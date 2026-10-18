@@ -31,6 +31,7 @@ export function Sidebar() {
   const copyName = useAppStore((s) => s.copyName)
   const openDialog = useAppStore((s) => s.openDialog)
   const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
+  const isModPressed = useAppStore((s) => s.isModPressed)
 
   return (
     <aside
@@ -87,7 +88,7 @@ export function Sidebar() {
                   <span className="text-[10px] text-muted-foreground/70 font-mono uppercase">
                     {t(TYPE_LABEL_KEY[acc.type])}
                   </span>
-                  {shortcutHint && (
+                  {shortcutHint && isModPressed && (
                     <kbd className="font-mono text-[9px] text-muted-foreground/60 ml-0.5">
                       {shortcutHint}
                     </kbd>
@@ -106,7 +107,7 @@ export function Sidebar() {
             >
               <Plus className="size-3.5 text-muted-foreground" />
               <span className="flex-1">{t('sidebar.add')}</span>
-              {shortcuts.addAccount && (
+              {shortcuts.addAccount && isModPressed && (
                 <kbd className="font-mono text-[9px] text-muted-foreground">
                   {formatShortcutForDisplay(shortcuts.addAccount)}
                 </kbd>
@@ -166,7 +167,7 @@ export function Sidebar() {
             <SlidersHorizontal className="size-3.5" aria-hidden />
             <span>{t('sidebar.settings')}</span>
           </span>
-          {shortcuts.settings && (
+          {shortcuts.settings && isModPressed && (
             <kbd className="pointer-events-none inline-flex items-center font-mono text-[10px] text-muted-foreground/70">
               {formatShortcutForDisplay(shortcuts.settings)}
             </kbd>

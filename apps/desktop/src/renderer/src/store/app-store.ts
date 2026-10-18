@@ -43,6 +43,7 @@ interface AppStore {
   about: AboutInfo | null
   canGoBack: boolean
   canGoForward: boolean
+  isModPressed: boolean
 
   init(): Promise<void>
   select(id: string): Promise<void>
@@ -58,6 +59,7 @@ interface AppStore {
   goBack(): Promise<void>
   goForward(): Promise<void>
   reload(): Promise<void>
+  setModPressed(pressed: boolean): void
 }
 
 const removingIds = new Set<string>()
@@ -84,6 +86,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   about: null,
   canGoBack: false,
   canGoForward: false,
+  isModPressed: false,
 
   async init() {
     let settingsFailed = false
@@ -119,6 +122,11 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     if (window.threads?.navigation?.onChanged) {
       window.threads.navigation.onChanged((navState) => {
         set({ canGoBack: navState.canGoBack, canGoForward: navState.canGoForward })
+      })
+    }
+    if (window.threads?.onModStateChanged) {
+      window.threads.onModStateChanged((pressed) => {
+        get().setModPressed(pressed)
       })
     }
   },
@@ -204,5 +212,13 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
   async reload() {
     await window.threads?.navigation?.reload?.()
+  },
+
+  setModPressed(pressed) {
+    if (get().isModPressed === pressed) return
+    set({ isModPressed: pressed })
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('mod-pressed', pressed)
+    }
   },
 }))

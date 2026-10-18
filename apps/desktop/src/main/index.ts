@@ -62,6 +62,22 @@ function createView(id: string): WebContentsView {
   wc.on('will-redirect', guard)
 
   wc.on('before-input-event', (event, input) => {
+    const isMeta = input.key === 'Meta' || input.code?.startsWith('Meta') || input.code?.startsWith('OS')
+    const isCtrl = input.key === 'Control' || input.code?.startsWith('Control')
+    const isModifierKey = process.platform === 'darwin' ? isMeta : (isCtrl || isMeta)
+
+    if (isModifierKey) {
+      const isDown = input.type === 'keyDown'
+      if (win && !win.isDestroyed()) {
+        win.webContents.send(IPC.modState, isDown)
+      }
+    } else if (input.type === 'keyUp') {
+      const hasMod = process.platform === 'darwin' ? input.meta : (input.control || input.meta)
+      if (!hasMod && win && !win.isDestroyed()) {
+        win.webContents.send(IPC.modState, false)
+      }
+    }
+
     if (input.type !== 'keyDown') return
     const isMod = process.platform === 'darwin' ? input.meta : (input.control || input.meta)
     if (isMod && !input.alt && !input.shift) {
@@ -282,6 +298,11 @@ function registerIpc(): void {
     }
   })
   handle<undefined>(IPC.navState, () => getNavigationState())
+  handle<string>(IPC.openExternal, (url) => {
+    if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
+      void shell.openExternal(url)
+    }
+  })
 }
 
 let collapseAnimTimer: NodeJS.Timeout | null = null
@@ -364,7 +385,10 @@ void app.whenReady().then(() => {
   win.webContents.on('will-navigate', (event, url) => {
     if (url !== win.webContents.getURL()) event.preventDefault()
   })
-  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) void shell.openExternal(url)
+    return { action: 'deny' }
+  })
   registerIpc()
 
   const devUrl = process.env['ELECTRON_RENDERER_URL']

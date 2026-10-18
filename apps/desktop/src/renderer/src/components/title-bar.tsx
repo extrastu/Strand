@@ -25,9 +25,10 @@ export function TitleBar() {
   const goForward = useAppStore((s) => s.goForward)
   const reload = useAppStore((s) => s.reload)
   const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
+  const isModPressed = useAppStore((s) => s.isModPressed)
   const onDrag = useWindowDrag()
   const baseLabel = collapsed ? t('titlebar.showSidebar') : t('titlebar.hideSidebar')
-  const shortcutHint = shortcuts.toggleSidebar ? ` (${formatShortcutForDisplay(shortcuts.toggleSidebar)})` : ''
+  const shortcutHint = shortcuts.toggleSidebar && isModPressed ? ` (${formatShortcutForDisplay(shortcuts.toggleSidebar)})` : ''
   const label = baseLabel + shortcutHint
 
   return (
@@ -61,7 +62,9 @@ export function TitleBar() {
                 <ChevronLeft className="size-4" aria-hidden />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom">{t('titlebar.back')}</TooltipContent>
+            <TooltipContent side="bottom">
+              {isModPressed ? `${t('titlebar.back')} (${formatShortcutForDisplay('Mod+[')})` : t('titlebar.back')}
+            </TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -77,7 +80,9 @@ export function TitleBar() {
                 <ChevronRight className="size-4" aria-hidden />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom">{t('titlebar.forward')}</TooltipContent>
+            <TooltipContent side="bottom">
+              {isModPressed ? `${t('titlebar.forward')} (${formatShortcutForDisplay('Mod+]')})` : t('titlebar.forward')}
+            </TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -93,7 +98,9 @@ export function TitleBar() {
                 <RotateCw className="size-3.5" aria-hidden />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom">{t('titlebar.reload')}</TooltipContent>
+            <TooltipContent side="bottom">
+              {isModPressed ? `${t('titlebar.reload')} (${formatShortcutForDisplay('Mod+R')})` : t('titlebar.reload')}
+            </TooltipContent>
           </Tooltip>
         </div>
 

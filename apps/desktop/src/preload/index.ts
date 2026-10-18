@@ -39,6 +39,14 @@ const api: ThreadsApi = {
     set: (patch) => ipcRenderer.invoke(IPC.settingsSet, patch),
   },
   about: () => ipcRenderer.invoke(IPC.about),
+  openExternal: (url: string) => ipcRenderer.invoke(IPC.openExternal, url),
+  onModStateChanged: (callback: (pressed: boolean) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, pressed: boolean) => callback(pressed)
+    ipcRenderer.on(IPC.modState, listener)
+    return () => {
+      ipcRenderer.removeListener(IPC.modState, listener)
+    }
+  },
   overlay: {
     set: (open) => ipcRenderer.invoke(IPC.overlay, { open }),
   },

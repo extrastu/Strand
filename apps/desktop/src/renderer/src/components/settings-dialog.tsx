@@ -1,4 +1,4 @@
-import { Info, Keyboard, Monitor, Moon, RotateCcw, SlidersHorizontal, Sun } from 'lucide-react'
+import { AtSign, ExternalLink, Info, Keyboard, Monitor, Moon, RotateCcw, SlidersHorizontal, Sun } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
@@ -46,7 +46,7 @@ export function SettingsDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
-      <DialogContent className="h-[460px] gap-0 overflow-hidden rounded-2xl p-0 shadow-[var(--shadow-pop)] sm:max-w-[660px]">
+      <DialogContent className="h-[80vh] w-[80vw] max-w-[80vw] sm:max-w-[80vw] gap-0 overflow-hidden rounded-2xl p-0 shadow-[var(--shadow-pop)]">
         {open && <SettingsBody />}
       </DialogContent>
     </Dialog>
@@ -75,8 +75,8 @@ function SettingsBody() {
   }
 
   return (
-    <div className="grid h-full grid-cols-[176px_1fr]">
-      <div className="flex flex-col gap-3 border-r p-4">
+    <div className="grid h-full grid-cols-[200px_1fr]">
+      <div className="flex flex-col gap-3 border-r p-5">
         <DialogTitle className="px-2.5 pt-1 font-serif text-xl font-normal">{t('settings.title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('settings.description')}</DialogDescription>
         <div role="tablist" aria-orientation="vertical" aria-label={t('settings.nav')} onKeyDown={onKeyDown} className="flex flex-col gap-0.5">
@@ -104,7 +104,7 @@ function SettingsBody() {
           ))}
         </div>
       </div>
-      <div role="tabpanel" id="settings-panel" aria-labelledby={`settings-tab-${section}`} className="overflow-y-auto p-6">
+      <div role="tabpanel" id="settings-panel" aria-labelledby={`settings-tab-${section}`} className="overflow-y-auto p-8">
         {section === 'general' ? (
           <GeneralPanel />
         ) : section === 'shortcuts' ? (
@@ -336,20 +336,44 @@ function AboutPanel() {
     void loadAbout()
   }, [loadAbout])
 
+  const openAuthorThreads = () => {
+    const url = 'https://www.threads.com/@thre.addrop'
+    if (window.threads?.openExternal) {
+      void window.threads.openExternal(url)
+    } else {
+      window.open(url, '_blank')
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center gap-3 pt-4 text-center">
-      <img src={iconUrl} alt={t('about.iconAlt')} width={72} height={72} />
+    <div className="flex h-full flex-col items-center justify-center gap-4 py-8 text-center max-w-sm mx-auto">
+      <img src={iconUrl} alt={t('about.iconAlt')} width={80} height={80} className="rounded-2xl shadow-sm" />
       <div>
         <h3 className="font-serif text-2xl">{about?.name ?? 'Strand'}</h3>
         {about && <p className="text-sm text-muted-foreground">{t('about.version', { version: about.version })}</p>}
       </div>
-      <p className="max-w-xs text-sm">{t('about.description')}</p>
-      {about ? (
-        <p className="text-xs text-muted-foreground">{t('about.runtime', { electron: about.electron, chromium: about.chromium })}</p>
-      ) : (
-        <p className="text-xs text-muted-foreground">{t('about.unavailable')}</p>
-      )}
-      <p className="max-w-xs text-xs text-muted-foreground">{t('about.notice')}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{t('about.description')}</p>
+
+      <div className="pt-1">
+        <Button
+          variant="outline"
+          onClick={openAuthorThreads}
+          className="gap-2 rounded-full px-5 py-2 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors"
+        >
+          <AtSign className="size-3.5 text-muted-foreground" aria-hidden />
+          <span>{t('about.followAuthor')}</span>
+          <ExternalLink className="size-3 text-muted-foreground" aria-hidden />
+        </Button>
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-border/50 w-full space-y-1">
+        {about ? (
+          <p className="text-xs text-muted-foreground">{t('about.runtime', { electron: about.electron, chromium: about.chromium })}</p>
+        ) : (
+          <p className="text-xs text-muted-foreground">{t('about.unavailable')}</p>
+        )}
+        <p className="text-xs text-muted-foreground/80">{t('about.notice')}</p>
+      </div>
     </div>
   )
 }

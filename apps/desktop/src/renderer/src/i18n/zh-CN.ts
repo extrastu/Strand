@@ -101,6 +101,7 @@ export const zhCN = {
   'about.iconAlt': 'Strand 图标',
   'about.version': '版本 {version}',
   'about.description': '一个非官方的 Threads 多账号 macOS 客户端。',
+  'about.followAuthor': '关注作者 Threads (@thre.addrop)',
   'about.runtime': 'Electron {electron} · Chromium {chromium}',
   'about.unavailable': '暂时无法读取版本信息。',
   'about.notice': 'Strand 与 Meta 或 Threads 没有关联,也未获其认可。',

@@ -82,6 +82,8 @@ export const IPC = {
   navReload: 'nav:reload',
   navState: 'nav:state',
   navChanged: 'nav:changed',
+  openExternal: 'shell:open-external',
+  modState: 'window:mod-state',
 } as const
 
 export interface NavigationState {
@@ -117,6 +119,8 @@ export interface ThreadsApi {
     set(patch: Partial<Settings>): Promise<Settings>
   }
   about(): Promise<AboutInfo>
+  openExternal(url: string): Promise<void>
+  onModStateChanged?(callback: (pressed: boolean) => void): () => void
   /** Account pages are native views drawn above the renderer; hide them while a dialog is open. */
   overlay: {
     set(open: boolean): Promise<void>

@@ -26,9 +26,24 @@ export function useGlobalShortcuts() {
   const goBack = useAppStore((s) => s.goBack)
   const goForward = useAppStore((s) => s.goForward)
   const reload = useAppStore((s) => s.reload)
+  const setModPressed = useAppStore((s) => s.setModPressed)
 
   useEffect(() => {
+    const isMac =
+      typeof navigator !== 'undefined'
+        ? /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)
+        : true
+
+    function updateModState(e: KeyboardEvent) {
+      const isMod = isMac
+        ? (e.metaKey || e.key === 'Meta')
+        : (e.ctrlKey || e.key === 'Control' || e.metaKey || e.key === 'Meta')
+      setModPressed(isMod)
+    }
+
     function handleKeyDown(e: KeyboardEvent) {
+      updateModState(e)
+
       // Toggle Sidebar
       if (shortcuts.toggleSidebar && matchShortcut(e, shortcuts.toggleSidebar)) {
         e.preventDefault()
@@ -102,7 +117,33 @@ export function useGlobalShortcuts() {
       }
     }
 
+    function handleKeyUp(e: KeyboardEvent) {
+      if (e.key === 'Meta' || e.key === 'Control' || e.key === 'OS') {
+        setModPressed(false)
+        return
+      }
+      const isMod = isMac ? e.metaKey : (e.ctrlKey || e.metaKey)
+      if (!isMod) {
+        setModPressed(false)
+      }
+    }
+
+    function handleBlur() {
+      setModPressed(false)
+    }
+
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [shortcuts, collapsed, setCollapsed, openDialog, closeDialog, dialog, accounts, activeId, select, canGoBack, canGoForward, goBack, goForward, reload])
+    window.addEventListener('keyup', handleKeyUp)
+    window.addEventListener('blur', handleBlur)
+    window.addEventListener('focus', handleBlur)
+    document.addEventListener('visibilitychange', handleBlur)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+      window.removeEventListener('blur', handleBlur)
+      window.removeEventListener('focus', handleBlur)
+      document.removeEventListener('visibilitychange', handleBlur)
+    }
+  }, [shortcuts, collapsed, setCollapsed, openDialog, closeDialog, dialog, accounts, activeId, select, canGoBack, canGoForward, goBack, goForward, reload, setModPressed])
 }

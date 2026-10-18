@@ -103,6 +103,7 @@ export const en: Record<MessageKey, string> = {
   'about.iconAlt': 'Strand icon',
   'about.version': 'Version {version}',
   'about.description': 'An unofficial multi-account Threads client for macOS.',
+  'about.followAuthor': 'Follow author on Threads (@thre.addrop)',
   'about.runtime': 'Electron {electron} · Chromium {chromium}',
   'about.unavailable': "Version information isn't available right now.",
   'about.notice': "Strand isn't affiliated with or endorsed by Meta or Threads.",
