@@ -7,10 +7,17 @@ import { IPC, SIDEBAR_WIDTH, SIDEBAR_WIDTH_HIDDEN, TOPBAR_HEIGHT } from '@shared
 import type { AccountInput, AccountsState } from '@shared/types'
 import { createStore, partitionFor } from './accounts'
 import type { AccountStore } from './accounts'
+import { resolveUserDataDir } from './legacy-data'
 import { classifyLink, isWrapperUrl } from './links'
 import iconPath from '../../build/icon.png?asset'
 
-app.setName('ThreadsMac')
+const APP_NAME = 'Strand'
+app.setName(APP_NAME)
+app.setAboutPanelOptions({ applicationName: APP_NAME })
+// The app used to be called ThreadsMac: keep its accounts and logins. A --user-data-dir switch (tests) wins.
+if (!app.commandLine.hasSwitch('user-data-dir')) {
+  app.setPath('userData', resolveUserDataDir(app.getPath('appData'), APP_NAME, ['ThreadsMac']))
+}
 
 const LOGIN_URL = 'https://www.threads.com/login'
 const CHROME_UA =
@@ -74,7 +81,7 @@ function showActive(): void {
   for (const [id, view] of views) view.setVisible(!overlayOpen && id === activeId)
   layout()
   const active = accounts.find((a) => a.id === activeId)
-  win.setTitle(active ? `Threads — ${active.name}` : 'Threads')
+  win.setTitle(active ? `${APP_NAME} — ${active.name}` : APP_NAME)
 }
 
 function destroyView(id: string): void {

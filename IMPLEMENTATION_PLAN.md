@@ -19,6 +19,8 @@ Work on a new branch (e.g. `refactor/ts-shadcn-ui`) cut from `feat/multi-account
 
 - App icon (concept A, "two accounts"): black superellipse tile, two overlapping white circles with the overlap cut out. Source `app/build/icon.svg`, 1024px `icon.png` (transparent corners) and `icon.icns` (10 sizes, each rendered from the SVG). The main process sets it as the Dock icon via an `?asset` import (checked: the bundled asset is byte-identical and loads as a 1024px image; the Dock tile itself was not looked at). There is no packaging config yet (no electron-builder), so `icon.icns` sits in `build/` where electron-builder expects it.
 
+- Renamed to **Strand** (package `strand`, productName, window title `Strand — <account>`, page title, About panel). Electron derives the userData folder from the app name, so `resolveUserDataDir` (`app/src/main/legacy-data.ts`, 5 tests on real temp directories) moves `~/Library/Application Support/ThreadsMac` to `.../Strand` on first launch when only the old one exists; if the move fails it keeps using the old folder; it never overwrites. It is skipped when `--user-data-dir` is passed. Not run against the real data (that would perform the move early): the first real launch does it. In `npm run dev` / `npm start` the menu bar and Dock label still say "Electron" (they come from Electron.app's Info.plist); a packaged build takes the name from productName.
+
 ## Next
 1. `/verify` again on the latest changes before any commit (title bar toggle, hide-sidebar collapse and the row layout changed after the first pass).
 2. User manual check with two real accounts: login at `threads.com/login`, switch, remove, real post links, drag, light and dark.
