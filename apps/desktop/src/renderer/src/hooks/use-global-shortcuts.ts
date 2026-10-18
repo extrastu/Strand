@@ -21,6 +21,11 @@ export function useGlobalShortcuts() {
   const accounts = useAppStore((s) => s.accounts)
   const activeId = useAppStore((s) => s.activeId)
   const select = useAppStore((s) => s.select)
+  const canGoBack = useAppStore((s) => s.canGoBack)
+  const canGoForward = useAppStore((s) => s.canGoForward)
+  const goBack = useAppStore((s) => s.goBack)
+  const goForward = useAppStore((s) => s.goForward)
+  const reload = useAppStore((s) => s.reload)
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -74,9 +79,30 @@ export function useGlobalShortcuts() {
           return
         }
       }
+
+      // Back: Mod+[
+      if (matchShortcut(e, 'Mod+[')) {
+        e.preventDefault()
+        if (canGoBack) void goBack()
+        return
+      }
+
+      // Forward: Mod+]
+      if (matchShortcut(e, 'Mod+]')) {
+        e.preventDefault()
+        if (canGoForward) void goForward()
+        return
+      }
+
+      // Reload: Mod+R
+      if (matchShortcut(e, 'Mod+R')) {
+        e.preventDefault()
+        void reload()
+        return
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [shortcuts, collapsed, setCollapsed, openDialog, closeDialog, dialog, accounts, activeId, select])
+  }, [shortcuts, collapsed, setCollapsed, openDialog, closeDialog, dialog, accounts, activeId, select, canGoBack, canGoForward, goBack, goForward, reload])
 }

@@ -21,6 +21,9 @@ export const zhCN = {
   'sidebar.switchAccount': '切换账号',
   'titlebar.hideSidebar': '隐藏侧边栏',
   'titlebar.showSidebar': '显示侧边栏',
+  'titlebar.back': '后退',
+  'titlebar.forward': '前进',
+  'titlebar.reload': '刷新',
 
   'type.personal': '个人',
   'type.creator': '创作者',

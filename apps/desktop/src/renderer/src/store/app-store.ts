@@ -41,6 +41,8 @@ interface AppStore {
   settings: Settings
   settingsLoaded: boolean
   about: AboutInfo | null
+  canGoBack: boolean
+  canGoForward: boolean
 
   init(): Promise<void>
   select(id: string): Promise<void>
@@ -53,6 +55,9 @@ interface AppStore {
   loadAbout(): Promise<void>
   openDialog(dialog: Exclude<DialogState, null>): void
   closeDialog(): void
+  goBack(): Promise<void>
+  goForward(): Promise<void>
+  reload(): Promise<void>
 }
 
 const removingIds = new Set<string>()
@@ -77,6 +82,8 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
   settingsLoaded: false,
   about: null,
+  canGoBack: false,
+  canGoForward: false,
 
   async init() {
     let settingsFailed = false
@@ -99,6 +106,19 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     if (window.threads?.accounts?.onChanged) {
       window.threads.accounts.onChanged((nextState) => {
         set(apply(nextState))
+      })
+    }
+    if (window.threads?.navigation?.getState) {
+      try {
+        const navState = await window.threads.navigation.getState()
+        set({ canGoBack: navState.canGoBack, canGoForward: navState.canGoForward })
+      } catch {
+        // ignore
+      }
+    }
+    if (window.threads?.navigation?.onChanged) {
+      window.threads.navigation.onChanged((navState) => {
+        set({ canGoBack: navState.canGoBack, canGoForward: navState.canGoForward })
       })
     }
   },
@@ -175,4 +195,14 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   openDialog: (dialog) => set({ dialog }),
   closeDialog: () => set({ dialog: null }),
+
+  async goBack() {
+    await window.threads?.navigation?.goBack?.()
+  },
+  async goForward() {
+    await window.threads?.navigation?.goForward?.()
+  },
+  async reload() {
+    await window.threads?.navigation?.reload?.()
+  },
 }))

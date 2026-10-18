@@ -77,7 +77,17 @@ export const IPC = {
   dragStart: 'window:drag-start',
   dragMove: 'window:drag-move',
   accountsChanged: 'accounts:changed',
+  navBack: 'nav:back',
+  navForward: 'nav:forward',
+  navReload: 'nav:reload',
+  navState: 'nav:state',
+  navChanged: 'nav:changed',
 } as const
+
+export interface NavigationState {
+  canGoBack: boolean
+  canGoForward: boolean
+}
 
 /** What the preload exposes to the renderer as `window.threads`. */
 export interface ThreadsApi {
@@ -89,6 +99,13 @@ export interface ThreadsApi {
     select(id: string): Promise<AccountsState>
     copyName(id: string): Promise<string>
     onChanged?(callback: (state: AccountsState) => void): () => void
+  }
+  navigation: {
+    goBack(): Promise<void>
+    goForward(): Promise<void>
+    reload(): Promise<void>
+    getState(): Promise<NavigationState>
+    onChanged?(callback: (state: NavigationState) => void): () => void
   }
   sidebar: {
     /** Resolves to the sidebar width in px that the main process now uses. */

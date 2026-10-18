@@ -1,4 +1,4 @@
-import { PanelLeft } from 'lucide-react'
+import { ChevronLeft, ChevronRight, PanelLeft, RotateCw } from 'lucide-react'
 import { DEFAULT_SHORTCUTS } from '@shared/types'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -10,15 +10,20 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 
 /**
- * 44px row across the whole window, like a macOS title bar: traffic lights, the sidebar toggle,
- * and the active account. Drags the window. Everything below it can be covered by
- * the account page, so nothing that must stay visible lives below this row's edge.
+ * 44px row across the whole window, like a macOS title bar: traffic lights, navigation controls
+ * (back, forward, refresh), the sidebar toggle, and the active account. Drags the window.
+ * Everything below it can be covered by the account page, so nothing that must stay visible lives below this row's edge.
  */
 export function TitleBar() {
   const t = useT()
   const active = useAppStore((s) => s.accounts.find((a) => a.id === s.activeId))
   const collapsed = useAppStore((s) => s.collapsed)
   const setCollapsed = useAppStore((s) => s.setCollapsed)
+  const canGoBack = useAppStore((s) => s.canGoBack)
+  const canGoForward = useAppStore((s) => s.canGoForward)
+  const goBack = useAppStore((s) => s.goBack)
+  const goForward = useAppStore((s) => s.goForward)
+  const reload = useAppStore((s) => s.reload)
   const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
   const onDrag = useWindowDrag()
   const baseLabel = collapsed ? t('titlebar.showSidebar') : t('titlebar.hideSidebar')
@@ -39,35 +44,88 @@ export function TitleBar() {
         style={{ width: collapsed ? 0 : 240 }}
       />
 
-      {/* Floating Toggle Button: glides smoothly between x=204px and x=76px */}
-      <div
-        className="absolute top-2 z-10 transition-transform duration-200 ease-out"
-        style={{
-          left: 76,
-          transform: `translateX(${collapsed ? 0 : 128}px)`,
-        }}
-      >
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={label}
-              aria-expanded={!collapsed}
-              className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08]"
-              onClick={() => void setCollapsed(!collapsed)}
-            >
-              <PanelLeft className="size-4" aria-hidden />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="right">{label}</TooltipContent>
-        </Tooltip>
+      {/* Navigation & Controls Toolbar: traffic lights are at x=16..70, toolbar starts at x=76 */}
+      <div className="absolute top-2 left-[76px] z-10 flex items-center gap-1">
+        {/* Navigation Buttons: Back, Forward, Reload */}
+        <div className="flex items-center gap-0.5">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('titlebar.back')}
+                disabled={!canGoBack || !active}
+                className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08] disabled:opacity-30 disabled:pointer-events-none"
+                onClick={() => void goBack()}
+              >
+                <ChevronLeft className="size-4" aria-hidden />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{t('titlebar.back')}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('titlebar.forward')}
+                disabled={!canGoForward || !active}
+                className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08] disabled:opacity-30 disabled:pointer-events-none"
+                onClick={() => void goForward()}
+              >
+                <ChevronRight className="size-4" aria-hidden />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{t('titlebar.forward')}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('titlebar.reload')}
+                disabled={!active}
+                className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08] disabled:opacity-30 disabled:pointer-events-none"
+                onClick={() => void reload()}
+              >
+                <RotateCw className="size-3.5" aria-hidden />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{t('titlebar.reload')}</TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Floating Sidebar Toggle Button: glides smoothly between docking at x=172px (collapsed) and pinning at x=204px (expanded) */}
+        <div
+          className="transition-transform duration-200 ease-out"
+          style={{
+            transform: `translateX(${collapsed ? 4 : 36}px)`,
+          }}
+        >
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={label}
+                aria-expanded={!collapsed}
+                className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08]"
+                onClick={() => void setCollapsed(!collapsed)}
+              >
+                <PanelLeft className="size-4" aria-hidden />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{label}</TooltipContent>
+          </Tooltip>
+        </div>
       </div>
 
       {/* Right Content Header: border-b only on main content area, with animated left padding */}
       <div
         className="flex h-full flex-1 items-center justify-between border-b border-border pr-4 transition-[padding-left] duration-200 ease-out"
-        style={{ paddingLeft: collapsed ? 116 : 16 }}
+        style={{ paddingLeft: collapsed ? 220 : 16 }}
       >
         {active ? (
           <div className="flex min-w-0 items-center gap-2">

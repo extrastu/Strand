@@ -65,6 +65,31 @@ test('formatShortcutForDisplay and matchShortcut work for account switching digi
   }
 })
 
+test('formatShortcutForDisplay and matchShortcut work for navigation shortcuts', () => {
+  assert.equal(formatShortcutForDisplay('Mod+['), '⌘[')
+  assert.equal(formatShortcutForDisplay('Mod+]'), '⌘]')
+  assert.equal(formatShortcutForDisplay('Mod+R'), '⌘R')
+
+  const backEvent: KeyboardEventLike = {
+    key: '[',
+    metaKey: true,
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+  }
+  assert.equal(matchShortcut(backEvent, 'Mod+['), true)
+  assert.equal(matchShortcut(backEvent, 'Mod+]'), false)
+
+  const reloadEvent: KeyboardEventLike = {
+    key: 'r',
+    metaKey: true,
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+  }
+  assert.equal(matchShortcut(reloadEvent, 'Mod+R'), true)
+})
+
 test('eventToShortcutString validates and converts keyboard events', () => {
   // Lone modifier returns null
   assert.equal(

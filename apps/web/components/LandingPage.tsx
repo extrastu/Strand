@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import type { Language } from '@/lib/i18n/content'
+import { detectBrowserLanguage } from '@/lib/i18n/detect'
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { AppMockup } from '@/components/AppMockup'
@@ -18,12 +19,8 @@ export const LandingPage: React.FC = () => {
 
   useEffect(() => {
     setMounted(true)
-    const savedLang = localStorage.getItem('strand_lang') as Language
-    if (savedLang === 'en' || savedLang === 'zh-CN') {
-      setLang(savedLang)
-    } else if (navigator.language.startsWith('zh')) {
-      setLang('zh-CN')
-    }
+    // Follow browser language, fallback to 'en' if unmatched
+    setLang(detectBrowserLanguage())
 
     const savedTheme = localStorage.getItem('strand_theme')
     if (savedTheme) {

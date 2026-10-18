@@ -88,10 +88,40 @@ function createView(id: string): WebContentsView {
     }
   })
 
+  const onNav = (): void => {
+    const { activeId } = store?.getState() ?? {}
+    if (id === activeId) emitNavigationState()
+  }
+  wc.on('did-navigate', onNav)
+  wc.on('did-navigate-in-page', onNav)
+  wc.on('did-finish-load', onNav)
+
   void wc.loadURL(LOGIN_URL)
   win.contentView.addChildView(view)
   views.set(id, view)
   return view
+}
+
+function getActiveView(): WebContentsView | undefined {
+  const { activeId } = store?.getState() ?? {}
+  if (!activeId) return undefined
+  return views.get(activeId)
+}
+
+function getNavigationState(): { canGoBack: boolean; canGoForward: boolean } {
+  const view = getActiveView()
+  if (!view) return { canGoBack: false, canGoForward: false }
+  const wc = view.webContents
+  return {
+    canGoBack: wc.navigationHistory.canGoBack(),
+    canGoForward: wc.navigationHistory.canGoForward(),
+  }
+}
+
+function emitNavigationState(): void {
+  if (win && !win.isDestroyed()) {
+    win.webContents.send(IPC.navChanged, getNavigationState())
+  }
 }
 
 function layout(): void {
@@ -113,6 +143,7 @@ function showActive(): void {
   layout()
   const active = accounts.find((a) => a.id === activeId)
   win.setTitle(active ? `${APP_NAME} — ${active.name}` : APP_NAME)
+  emitNavigationState()
 }
 
 function destroyView(id: string): void {
@@ -230,6 +261,27 @@ function registerIpc(): void {
     }
     return animateSidebar(targetWidth, 200)
   })
+  handle<undefined>(IPC.navBack, () => {
+    const view = getActiveView()
+    if (view && view.webContents.navigationHistory.canGoBack()) {
+      view.webContents.navigationHistory.goBack()
+    }
+    emitNavigationState()
+  })
+  handle<undefined>(IPC.navForward, () => {
+    const view = getActiveView()
+    if (view && view.webContents.navigationHistory.canGoForward()) {
+      view.webContents.navigationHistory.goForward()
+    }
+    emitNavigationState()
+  })
+  handle<undefined>(IPC.navReload, () => {
+    const view = getActiveView()
+    if (view) {
+      view.webContents.reload()
+    }
+  })
+  handle<undefined>(IPC.navState, () => getNavigationState())
 }
 
 let collapseAnimTimer: NodeJS.Timeout | null = null

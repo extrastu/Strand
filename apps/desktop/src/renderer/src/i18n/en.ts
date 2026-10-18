@@ -23,6 +23,9 @@ export const en: Record<MessageKey, string> = {
   'sidebar.switchAccount': 'Switch account',
   'titlebar.hideSidebar': 'Hide sidebar',
   'titlebar.showSidebar': 'Show sidebar',
+  'titlebar.back': 'Back',
+  'titlebar.forward': 'Forward',
+  'titlebar.reload': 'Refresh',
 
   'type.personal': 'Personal',
   'type.creator': 'Creator',

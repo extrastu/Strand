@@ -18,6 +18,19 @@ const api: ThreadsApi = {
       }
     },
   },
+  navigation: {
+    goBack: () => ipcRenderer.invoke(IPC.navBack),
+    goForward: () => ipcRenderer.invoke(IPC.navForward),
+    reload: () => ipcRenderer.invoke(IPC.navReload),
+    getState: () => ipcRenderer.invoke(IPC.navState),
+    onChanged: (callback) => {
+      const listener = (_event: Electron.IpcRendererEvent, state: import('@shared/types').NavigationState) => callback(state)
+      ipcRenderer.on(IPC.navChanged, listener)
+      return () => {
+        ipcRenderer.removeListener(IPC.navChanged, listener)
+      }
+    },
+  },
   sidebar: {
     setCollapsed: (collapsed, animated) => ipcRenderer.invoke(IPC.collapse, { collapsed, animated }),
   },
