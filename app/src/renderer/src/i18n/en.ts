@@ -9,6 +9,11 @@ export const en: Record<MessageKey, string> = {
   'sidebar.heading': 'Accounts',
   'sidebar.add': 'Add account',
   'sidebar.settings': 'Settings',
+  'sidebar.searchPlaceholder': 'Search accounts...',
+  'sidebar.noResults': 'No matching accounts',
+  'sidebar.clearSearch': 'Clear search',
+  'sidebar.emptyTitle': 'No accounts yet',
+  'sidebar.emptyHint': 'Click above to add',
   'titlebar.hideSidebar': 'Hide sidebar',
   'titlebar.showSidebar': 'Show sidebar',
 

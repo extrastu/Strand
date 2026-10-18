@@ -7,6 +7,11 @@ export const zhCN = {
   'sidebar.heading': '账号',
   'sidebar.add': '添加账号',
   'sidebar.settings': '设置',
+  'sidebar.searchPlaceholder': '搜索账号...',
+  'sidebar.noResults': '未找到匹配账号',
+  'sidebar.clearSearch': '清除搜索',
+  'sidebar.emptyTitle': '暂无账号',
+  'sidebar.emptyHint': '点击上方添加账号',
   'titlebar.hideSidebar': '隐藏侧边栏',
   'titlebar.showSidebar': '显示侧边栏',
 
