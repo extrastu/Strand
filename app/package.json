@@ -1,0 +1,15 @@
+{
+  "name": "threads-mac",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multi-account Threads client for macOS",
+  "main": "src/main.js",
+  "engines": { "node": ">=21" },
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}
