@@ -1,0 +1,13 @@
+{
+  "name": "threads-mac-spike",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Throwaway WebView feasibility spike for a Threads Mac client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}
