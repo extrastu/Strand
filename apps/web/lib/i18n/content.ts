@@ -27,13 +27,38 @@ export const content = {
       },
       releases: [
         {
-          version: 'v0.2.1',
+          version: 'v0.2.2',
           date: 'October 18, 2026',
           isLatest: true,
+          summary: 'Automatic in-place updates on macOS, toast UI refinements, and official Changelog link in Settings.',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.2',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                'Automatic in-place updater for macOS: downloads, unpacks, and replaces Strand.app with single-click restart prompt.',
+                'Settings > About panel now provides direct links to Official Website, Changelog, and GitHub repository.',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                'Redesigned Toast notification layout with flexible height and whitespace protection to prevent text wrapping.',
+                'Prioritized native .zip archives for faster and cleaner in-place updates.',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.2.1',
+          date: 'October 18, 2026',
+          isLatest: false,
           summary: 'Dedicated Changelog portal launch, automated release badges, and full SEO enhancements.',
-          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
-          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
-          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.1',
           sections: [
             {
               category: 'features',
@@ -112,7 +137,7 @@ export const content = {
       ],
     },
     hero: {
-      badge: 'Strand v0.2.1 for macOS is out',
+      badge: 'Strand v0.2.2 for macOS is out',
       titlePrimary: 'Threads, refined for',
       titleSecondary: 'macOS workflow.',
       description:
@@ -201,13 +226,13 @@ export const content = {
         title: 'Apple Silicon (Recommended)',
         desc: 'M1, M2, M3, M4 Macs with native ARM64 speed and battery optimization.',
         btn: 'Download DMG (Apple Silicon)',
-        filename: 'Strand-0.2.1-darwin-arm64.dmg',
+        filename: 'Strand-0.2.2-darwin-arm64.dmg',
       },
       zipPackage: {
         title: 'Portable ZIP Archive',
         desc: 'Direct drag-and-drop portable package for Apple Silicon machines.',
         btn: 'Download ZIP',
-        filename: 'Strand-0.2.1-darwin-arm64.zip',
+        filename: 'Strand-0.2.2-darwin-arm64.zip',
       },
       checksumNote: 'SHA-256 integrity checksums available on GitHub Releases.',
       installTipTitle: 'Installation Tip',
@@ -275,13 +300,38 @@ export const content = {
       },
       releases: [
         {
-          version: 'v0.2.1',
+          version: 'v0.2.2',
           date: '2026 年 10 月 18 日',
           isLatest: true,
+          summary: 'macOS 自动无缝热更新支持，Toast 提醒布局优化，设置面板新增官网、更新日志与 GitHub 链接。',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.2',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                '全新 macOS 自动无缝热更新：下载完成后自动就地解压替换 Strand.app 并提醒用户一键重启生效。',
+                '设置「关于」面板新增官网、更新日志与 GitHub 官方仓库链接直达。',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                '全面重构 Toast 提示组件布局，解除固定高度与换行压缩问题，支持操作按钮自适应单行排版。',
+                'macOS 更新机制优先拉取 .zip 格式免挂载解压，大幅提升更新平滑度。',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.2.1',
+          date: '2026 年 10 月 18 日',
+          isLatest: false,
           summary: '官方网站上线更新日志页面，接入动态版本号 Badge，全面优化 SEO 与依赖项。',
-          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
-          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
-          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.1',
           sections: [
             {
               category: 'features',
@@ -360,7 +410,7 @@ export const content = {
       ],
     },
     hero: {
-      badge: 'Strand v0.2.1 已正式发布',
+      badge: 'Strand v0.2.2 已正式发布',
       titlePrimary: '专为 macOS 打造的',
       titleSecondary: 'Threads 多账号优雅体验。',
       description:
@@ -449,13 +499,13 @@ export const content = {
         title: 'Apple Silicon 安装包 (推荐)',
         desc: '适用于搭载 M1, M2, M3, M4 芯片的 Mac，原生 ARM64 极速启动与续航优化。',
         btn: '下载 DMG 安装包 (Apple Silicon)',
-        filename: 'Strand-0.2.1-darwin-arm64.dmg',
+        filename: 'Strand-0.2.2-darwin-arm64.dmg',
       },
       zipPackage: {
         title: '便携 ZIP 压缩包',
         desc: '解压即用无需挂载安装映像，适合偏好免安装的用户。',
         btn: '下载 ZIP 压缩包',
-        filename: 'Strand-0.2.1-darwin-arm64.zip',
+        filename: 'Strand-0.2.2-darwin-arm64.zip',
       },
       checksumNote: '所有发行包的 SHA-256 校验和均公布在 GitHub Releases 页面。',
       installTipTitle: '首次安装提示',

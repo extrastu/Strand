@@ -67,6 +67,8 @@ export type UpdateState =
   | { status: 'available'; info: UpdateInfo }
   | { status: 'not-available'; checkedAt: string; currentVersion: string }
   | { status: 'downloading'; info: UpdateInfo; percent: number; transferred: number; total: number }
+  | { status: 'installing'; info: UpdateInfo }
+  | { status: 'ready-to-restart'; info: UpdateInfo }
   | { status: 'downloaded'; info: UpdateInfo; filePath: string }
   | { status: 'error'; message: string }
 
@@ -106,6 +108,7 @@ export const IPC = {
   updaterCheck: 'updater:check',
   updaterDownload: 'updater:download',
   updaterInstall: 'updater:install',
+  updaterRestart: 'updater:restart',
   updaterOpenRelease: 'updater:open-release',
   updaterState: 'updater:state',
   updaterStatusChanged: 'updater:status-changed',
@@ -150,6 +153,7 @@ export interface ThreadsApi {
     check(manual?: boolean): Promise<UpdateState>
     download(): Promise<void>
     install(): Promise<void>
+    restart(): Promise<void>
     openReleasePage(): Promise<void>
     getState(): Promise<UpdateState>
     onStatusChanged?(callback: (state: UpdateState) => void): () => void

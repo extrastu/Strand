@@ -64,6 +64,7 @@ interface AppStore {
   checkForUpdates(manual?: boolean): Promise<void>
   downloadUpdate(): Promise<void>
   installUpdate(): Promise<void>
+  restartApp(): Promise<void>
   openReleasePage(): Promise<void>
 }
 
@@ -150,9 +151,17 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         if (state.status === 'available' && prev.status !== 'available') {
           toast.info(t('updater.newVersionNotification', { version: state.info.version }), {
             action: {
-              label: t('updater.releaseNotes'),
+              label: t('updater.viewUpdate'),
               onClick: () => get().openDialog({ kind: 'settings' }),
             },
+          })
+        } else if (state.status === 'ready-to-restart' && prev.status !== 'ready-to-restart') {
+          toast.success(t('updater.readyToRestartNotification', { version: state.info.version }), {
+            action: {
+              label: t('updater.restartNow'),
+              onClick: () => void get().restartApp(),
+            },
+            duration: 12000,
           })
         }
       })
@@ -272,6 +281,15 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   async installUpdate() {
     try {
       await window.threads?.updater?.install?.()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      toast.error(message)
+    }
+  },
+
+  async restartApp() {
+    try {
+      await window.threads?.updater?.restart?.()
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       toast.error(message)

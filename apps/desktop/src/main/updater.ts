@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { app, shell } from 'electron'
@@ -70,13 +71,29 @@ export function findBestAsset(
   const targetArch = arch === 'arm64' ? 'arm64' : 'x64'
 
   if (platform === 'darwin') {
-    // 1. DMG for exact architecture (e.g. Strand-0.2.1-darwin-arm64.dmg or Strand-0.2.1-arm64.dmg)
+    // 1. ZIP for exact architecture (extracts directly without disk mounting)
+    const zipArch = assets.find(
+      (a) => a.name.endsWith('.zip') && a.name.toLowerCase().includes(targetArch),
+    )
+    if (zipArch) return zipArch
+
+    // 2. Universal or any macOS ZIP
+    const zipAny = assets.find(
+      (a) =>
+        a.name.endsWith('.zip') &&
+        (a.name.toLowerCase().includes('darwin') ||
+          a.name.toLowerCase().includes('mac') ||
+          a.name.toLowerCase().includes('universal')),
+    )
+    if (zipAny) return zipAny
+
+    // 3. DMG for exact architecture
     const dmgArch = assets.find(
       (a) => a.name.endsWith('.dmg') && a.name.toLowerCase().includes(targetArch),
     )
     if (dmgArch) return dmgArch
 
-    // 2. Universal or any macOS DMG
+    // 4. Universal or any macOS DMG
     const dmgAny = assets.find(
       (a) =>
         a.name.endsWith('.dmg') &&
@@ -86,19 +103,11 @@ export function findBestAsset(
     )
     if (dmgAny) return dmgAny
 
-    // 3. Fallback to any DMG
-    const anyDmg = assets.find((a) => a.name.endsWith('.dmg'))
-    if (anyDmg) return anyDmg
-
-    // 4. ZIP for exact architecture
-    const zipArch = assets.find(
-      (a) => a.name.endsWith('.zip') && a.name.toLowerCase().includes(targetArch),
-    )
-    if (zipArch) return zipArch
-
-    // 5. Any ZIP
+    // 5. Fallback to any ZIP or DMG
     const anyZip = assets.find((a) => a.name.endsWith('.zip'))
     if (anyZip) return anyZip
+    const anyDmg = assets.find((a) => a.name.endsWith('.dmg'))
+    if (anyDmg) return anyDmg
   }
 
   return assets[0] ?? null
@@ -279,11 +288,8 @@ export class AppUpdater {
 
       fs.renameSync(partPath, destPath)
 
-      this.broadcast({
-        status: 'downloaded',
-        info,
-        filePath: destPath,
-      })
+      // Automatically install the update in-place
+      await this.applyUpdate(destPath, info)
     } catch (err) {
       try {
         if (fs.existsSync(partPath)) fs.unlinkSync(partPath)
@@ -297,19 +303,106 @@ export class AppUpdater {
   }
 
   async install(): Promise<void> {
-    if (this.state.status !== 'downloaded') {
-      throw new Error('Update has not been downloaded yet')
+    if (this.state.status === 'downloaded') {
+      await this.applyUpdate(this.state.filePath, this.state.info)
+    }
+  }
+
+  restart(): void {
+    app.relaunch()
+    app.exit(0)
+  }
+
+  private async applyUpdate(filePath: string, info: UpdateInfo): Promise<void> {
+    this.broadcast({ status: 'installing', info })
+
+    if (process.platform !== 'darwin') {
+      this.broadcast({ status: 'downloaded', info, filePath })
+      return
     }
 
-    const { filePath } = this.state
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`Downloaded installer file not found: ${filePath}`)
+    if (!app.isPackaged) {
+      // In development mode, simulate successful installation
+      this.broadcast({ status: 'ready-to-restart', info })
+      return
     }
 
-    if (filePath.endsWith('.dmg')) {
-      await shell.openPath(filePath)
-    } else {
-      shell.showItemInFolder(filePath)
+    const currentAppBundle = path.resolve(process.execPath, '../../..')
+    if (!currentAppBundle.endsWith('.app') || !fs.existsSync(currentAppBundle)) {
+      this.broadcast({ status: 'downloaded', info, filePath })
+      return
+    }
+
+    const stagingDir = path.join(app.getPath('temp'), `strand-staging-${Date.now()}`)
+    fs.mkdirSync(stagingDir, { recursive: true })
+
+    try {
+      if (filePath.endsWith('.zip')) {
+        execFileSync('/usr/bin/ditto', ['-x', '-k', filePath, stagingDir])
+      } else if (filePath.endsWith('.dmg')) {
+        const mountPoint = path.join(app.getPath('temp'), `strand-mount-${Date.now()}`)
+        fs.mkdirSync(mountPoint, { recursive: true })
+        try {
+          execFileSync('hdiutil', ['attach', '-nobrowse', '-readonly', '-mountpoint', mountPoint, filePath])
+          const mountedApp = path.join(mountPoint, 'Strand.app')
+          if (!fs.existsSync(mountedApp)) {
+            throw new Error('Strand.app not found inside DMG')
+          }
+          execFileSync('/usr/bin/ditto', [mountedApp, path.join(stagingDir, 'Strand.app')])
+        } finally {
+          try {
+            execFileSync('hdiutil', ['detach', mountPoint])
+            fs.rmSync(mountPoint, { recursive: true, force: true })
+          } catch {
+            // ignore unmount errors
+          }
+        }
+      } else {
+        throw new Error(`Unsupported update archive format: ${filePath}`)
+      }
+
+      const extractedApp = path.join(stagingDir, 'Strand.app')
+      if (!fs.existsSync(extractedApp)) {
+        throw new Error('Strand.app not found in update archive')
+      }
+
+      const appParentDir = path.dirname(currentAppBundle)
+      const preparedNewApp = path.join(appParentDir, `.Strand-new-${Date.now()}.app`)
+      const backupApp = path.join(appParentDir, `.Strand-old-${Date.now()}.app`)
+
+      // Copy from temp into destination parent folder with ditto (same filesystem guarantees atomic rename)
+      execFileSync('/usr/bin/ditto', [extractedApp, preparedNewApp])
+
+      // Atomic swap
+      fs.renameSync(currentAppBundle, backupApp)
+      try {
+        fs.renameSync(preparedNewApp, currentAppBundle)
+      } catch (swapErr) {
+        if (fs.existsSync(backupApp) && !fs.existsSync(currentAppBundle)) {
+          fs.renameSync(backupApp, currentAppBundle)
+        }
+        throw swapErr
+      }
+
+      // Cleanup
+      try {
+        fs.rmSync(backupApp, { recursive: true, force: true })
+        fs.rmSync(stagingDir, { recursive: true, force: true })
+        fs.unlinkSync(filePath)
+      } catch {
+        // best effort cleanup
+      }
+
+      this.broadcast({ status: 'ready-to-restart', info })
+    } catch {
+      try {
+        fs.rmSync(stagingDir, { recursive: true, force: true })
+      } catch {
+        // ignore
+      }
+      // If auto-install failed (e.g. read-only permissions in /Applications),
+      // fallback to 'downloaded' so user can open the installer manually
+      this.broadcast({ status: 'downloaded', info, filePath })
     }
   }
 

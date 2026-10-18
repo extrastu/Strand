@@ -52,7 +52,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
               <div className="space-y-1.5 mb-8 text-xs text-neutral-500">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Version 0.2.1 · Universal binary ready</span>
+                  <span>Version 0.2.2 · Universal binary ready</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
@@ -67,7 +67,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
               className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-md"
             >
               <a
-                href="https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg"
+                href="https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.dmg"
                 download
               >
                 <Download className="w-4 h-4" />
@@ -107,7 +107,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
               className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-2xs"
             >
               <a
-                href="https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.zip"
+                href="https://github.com/extrastu/Strand/releases/download/v0.2.2/Strand-0.2.2-darwin-arm64.zip"
                 download
               >
                 <Download className="w-4 h-4 text-neutral-500" />

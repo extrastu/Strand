@@ -51,6 +51,7 @@ const api: ThreadsApi = {
     check: (manual?: boolean) => ipcRenderer.invoke(IPC.updaterCheck, { manual }),
     download: () => ipcRenderer.invoke(IPC.updaterDownload),
     install: () => ipcRenderer.invoke(IPC.updaterInstall),
+    restart: () => ipcRenderer.invoke(IPC.updaterRestart),
     openReleasePage: () => ipcRenderer.invoke(IPC.updaterOpenRelease),
     getState: () => ipcRenderer.invoke(IPC.updaterState),
     onStatusChanged: (callback) => {

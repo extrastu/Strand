@@ -34,6 +34,12 @@ export default function ChangelogPage() {
             Track all releases, new capabilities, and fixes for Strand, the unofficial macOS desktop client for Threads.
           </p>
           <article className="mb-6">
+            <h2 className="text-xl font-bold">v0.2.2 (October 18, 2026)</h2>
+            <p className="text-neutral-600">
+              Automatic in-place updates on macOS, toast UI refinements, and official Changelog link in Settings.
+            </p>
+          </article>
+          <article className="mb-6">
             <h2 className="text-xl font-bold">v0.2.1 (October 18, 2026)</h2>
             <p className="text-neutral-600">
               Dedicated Changelog portal launch, automated release badges, and full SEO enhancements.

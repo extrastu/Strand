@@ -313,6 +313,7 @@ function registerIpc(): void {
   handle<{ manual?: boolean }>(IPC.updaterCheck, ({ manual }) => updater.check(manual === true))
   handle<undefined>(IPC.updaterDownload, () => updater.download())
   handle<undefined>(IPC.updaterInstall, () => updater.install())
+  handle<undefined>(IPC.updaterRestart, () => updater.restart())
   handle<undefined>(IPC.updaterOpenRelease, () => updater.openReleasePage())
   handle<undefined>(IPC.updaterState, () => updater.getState())
 }

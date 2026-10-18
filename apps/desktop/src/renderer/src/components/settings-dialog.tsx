@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   Download,
   ExternalLink,
+  Globe,
   Info,
   Keyboard,
   Loader2,
@@ -11,6 +12,7 @@ import {
   Moon,
   RefreshCw,
   RotateCcw,
+  ScrollText,
   SlidersHorizontal,
   Sparkles,
   Sun,
@@ -357,6 +359,24 @@ function ShortcutsPanel() {
   )
 }
 
+function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+    </svg>
+  )
+}
+
 function AboutPanel() {
   const t = useT()
   const about = useAppStore((s) => s.about)
@@ -366,8 +386,7 @@ function AboutPanel() {
     void loadAbout()
   }, [loadAbout])
 
-  const openAuthorThreads = () => {
-    const url = 'https://www.threads.com/@thre.addrop'
+  const openLink = (url: string) => {
     if (window.threads?.openExternal) {
       void window.threads.openExternal(url)
     } else {
@@ -386,15 +405,46 @@ function AboutPanel() {
 
       <UpdateSection />
 
-      <div className="pt-1">
+      <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
         <Button
           variant="outline"
-          onClick={openAuthorThreads}
-          className="gap-2 rounded-full px-5 py-2 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors"
+          size="sm"
+          onClick={() => openLink('https://istrand.vercel.app/')}
+          className="gap-1.5 rounded-full px-3.5 py-1.5 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors cursor-pointer"
+        >
+          <Globe className="size-3.5 text-muted-foreground" aria-hidden />
+          <span>{t('about.website')}</span>
+          <ExternalLink className="size-2.5 text-muted-foreground/70" aria-hidden />
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => openLink('https://istrand.vercel.app/changelog')}
+          className="gap-1.5 rounded-full px-3.5 py-1.5 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors cursor-pointer"
+        >
+          <ScrollText className="size-3.5 text-muted-foreground" aria-hidden />
+          <span>{t('about.changelog')}</span>
+          <ExternalLink className="size-2.5 text-muted-foreground/70" aria-hidden />
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => openLink('https://github.com/extrastu/Strand')}
+          className="gap-1.5 rounded-full px-3.5 py-1.5 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors cursor-pointer"
+        >
+          <GithubIcon className="size-3.5 text-muted-foreground" aria-hidden />
+          <span>{t('about.github')}</span>
+          <ExternalLink className="size-2.5 text-muted-foreground/70" aria-hidden />
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => openLink('https://www.threads.com/@thre.addrop')}
+          className="gap-1.5 rounded-full px-3.5 py-1.5 font-medium text-xs hover:border-foreground/30 hover:bg-accent transition-colors cursor-pointer"
         >
           <AtSign className="size-3.5 text-muted-foreground" aria-hidden />
           <span>{t('about.followAuthor')}</span>
-          <ExternalLink className="size-3 text-muted-foreground" aria-hidden />
+          <ExternalLink className="size-2.5 text-muted-foreground/70" aria-hidden />
         </Button>
       </div>
 
@@ -416,6 +466,7 @@ function UpdateSection() {
   const checkForUpdates = useAppStore((s) => s.checkForUpdates)
   const downloadUpdate = useAppStore((s) => s.downloadUpdate)
   const installUpdate = useAppStore((s) => s.installUpdate)
+  const restartApp = useAppStore((s) => s.restartApp)
   const openReleasePage = useAppStore((s) => s.openReleasePage)
 
   return (
@@ -437,7 +488,7 @@ function UpdateSection() {
 
       {updateState.status === 'checking' && (
         <div className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
-          <Loader2 className="size-3.5 animate-spin text-foreground" />
+          <Loader2 className="size-3.5 animate-spin text-foreground shrink-0" />
           <span>{t('updater.checking')}</span>
         </div>
       )}
@@ -502,6 +553,31 @@ function UpdateSection() {
             </span>
           </div>
           <Progress value={updateState.percent} className="h-1.5" />
+        </div>
+      )}
+
+      {updateState.status === 'installing' && (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
+          <Loader2 className="size-3.5 animate-spin text-foreground shrink-0" />
+          <span>{t('updater.installing')}</span>
+        </div>
+      )}
+
+      {updateState.status === 'ready-to-restart' && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-foreground font-medium">
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span className="truncate max-w-[200px]">
+              {t('updater.readyToRestartDesc', { version: updateState.info.version })}
+            </span>
+          </div>
+          <Button
+            size="sm"
+            className="h-7 text-xs rounded-lg cursor-pointer shrink-0"
+            onClick={() => void restartApp()}
+          >
+            {t('updater.restartNow')}
+          </Button>
         </div>
       )}
 

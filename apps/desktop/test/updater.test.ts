@@ -23,18 +23,18 @@ test('compareVersions handles prereleases', () => {
   assert.equal(compareVersions('1.0.0-beta.2', '1.0.0-beta.1') > 0, true)
 })
 
-test('findBestAsset picks matching DMG based on architecture', () => {
+test('findBestAsset picks matching ZIP or DMG based on architecture', () => {
   const assets: GitHubReleaseAsset[] = [
-    { name: 'Strand-0.2.1-darwin-x64.dmg', browser_download_url: 'https://download/x64.dmg', size: 1000 },
-    { name: 'Strand-0.2.1-darwin-arm64.dmg', browser_download_url: 'https://download/arm64.dmg', size: 1000 },
+    { name: 'Strand-0.2.1-darwin-x64.zip', browser_download_url: 'https://download/x64.zip', size: 800 },
     { name: 'Strand-0.2.1-darwin-arm64.zip', browser_download_url: 'https://download/arm64.zip', size: 800 },
+    { name: 'Strand-0.2.1-darwin-arm64.dmg', browser_download_url: 'https://download/arm64.dmg', size: 1000 },
   ]
 
   const armBest = findBestAsset(assets, 'darwin', 'arm64')
-  assert.equal(armBest?.name, 'Strand-0.2.1-darwin-arm64.dmg')
+  assert.equal(armBest?.name, 'Strand-0.2.1-darwin-arm64.zip')
 
   const x64Best = findBestAsset(assets, 'darwin', 'x64')
-  assert.equal(x64Best?.name, 'Strand-0.2.1-darwin-x64.dmg')
+  assert.equal(x64Best?.name, 'Strand-0.2.1-darwin-x64.zip')
 })
 
 test('findBestAsset falls back to any DMG or ZIP', () => {

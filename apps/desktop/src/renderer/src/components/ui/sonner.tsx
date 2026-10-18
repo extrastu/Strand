@@ -34,7 +34,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast !h-9 !min-h-0 !w-auto !rounded-full !px-4 !py-0 !text-[13px] !shadow-[var(--shadow-pop)]",
+          toast:
+            'cn-toast !w-auto !min-w-[260px] !max-w-[440px] !h-auto !min-h-10 !rounded-2xl !px-4 !py-2.5 !text-[13px] !shadow-[var(--shadow-pop)] !gap-3',
+          title: '!text-[13px] !font-medium !leading-snug !whitespace-nowrap',
+          description: '!text-[12px] !text-muted-foreground !leading-tight',
+          actionButton:
+            '!bg-primary !text-primary-foreground hover:!opacity-90 !rounded-lg !px-3 !py-1 !text-xs !font-medium !shrink-0 !whitespace-nowrap',
+          cancelButton:
+            '!bg-secondary !text-secondary-foreground !rounded-lg !px-3 !py-1 !text-xs !shrink-0 !whitespace-nowrap',
         },
       }}
       {...props}
