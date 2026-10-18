@@ -7,9 +7,11 @@ import { Sidebar } from '@/components/sidebar'
 import { TitleBar } from '@/components/title-bar'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { useGlobalShortcuts } from '@/hooks/use-global-shortcuts'
 import { useAppStore } from '@/store/app-store'
 
 export function App() {
+  useGlobalShortcuts()
   const collapsed = useAppStore((s) => s.collapsed)
   const language = useAppStore((s) => s.settings.language)
   const settingsLoaded = useAppStore((s) => s.settingsLoaded)

@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Plus, Search, Settings, X } from 'lucide-react'
+import { DEFAULT_SHORTCUTS } from '@shared/types'
 import { AccountRow } from '@/components/account-row'
 import { useT } from '@/i18n/use-t'
+import { formatShortcutForDisplay } from '@/lib/shortcuts'
 import { useAppStore } from '@/store/app-store'
 
 /** Account list. Collapsing removes it entirely (see App), so it only has the expanded layout. */
@@ -10,6 +12,7 @@ export function Sidebar() {
   const accounts = useAppStore((s) => s.accounts)
   const activeId = useAppStore((s) => s.activeId)
   const openDialog = useAppStore((s) => s.openDialog)
+  const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
 
   const [query, setQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -23,25 +26,16 @@ export function Sidebar() {
     )
   }, [accounts, query])
 
-  // Global keyboard shortcuts: ⌘N for add account, ⌘, for settings, ⌘F for search
+  // Listen for focus search custom event triggered by global shortcut
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const isCmdOrCtrl = e.metaKey || e.ctrlKey
-      if (isCmdOrCtrl && e.key.toLowerCase() === 'n') {
-        e.preventDefault()
-        openDialog({ kind: 'add' })
-      } else if (isCmdOrCtrl && e.key === ',') {
-        e.preventDefault()
-        openDialog({ kind: 'settings' })
-      } else if (isCmdOrCtrl && e.key.toLowerCase() === 'f') {
-        e.preventDefault()
-        searchInputRef.current?.focus()
-      }
+    const handleFocusSearch = () => {
+      searchInputRef.current?.focus()
+      searchInputRef.current?.select()
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [openDialog])
+    window.addEventListener('focus-sidebar-search', handleFocusSearch)
+    return () => window.removeEventListener('focus-sidebar-search', handleFocusSearch)
+  }, [])
 
   const showSearch = accounts.length >= 2 || query.length > 0
 
@@ -60,9 +54,11 @@ export function Sidebar() {
             </span>
             <span className="truncate">{t('sidebar.add')}</span>
           </span>
-          <kbd className="pointer-events-none inline-flex items-center rounded border border-border/70 bg-muted/60 px-1 py-0.2 font-mono text-[9px] text-muted-foreground">
-            ⌘N
-          </kbd>
+          {shortcuts.addAccount && (
+            <kbd className="pointer-events-none inline-flex items-center rounded border border-border/70 bg-muted/60 px-1 py-0.2 font-mono text-[9px] text-muted-foreground">
+              {formatShortcutForDisplay(shortcuts.addAccount)}
+            </kbd>
+          )}
         </button>
 
         {/* Quick Filter Box */}
@@ -146,9 +142,11 @@ export function Sidebar() {
             <Settings className="size-4 shrink-0 transition-transform duration-200 group-hover:rotate-45" aria-hidden />
             <span>{t('sidebar.settings')}</span>
           </span>
-          <kbd className="pointer-events-none inline-flex items-center rounded border border-border/60 bg-muted/40 px-1 py-0.2 font-mono text-[9px] text-muted-foreground/70">
-            ⌘,
-          </kbd>
+          {shortcuts.settings && (
+            <kbd className="pointer-events-none inline-flex items-center rounded border border-border/60 bg-muted/40 px-1 py-0.2 font-mono text-[9px] text-muted-foreground/70">
+              {formatShortcutForDisplay(shortcuts.settings)}
+            </kbd>
+          )}
         </button>
       </div>
     </aside>

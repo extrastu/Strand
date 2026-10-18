@@ -3,7 +3,7 @@
 import path from 'node:path'
 import { app, BrowserWindow, clipboard, dialog, ipcMain, nativeImage, nativeTheme, session, shell, WebContentsView } from 'electron'
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
-import { IPC, SIDEBAR_WIDTH, SIDEBAR_WIDTH_HIDDEN, TOPBAR_HEIGHT } from '@shared/types'
+import { DEFAULT_SHORTCUTS, IPC, SIDEBAR_WIDTH, SIDEBAR_WIDTH_HIDDEN, TOPBAR_HEIGHT } from '@shared/types'
 import { defaultLanguageFor } from '@shared/locale'
 import type { AboutInfo, AccountInput, AccountsState, Settings } from '@shared/types'
 import { createStore, partitionFor } from './accounts'
@@ -208,6 +208,7 @@ void app.whenReady().then(() => {
     settings = createSettingsStore(path.join(app.getPath('userData'), 'settings.json'), {
       theme: 'system',
       language: defaultLanguageFor(app.getLocale()),
+      shortcuts: DEFAULT_SHORTCUTS,
     })
   } catch (err) {
     // Reading the data failed for a reason other than "missing" or "corrupt" (permissions, a folder in

@@ -1,10 +1,12 @@
 import { PanelLeft } from 'lucide-react'
+import { DEFAULT_SHORTCUTS } from '@shared/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useWindowDrag } from '@/hooks/use-window-drag'
 import { useT } from '@/i18n/use-t'
 import { TYPE_LABEL_KEY } from '@/lib/labels'
+import { formatShortcutForDisplay } from '@/lib/shortcuts'
 import { useAppStore } from '@/store/app-store'
 
 /**
@@ -17,8 +19,11 @@ export function TitleBar() {
   const active = useAppStore((s) => s.accounts.find((a) => a.id === s.activeId))
   const collapsed = useAppStore((s) => s.collapsed)
   const setCollapsed = useAppStore((s) => s.setCollapsed)
+  const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
   const onDrag = useWindowDrag()
-  const label = collapsed ? t('titlebar.showSidebar') : t('titlebar.hideSidebar')
+  const baseLabel = collapsed ? t('titlebar.showSidebar') : t('titlebar.hideSidebar')
+  const shortcutHint = shortcuts.toggleSidebar ? ` (${formatShortcutForDisplay(shortcuts.toggleSidebar)})` : ''
+  const label = baseLabel + shortcutHint
 
   return (
     <header

@@ -134,3 +134,32 @@ test('valid JSON of the wrong shape is treated as corrupt: defaults and a backup
     assert.equal(fs.readFileSync(`${file}.corrupt`, 'utf8'), raw, raw)
   }
 })
+
+test('shortcuts can be set and persisted independently', () => {
+  const file = tmpFile()
+  const defaults: Settings = {
+    theme: 'system',
+    language: 'en',
+    shortcuts: { toggleSidebar: 'Mod+B', addAccount: 'Mod+N', settings: 'Mod+,', search: 'Mod+F' },
+  }
+  const store = createSettingsStore(file, defaults)
+  store.set({ shortcuts: { toggleSidebar: 'Mod+Shift+S' } })
+  assert.equal(store.get().shortcuts?.toggleSidebar, 'Mod+Shift+S')
+  assert.equal(store.get().shortcuts?.addAccount, 'Mod+N')
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, 'utf8')), {
+    shortcuts: { toggleSidebar: 'Mod+Shift+S' },
+  })
+
+  // Read back by a new store instance
+  const second = createSettingsStore(file, defaults)
+  assert.equal(second.get().shortcuts?.toggleSidebar, 'Mod+Shift+S')
+  assert.equal(second.get().shortcuts?.addAccount, 'Mod+N')
+})
+
+test('invalid shortcuts or unknown actions are rejected', () => {
+  const file = tmpFile()
+  const store = createSettingsStore(file, DEFAULTS)
+  assert.throws(() => store.set({ shortcuts: 'invalid' as never }), /shortcuts must be an object/)
+  assert.throws(() => store.set({ shortcuts: { unknownAction: 'Mod+K' } as never }), /unknown shortcut action/)
+  assert.throws(() => store.set({ shortcuts: { toggleSidebar: '' } }), /invalid shortcut/)
+})

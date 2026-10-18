@@ -1,6 +1,7 @@
 import { toast } from 'sonner'
 import { create } from 'zustand'
 import { defaultLanguageFor } from '@shared/locale'
+import { DEFAULT_SHORTCUTS } from '@shared/types'
 import type { AboutInfo, Account, AccountInput, AccountsState, Settings } from '@shared/types'
 import { translate } from '@/i18n'
 import type { MessageKey, Params } from '@/i18n'
@@ -72,6 +73,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   settings: {
     theme: 'system',
     language: defaultLanguageFor(typeof navigator === 'undefined' ? '' : navigator.language),
+    shortcuts: DEFAULT_SHORTCUTS,
   },
   settingsLoaded: false,
   about: null,

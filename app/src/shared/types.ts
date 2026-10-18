@@ -27,9 +27,28 @@ export type Language = 'zh-CN' | 'en'
 export const THEMES: readonly ThemeSetting[] = ['system', 'light', 'dark']
 export const LANGUAGES: readonly Language[] = ['zh-CN', 'en']
 
+export type ShortcutAction = 'toggleSidebar' | 'addAccount' | 'settings' | 'search'
+
+export const SHORTCUT_ACTIONS: readonly ShortcutAction[] = [
+  'toggleSidebar',
+  'addAccount',
+  'settings',
+  'search',
+]
+
+export type ShortcutMap = Record<ShortcutAction, string>
+
+export const DEFAULT_SHORTCUTS: ShortcutMap = {
+  toggleSidebar: 'Mod+B',
+  addAccount: 'Mod+N',
+  settings: 'Mod+,',
+  search: 'Mod+F',
+}
+
 export interface Settings {
   theme: ThemeSetting
   language: Language
+  shortcuts?: Partial<Record<ShortcutAction, string>>
 }
 
 export interface AboutInfo {
