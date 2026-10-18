@@ -1,9 +1,10 @@
 import React from 'react'
-import { Download, Sparkles, Apple, ArrowRight, ShieldCheck } from 'lucide-react'
+import { Download, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react'
 import type { Language } from '@/lib/i18n/content'
 import { content } from '@/lib/i18n/content'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { AppleIcon } from '@/components/icons'
 
 interface HeroProps {
   lang: Language
@@ -52,7 +53,7 @@ export const Hero: React.FC<HeroProps> = ({ lang }) => {
             className="w-full sm:w-auto h-auto py-3.5 px-6 rounded-xl shadow-md"
           >
             <a href="#download" className="gap-2.5">
-              <Apple className="w-4 h-4 fill-current shrink-0" />
+              <AppleIcon className="w-4 h-4 shrink-0" />
               <div className="text-left">
                 <div className="font-semibold text-sm leading-tight">{t.downloadDmg}</div>
                 <div className="text-[11px] opacity-75 font-normal leading-tight">{t.downloadDmgSub}</div>

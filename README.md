@@ -58,6 +58,12 @@ threadsMac/
 
 ---
 
+## 开源协议 (License)
+
+本项目遵循 [MIT License](LICENSE) 开源协议。
+
+---
+
 ## 免责声明
 
 Strand 是一个独立的开源项目。与 Meta Platforms, Inc. 或 Threads 无任何隶属、赞助、认可或合作关系。

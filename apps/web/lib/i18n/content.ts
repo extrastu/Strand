@@ -142,7 +142,9 @@ export const content = {
         releases: 'Releases',
         repo: 'Source Code',
         issues: 'Report Issue',
+        license: 'MIT License',
       },
+      licenseNote: 'Open-source under the MIT License.',
     },
   },
   'zh-CN': {
@@ -286,7 +288,9 @@ export const content = {
         releases: '版本发布',
         repo: '开源仓库',
         issues: '反馈问题',
+        license: 'MIT 开源协议',
       },
+      licenseNote: '基于 MIT 协议完全开源开放。',
     },
   },
 }

@@ -1,6 +1,7 @@
 {
   "name": "@strand/web",
   "version": "0.2.0",
+  "license": "MIT",
   "private": true,
   "description": "Official landing website for Strand, the macOS Threads client (Next.js + shadcn + Lucide)",
   "repository": {

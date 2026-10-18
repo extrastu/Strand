@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Apple, Download, AlertCircle, FileArchive, CheckCircle2 } from 'lucide-react'
+import { Download, AlertCircle, FileArchive, CheckCircle2 } from 'lucide-react'
 import type { Language } from '@/lib/i18n/content'
 import { content } from '@/lib/i18n/content'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { AppleIcon } from '@/components/icons'
 
 interface DownloadSectionProps {
   lang: Language
@@ -40,7 +41,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
             </div>
             <div>
               <div className="w-12 h-12 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 flex items-center justify-center mb-5 shadow-xs">
-                <Apple className="w-6 h-6 fill-current" />
+                <AppleIcon className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
                 {t.appleSilicon.title}
