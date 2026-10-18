@@ -140,7 +140,7 @@ test('shortcuts can be set and persisted independently', () => {
   const defaults: Settings = {
     theme: 'system',
     language: 'en',
-    shortcuts: { toggleSidebar: 'Mod+B', addAccount: 'Mod+N', settings: 'Mod+,', search: 'Mod+F' },
+    shortcuts: { toggleSidebar: 'Mod+B', addAccount: 'Mod+N', settings: 'Mod+,' },
   }
   const store = createSettingsStore(file, defaults)
   store.set({ shortcuts: { toggleSidebar: 'Mod+Shift+S' } })

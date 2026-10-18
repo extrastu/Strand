@@ -91,8 +91,6 @@ export const zhCN = {
   'shortcuts.addAccountDesc': '打开添加账号对话框',
   'shortcuts.settings': '打开设置',
   'shortcuts.settingsDesc': '打开应用设置对话框',
-  'shortcuts.search': '搜索账号',
-  'shortcuts.searchDesc': '聚焦侧边栏搜索框',
   'shortcuts.switchAccount': '按序号快速切换账号',
   'shortcuts.switchAccountDesc': '按序号快速切换至对应的 Threads 账号 (⌘1 - ⌘9)',
   'shortcuts.reset': '恢复默认',

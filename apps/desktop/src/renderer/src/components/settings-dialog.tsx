@@ -55,7 +55,6 @@ const SHORTCUT_ITEMS: { action: ShortcutAction; title: MessageKey; desc: Message
   { action: 'toggleSidebar', title: 'shortcuts.toggleSidebar', desc: 'shortcuts.toggleSidebarDesc' },
   { action: 'addAccount', title: 'shortcuts.addAccount', desc: 'shortcuts.addAccountDesc' },
   { action: 'settings', title: 'shortcuts.settings', desc: 'shortcuts.settingsDesc' },
-  { action: 'search', title: 'shortcuts.search', desc: 'shortcuts.searchDesc' },
 ]
 
 export function SettingsDialog() {

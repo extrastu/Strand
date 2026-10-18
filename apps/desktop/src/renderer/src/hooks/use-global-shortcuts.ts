@@ -8,7 +8,6 @@ import { useAppStore } from '@/store/app-store'
  * - Toggle sidebar
  * - Add account
  * - Settings
- * - Focus sidebar search
  * - Switch account by index (Mod+1 ... Mod+9)
  */
 export function useGlobalShortcuts() {
@@ -62,21 +61,6 @@ export function useGlobalShortcuts() {
       if (shortcuts.settings && matchShortcut(e, shortcuts.settings)) {
         e.preventDefault()
         openDialog({ kind: 'settings' })
-        return
-      }
-
-      // Search in Sidebar
-      if (shortcuts.search && matchShortcut(e, shortcuts.search)) {
-        e.preventDefault()
-        if (collapsed) {
-          void setCollapsed(false).then(() => {
-            setTimeout(() => {
-              window.dispatchEvent(new CustomEvent('focus-sidebar-search'))
-            }, 60)
-          })
-        } else {
-          window.dispatchEvent(new CustomEvent('focus-sidebar-search'))
-        }
         return
       }
 
