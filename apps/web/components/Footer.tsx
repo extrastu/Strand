@@ -83,7 +83,16 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
           </div>
           <div className="flex items-center gap-1 text-neutral-400">
             <span>Crafted with</span>
-            <Heart className="w-3 h-3 text-red-500 fill-current" />
+            <Heart className="w-3 h-3 text-red-500 fill-current mx-0.5" />
+            <span>by</span>
+            <a
+              href="https://www.threads.com/@thre.addrop"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white underline underline-offset-2 transition-colors"
+            >
+              extrastu
+            </a>
             <span>for macOS creators</span>
           </div>
         </div>

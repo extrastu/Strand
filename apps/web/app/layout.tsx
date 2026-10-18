@@ -112,6 +112,7 @@ const jsonLd = {
   },
   sameAs: [
     'https://github.com/extrastu/Strand',
+    'https://www.threads.com/@thre.addrop',
   ],
   offers: {
     '@type': 'Offer',
