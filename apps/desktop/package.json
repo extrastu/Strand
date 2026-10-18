@@ -4,6 +4,10 @@
   "version": "0.2.0",
   "private": true,
   "description": "An unofficial multi-account client for Threads on macOS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extrastu/Strand.git"
+  },
   "main": "./out/main/index.js",
   "engines": {
     "node": ">=22.12"

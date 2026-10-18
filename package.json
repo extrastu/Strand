@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "private": true,
   "description": "Monorepo for Strand: unofficial macOS Threads client and official web portal",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extrastu/Strand.git"
+  },
+  "bugs": {
+    "url": "https://github.com/extrastu/Strand/issues"
+  },
+  "homepage": "https://github.com/extrastu/Strand#readme",
   "workspaces": [
     "apps/*"
   ],

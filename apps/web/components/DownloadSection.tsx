@@ -62,13 +62,16 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
 
             <Button
               size="lg"
+              asChild
               className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-md"
-              onClick={() => {
-                alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.appleSilicon.filename}`)
-              }}
             >
-              <Download className="w-4 h-4" />
-              <span>{t.appleSilicon.btn}</span>
+              <a
+                href="https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg"
+                download
+              >
+                <Download className="w-4 h-4" />
+                <span>{t.appleSilicon.btn}</span>
+              </a>
             </Button>
           </div>
 
@@ -99,24 +102,40 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
             <Button
               variant="outline"
               size="lg"
+              asChild
               className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-2xs"
-              onClick={() => {
-                alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.zipPackage.filename}`)
-              }}
             >
-              <Download className="w-4 h-4 text-neutral-500" />
-              <span>{t.zipPackage.btn}</span>
+              <a
+                href="https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip"
+                download
+              >
+                <Download className="w-4 h-4 text-neutral-500" />
+                <span>{t.zipPackage.btn}</span>
+              </a>
             </Button>
           </div>
         </div>
 
         {/* First Launch Tip */}
-        <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 flex items-start gap-3 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
+        <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 flex items-start gap-3 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300 mb-6">
           <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
           <div>
             <span className="font-semibold">{t.installTipTitle}: </span>
             {t.installTipText}
           </div>
+        </div>
+
+        {/* Checksum and Releases Link */}
+        <div className="text-center text-xs text-neutral-500">
+          <span>{t.checksumNote} </span>
+          <a
+            href="https://github.com/extrastu/Strand/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-4 text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white font-medium"
+          >
+            GitHub Releases &rarr;
+          </a>
         </div>
       </div>
     </section>

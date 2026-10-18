@@ -1,6 +1,8 @@
 # Strand
 
 > 优雅、纯粹。专为 macOS 打造的非官方 Threads 多账号客户端与官方网站。
+> 
+> 🔗 开源仓库：[https://github.com/extrastu/Strand](https://github.com/extrastu/Strand)
 
 ---
 

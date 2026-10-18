@@ -3,6 +3,10 @@
   "version": "0.2.0",
   "private": true,
   "description": "Official landing website for Strand, the macOS Threads client (Next.js + shadcn + Lucide)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extrastu/Strand.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -112,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
             className="h-8 w-8 text-neutral-700 dark:text-neutral-300"
           >
             <a
-              href="https://github.com"
+              href="https://github.com/extrastu/Strand"
               target="_blank"
               rel="noopener noreferrer"
               title="GitHub Repository"

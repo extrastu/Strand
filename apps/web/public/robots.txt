@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://strand.app/sitemap.xml

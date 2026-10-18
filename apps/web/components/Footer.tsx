@@ -38,13 +38,15 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
           {/* Links */}
           <div className="flex items-center gap-6 font-medium">
             <a
-              href="#download"
+              href="https://github.com/extrastu/Strand/releases"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               {t.links.releases}
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/extrastu/Strand"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1"
@@ -53,7 +55,7 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
               <span>{t.links.repo}</span>
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/extrastu/Strand/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-neutral-900 dark:hover:text-white transition-colors"
