@@ -1,13 +1,14 @@
 // Multi-account Threads shell: the renderer (sidebar + top bar) is this window's own page, plus one
 // isolated WebContentsView per account. No injection into Threads pages, no API calls.
 import path from 'node:path'
-import { app, BrowserWindow, clipboard, ipcMain, session, shell, WebContentsView } from 'electron'
+import { app, BrowserWindow, clipboard, ipcMain, nativeImage, session, shell, WebContentsView } from 'electron'
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import { IPC, SIDEBAR_WIDTH, SIDEBAR_WIDTH_HIDDEN, TOPBAR_HEIGHT } from '@shared/types'
 import type { AccountInput, AccountsState } from '@shared/types'
 import { createStore, partitionFor } from './accounts'
 import type { AccountStore } from './accounts'
 import { classifyLink, isWrapperUrl } from './links'
+import iconPath from '../../build/icon.png?asset'
 
 app.setName('ThreadsMac')
 
@@ -173,6 +174,11 @@ function registerIpc(): void {
 }
 
 void app.whenReady().then(() => {
+  // A packaged app takes its icon from icon.icns; in dev the Dock would show Electron's, so set ours.
+  if (process.platform === 'darwin') {
+    const icon = nativeImage.createFromPath(iconPath)
+    if (!icon.isEmpty()) app.dock?.setIcon(icon)
+  }
   store = createStore(path.join(app.getPath('userData'), 'accounts.json'))
   win = new BrowserWindow({
     width: 1200,
