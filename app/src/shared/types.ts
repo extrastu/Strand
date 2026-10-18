@@ -90,7 +90,7 @@ export interface ThreadsApi {
   }
   sidebar: {
     /** Resolves to the sidebar width in px that the main process now uses. */
-    setCollapsed(collapsed: boolean): Promise<number>
+    setCollapsed(collapsed: boolean, animated?: boolean): Promise<number>
   }
   settings: {
     get(): Promise<Settings>

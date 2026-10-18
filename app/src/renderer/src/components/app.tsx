@@ -8,6 +8,7 @@ import { TitleBar } from '@/components/title-bar'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useGlobalShortcuts } from '@/hooks/use-global-shortcuts'
+import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 
 export function App() {
@@ -27,8 +28,22 @@ export function App() {
     <TooltipProvider delayDuration={300}>
       <div className="flex h-full flex-col">
         <TitleBar />
-        <div className="flex min-h-0 flex-1">
-          {!collapsed && <Sidebar />}
+        <div className="flex min-h-0 flex-1 overflow-hidden">
+          <div
+            className={cn(
+              'h-full shrink-0 overflow-hidden bg-sidebar transition-[width] duration-200 ease-out',
+              !collapsed && 'border-r border-border',
+            )}
+            style={{ width: collapsed ? 0 : 240 }}
+            aria-hidden={collapsed}
+          >
+            <div
+              className="h-full w-[240px] transition-transform duration-200 ease-out"
+              style={{ transform: `translateX(${collapsed ? -240 : 0}px)` }}
+            >
+              <Sidebar />
+            </div>
+          </div>
           {/* The active account's page is a native view drawn over this area by the main process. */}
           <main className="min-w-0 flex-1">
             <EmptyState />

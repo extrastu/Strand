@@ -28,74 +28,58 @@ export function TitleBar() {
   return (
     <header
       onPointerDown={onDrag}
-      className={cn(
-        'h-11 shrink-0 flex items-center select-none border-b border-border bg-background',
-        collapsed && 'pl-[76px] pr-4 justify-between',
-      )}
+      className="relative h-11 shrink-0 flex items-center select-none bg-background overflow-hidden"
     >
-      {!collapsed ? (
-        <>
-          {/* Header row directly above sidebar: shares bg-sidebar and right border, holding traffic lights and toggle */}
-          <div className="flex h-full w-[240px] shrink-0 items-center justify-between border-r border-border bg-sidebar pl-[76px] pr-2">
-            <div />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label={label}
-                  aria-expanded={true}
-                  className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08]"
-                  onClick={() => void setCollapsed(true)}
-                >
-                  <PanelLeft className="size-4" aria-hidden />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">{label}</TooltipContent>
-            </Tooltip>
-          </div>
+      {/* Sidebar top background strip: animates width from 240px to 0px */}
+      <div
+        className={cn(
+          'h-full shrink-0 overflow-hidden bg-sidebar transition-[width] duration-200 ease-out',
+          !collapsed && 'border-r border-border',
+        )}
+        style={{ width: collapsed ? 0 : 240 }}
+      />
 
-          {/* Header row above active page */}
-          <div className="flex flex-1 items-center justify-between px-4">
-            {active ? (
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="truncate text-sm font-medium text-foreground">{active.name}</span>
-                <span className="rounded border border-border/80 bg-muted/60 px-1.5 py-0.2 text-[10px] font-mono font-medium text-muted-foreground uppercase">
-                  {t(TYPE_LABEL_KEY[active.type])}
-                </span>
-              </div>
-            ) : (
-              <div />
-            )}
+      {/* Floating Toggle Button: glides smoothly between x=204px and x=76px */}
+      <div
+        className="absolute top-2 z-10 transition-transform duration-200 ease-out"
+        style={{
+          left: 76,
+          transform: `translateX(${collapsed ? 0 : 128}px)`,
+        }}
+      >
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={label}
+              aria-expanded={!collapsed}
+              className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08]"
+              onClick={() => void setCollapsed(!collapsed)}
+            >
+              <PanelLeft className="size-4" aria-hidden />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">{label}</TooltipContent>
+        </Tooltip>
+      </div>
+
+      {/* Right Content Header: border-b only on main content area, with animated left padding */}
+      <div
+        className="flex h-full flex-1 items-center justify-between border-b border-border pr-4 transition-[padding-left] duration-200 ease-out"
+        style={{ paddingLeft: collapsed ? 116 : 16 }}
+      >
+        {active ? (
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="truncate text-sm font-medium text-foreground">{active.name}</span>
+            <span className="rounded border border-border/80 bg-muted/60 px-1.5 py-0.2 text-[10px] font-mono font-medium text-muted-foreground uppercase">
+              {t(TYPE_LABEL_KEY[active.type])}
+            </span>
           </div>
-        </>
-      ) : (
-        <div className="flex flex-1 items-center gap-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={label}
-                aria-expanded={false}
-                className="size-7 rounded-md text-muted-foreground hover:bg-black/[0.05] hover:text-foreground dark:hover:bg-white/[0.08]"
-                onClick={() => void setCollapsed(false)}
-              >
-                <PanelLeft className="size-4" aria-hidden />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">{label}</TooltipContent>
-          </Tooltip>
-          {active && (
-            <div className="flex min-w-0 items-center gap-2">
-              <span className="truncate text-sm font-medium text-foreground">{active.name}</span>
-              <span className="rounded border border-border/80 bg-muted/60 px-1.5 py-0.2 text-[10px] font-mono font-medium text-muted-foreground uppercase">
-                {t(TYPE_LABEL_KEY[active.type])}
-              </span>
-            </div>
-          )}
-        </div>
-      )}
+        ) : (
+          <div />
+        )}
+      </div>
     </header>
   )
 }

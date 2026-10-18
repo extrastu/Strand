@@ -12,7 +12,7 @@ const api: ThreadsApi = {
     copyName: (id) => ipcRenderer.invoke(IPC.copyName, { id }),
   },
   sidebar: {
-    setCollapsed: (collapsed) => ipcRenderer.invoke(IPC.collapse, { collapsed }),
+    setCollapsed: (collapsed, animated) => ipcRenderer.invoke(IPC.collapse, { collapsed, animated }),
   },
   settings: {
     get: () => ipcRenderer.invoke(IPC.settingsGet),

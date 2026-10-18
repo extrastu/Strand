@@ -35,7 +35,7 @@ export function Sidebar() {
   return (
     <aside
       aria-label={t('sidebar.aria')}
-      className="flex h-full w-[240px] shrink-0 flex-col border-r border-border bg-sidebar select-none text-foreground"
+      className="flex h-full w-[240px] shrink-0 flex-col bg-sidebar select-none text-foreground"
     >
       {/* Top Active Account Profile Card with Switcher Dropdown */}
       <div className="pt-2 px-2 pb-1.5">

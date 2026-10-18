@@ -48,7 +48,7 @@ interface AppStore {
   save(id: string | null, input: AccountInput): Promise<boolean>
   remove(id: string): Promise<void>
   copyName(id: string): Promise<void>
-  setCollapsed(collapsed: boolean): Promise<void>
+  setCollapsed(collapsed: boolean, animated?: boolean): Promise<void>
   updateSettings(patch: Partial<Settings>): Promise<void>
   loadAbout(): Promise<void>
   openDialog(dialog: Exclude<DialogState, null>): void
@@ -95,7 +95,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
       return
     }
     // Always tell main which width to use, so both sides agree even if the stored flag is missing.
-    await get().setCollapsed(readCollapsed())
+    await get().setCollapsed(readCollapsed(), false)
   },
 
   async select(id) {
@@ -141,11 +141,11 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     }
   },
 
-  async setCollapsed(collapsed) {
+  async setCollapsed(collapsed, animated = true) {
     try {
-      await window.threads.sidebar.setCollapsed(collapsed)
       writeCollapsed(collapsed)
       set({ collapsed })
+      await window.threads.sidebar.setCollapsed(collapsed, animated)
     } catch {
       toast.error(t('toast.sidebarFailed'))
     }

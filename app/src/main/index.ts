@@ -190,10 +190,55 @@ function registerIpc(): void {
     overlayOpen = open === true
     showActive()
   })
-  handle<{ collapsed?: unknown }>(IPC.collapse, ({ collapsed }) => {
-    sidebarWidth = collapsed === true ? SIDEBAR_WIDTH_HIDDEN : SIDEBAR_WIDTH
-    layout()
-    return sidebarWidth
+  handle<{ collapsed?: unknown; animated?: unknown }>(IPC.collapse, async ({ collapsed, animated }) => {
+    const targetWidth = collapsed === true ? SIDEBAR_WIDTH_HIDDEN : SIDEBAR_WIDTH
+    if (animated === false) {
+      if (collapseAnimTimer) {
+        clearInterval(collapseAnimTimer)
+        collapseAnimTimer = null
+      }
+      sidebarWidth = targetWidth
+      layout()
+      return sidebarWidth
+    }
+    return animateSidebar(targetWidth, 200)
+  })
+}
+
+let collapseAnimTimer: NodeJS.Timeout | null = null
+
+function animateSidebar(targetWidth: number, durationMs = 200): Promise<number> {
+  return new Promise((resolve) => {
+    if (collapseAnimTimer) {
+      clearInterval(collapseAnimTimer)
+      collapseAnimTimer = null
+    }
+    const startWidth = sidebarWidth
+    if (startWidth === targetWidth || durationMs <= 0) {
+      sidebarWidth = targetWidth
+      layout()
+      return resolve(sidebarWidth)
+    }
+
+    const startTime = Date.now()
+    const frameInterval = 16
+
+    collapseAnimTimer = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(1, elapsed / durationMs)
+      // Ease out cubic: 1 - (1 - progress)^3
+      const ease = 1 - Math.pow(1 - progress, 3)
+      sidebarWidth = Math.round(startWidth + (targetWidth - startWidth) * ease)
+      layout()
+
+      if (progress >= 1) {
+        if (collapseAnimTimer) clearInterval(collapseAnimTimer)
+        collapseAnimTimer = null
+        sidebarWidth = targetWidth
+        layout()
+        resolve(sidebarWidth)
+      }
+    }, frameInterval)
   })
 }
 
