@@ -1,69 +1,106 @@
+<div align="center">
+
 # Strand
 
-> 优雅、纯粹。专为 macOS 打造的非官方 Threads 多账号客户端与官方网站。
-> 
-> 🔗 开源仓库：[https://github.com/extrastu/Strand](https://github.com/extrastu/Strand)
-> 
-> 🌐 官方网站：[https://istrand.vercel.app/](https://istrand.vercel.app/)
+<p>
+  <strong>An elegant, distraction-free multi-account desktop client for Threads on macOS.</strong>
+</p>
+
+<p>
+  <strong>English</strong> | <a href="README.zh-CN.md">简体中文</a>
+</p>
+
+<p>
+  <a href="https://github.com/extrastu/Strand/releases/tag/v0.2.0">
+    <img src="https://img.shields.io/badge/Release-v0.2.0-black?style=flat-square" alt="Version 0.2.0" />
+  </a>
+  <a href="https://istrand.vercel.app/">
+    <img src="https://img.shields.io/badge/Website-istrand.vercel.app-black?style=flat-square" alt="Website" />
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="MIT License" />
+  </a>
+  <img src="https://img.shields.io/badge/Platform-macOS%2013+-101010?style=flat-square&logo=apple" alt="macOS 13+" />
+</p>
+
+<p>
+  🔗 <strong>GitHub Repository</strong>: <a href="https://github.com/extrastu/Strand">https://github.com/extrastu/Strand</a> &nbsp;|&nbsp;
+  🌐 <strong>Official Website</strong>: <a href="https://istrand.vercel.app/">https://istrand.vercel.app/</a>
+</p>
 
 ---
 
-## 架构概览 (Monorepo)
+</div>
 
-本项目采用现代标准 Monorepo 架构，统一由工作区（npm / pnpm workspaces）进行管理：
+## Architecture Overview (Monorepo)
+
+Strand is organized as a modern monorepo powered by workspace management (`npm` / `pnpm` workspaces):
 
 ```
 threadsMac/
 ├── apps/
-│   ├── desktop/            # macOS 桌面客户端应用 (Electron + React 19 + TypeScript)
-│   └── web/                # 官方落地页门户网站 (Next.js 15 App Router + shadcn/ui + Lucide + Tailwind CSS v4)
-├── package.json            # 根工作区配置与统一快捷脚本
-├── pnpm-workspace.yaml     # pnpm 兼容配置
-└── README.md
+│   ├── desktop/            # macOS desktop client (Electron + React 19 + TypeScript)
+│   └── web/                # Official web portal (Next.js 15 App Router + shadcn/ui + Lucide + Tailwind CSS v4)
+├── package.json            # Root workspace scripts & dependencies
+├── pnpm-workspace.yaml     # pnpm workspace configuration
+├── README.md               # English documentation (Default)
+├── README.zh-CN.md         # Simplified Chinese documentation
+└── LICENSE                 # MIT License
 ```
 
-### 1. 桌面客户端 (`apps/desktop`)
-- **多账号独立沙箱**：基于 Electron 分区 (`persist:account-<id>`)，Cookie 与缓存完全物理隔离，避免登入登出与串号烦恼。
-- **纯粹黑白美学**：汲取 Threads 经典黑白视觉基调与 Claude 桌面端几何形态，专注沉浸。
-- **键盘优先**：支持 `⌘B` 抽屉式侧边栏折叠、`⌘1~9` 快速切换账号、`⌘,` 快捷设置等。
-- **隐私至上**：零三方服务中转、不采集任何敏感凭据、纯本地安全存储。
-- **支持架构**：提供经过签名的 Apple Silicon (`arm64`) 与 Intel (`x64`) 的 `.dmg` 安装包与 `.zip` 压缩包。
+### 1. Desktop Application (`apps/desktop`)
+- **Isolated Multi-Account Sessions**: Strictly isolated partitions (`persist:account-<id>`) with separate cookies, cache, and IndexedDB storage. No cross-talk or constant re-logging.
+- **Monochrome Aesthetics**: Inspired by Threads classic black-and-white palette and Claude desktop geometry for deep, distraction-free focus.
+- **Keyboard-First Workflow**: `⌘B` to toggle sidebar drawer with smooth spring animation, `⌘1~9` to instantly jump between accounts, and `⌘,` for settings.
+- **Privacy by Design**: Zero middleman servers, no scraping scripts, no credential storage. Local-first security.
+- **Universal macOS Binaries**: Native support for Apple Silicon (`arm64`) and Intel (`x64`) with signed DMG and portable ZIP archives.
 
-### 2. 官方网站 (`apps/web`)
-- **技术栈**：Next.js 15 (App Router) + shadcn/ui + Lucide React + Tailwind CSS v4。
-- **极致 SEO 优化**：服务端静态预渲染 (SSG)、OpenGraph、Twitter Card、`robots.txt`、`sitemap.xml` 及 Schema.org `SoftwareApplication` 结构化数据 (JSON-LD)。
-- **设计风格**：与客户端完全同构的黑白极简与玻璃拟态质感，支持一键切换深色/浅色主题。
-- **双语支持**：内置英文与简体中文全量本地化，自动识别系统首选语言。
-- **交互式产品沙盒**：在网页端高保真模拟 macOS 窗口交互，支持点选切换账号、折叠侧边栏、预览设置对话框与发帖界面。
-- **下载与指引**：直观的 Apple Silicon / Intel 镜像下载卡片与首发安装安全提示。
+### 2. Official Website (`apps/web`)
+- **Tech Stack**: Next.js 15 (App Router) + shadcn/ui + Lucide React + Tailwind CSS v4.
+- **SEO & Performance**: Server-side static generation (SSG), OpenGraph, Twitter Cards, `robots.txt`, `sitemap.xml`, and Schema.org `SoftwareApplication` JSON-LD rich snippets.
+- **Design Alignment**: Clean monochrome aesthetics and glassmorphism that perfectly mirror the desktop application.
+- **Bilingual & Adaptive**: Automatically follows browser language preference with graceful fallback to English, alongside manual language toggling.
+- **Interactive Sandbox**: High-fidelity in-browser macOS window mockup to preview multi-account switching, sidebar collapse, and settings.
+- **Download Center**: Direct download cards for Apple Silicon and Intel machines with first-launch verification instructions.
 
 ---
 
-## 常用脚本 (Root Workspace)
+## Workspace Commands
 
-在仓库根目录下即可统一调度所有子应用：
+Manage and run all sub-applications directly from the repository root:
 
-| 命令 | 描述 |
+| Command | Description |
 | :--- | :--- |
-| `npm run dev:web` (或 `npm run dev`) | 启动 Web 官网本地开发服务器 (`http://localhost:5173`) |
-| `npm run dev:desktop` | 启动 macOS 桌面客户端开发模式 (HMR 热重载) |
-| `npm run build` | 统一编译构建桌面端与官网应用 |
-| `npm run build:web` | 单独构建官网静态发布资源 (输出至 `apps/web/dist`) |
-| `npm run build:desktop` | 单独构建桌面端可执行捆绑包 (输出至 `apps/desktop/out`) |
-| `npm run test` | 运行所有测试用例 (Vitest) |
-| `npm run typecheck` | 执行全局 TypeScript 类型检查 |
-| `npm run package:dmg` | 打包生成 macOS DMG 安装包 (存入 `apps/desktop/release`) |
-| `npm run package:zip` | 打包生成 macOS ZIP 分发包 |
-| `npm run dist` | 同时生成 DMG 与 ZIP 完整分发文件 |
+| `npm run dev:web` (or `npm run dev`) | Start Next.js official website development server (`http://localhost:3000`) |
+| `npm run dev:desktop` | Start macOS desktop client with HMR hot reload |
+| `npm run build` | Build both desktop client and web portal |
+| `npm run build:web` | Build web portal for production (Next.js static export / SSG) |
+| `npm run build:desktop` | Build desktop client bundle (`apps/desktop/out`) |
+| `npm run test` | Run complete automated test suite (Vitest) |
+| `npm run typecheck` | Perform TypeScript typechecking across all packages |
+| `npm run package:dmg` | Package macOS DMG installer into `apps/desktop/release` |
+| `npm run package:zip` | Package macOS ZIP distribution archive |
+| `npm run dist` | Generate both DMG and ZIP release files |
 
 ---
 
-## 开源协议 (License)
+## Download & Installation
 
-本项目遵循 [MIT License](LICENSE) 开源协议。
+Grab the latest release from [GitHub Releases](https://github.com/extrastu/Strand/releases) or the [Official Download Center](https://istrand.vercel.app/#download):
+
+- **DMG Installer (Apple Silicon)**: [`Strand-0.2.0-darwin-arm64.dmg`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg)
+- **Portable ZIP (Apple Silicon)**: [`Strand-0.2.0-darwin-arm64.zip`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip)
+
+> **First Launch Tip**: Strand is an open-source, ad-hoc signed application. If macOS displays a verification prompt on first launch, right-click (or Control-click) `Strand.app` in `/Applications` and select **Open**.
 
 ---
 
-## 免责声明
+## License
 
-Strand 是一个独立的开源项目。与 Meta Platforms, Inc. 或 Threads 无任何隶属、赞助、认可或合作关系。
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Disclaimer
+
+Strand is an independent open-source project. It is not affiliated with, endorsed by, or sponsored by Meta Platforms, Inc. or Threads.
