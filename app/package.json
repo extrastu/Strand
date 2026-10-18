@@ -13,6 +13,9 @@
     "build": "electron-vite build",
     "start": "electron-vite build && electron-vite preview",
     "package": "electron-vite build && node scripts/package.mjs",
+    "package:dmg": "electron-vite build && node scripts/package.mjs --dmg",
+    "package:zip": "electron-vite build && node scripts/package.mjs --zip",
+    "dist": "electron-vite build && node scripts/package.mjs --all",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "test": "vitest run"
   },
