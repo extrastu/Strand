@@ -1,7 +1,8 @@
 import React from 'react'
 import { Users, Palette, ShieldCheck, Command, Languages, Zap } from 'lucide-react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
 interface FeaturesProps {
   lang: Language
@@ -35,25 +36,25 @@ export const Features: React.FC<FeaturesProps> = ({ lang }) => {
           </p>
         </div>
 
-        {/* Feature Grid */}
+        {/* Feature Grid with shadcn Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {t.items.map((item, idx) => {
             const IconComponent = iconMap[item.icon as keyof typeof iconMap] || Zap
             return (
-              <div
+              <Card
                 key={idx}
-                className="group relative p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#151517] hover:border-neutral-300 dark:hover:border-neutral-700 shadow-xs hover:shadow-md transition-all duration-200"
+                className="group p-6 border-neutral-200/80 dark:border-neutral-800/80 hover:border-neutral-300 dark:hover:border-neutral-700 shadow-2xs hover:shadow-md transition-all duration-200"
               >
                 <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-neutral-100 mb-4 group-hover:scale-105 transition-transform duration-200">
                   <IconComponent className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                <CardTitle className="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
                   {item.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
                   {item.desc}
-                </p>
-              </div>
+                </CardDescription>
+              </Card>
             )
           })}
         </div>

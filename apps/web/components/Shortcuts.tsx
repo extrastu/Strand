@@ -1,6 +1,6 @@
 import React from 'react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
 
 interface ShortcutsProps {
   lang: Language
@@ -24,7 +24,7 @@ export const Shortcuts: React.FC<ShortcutsProps> = ({ lang }) => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-[#151517] rounded-2xl border border-neutral-200/90 dark:border-neutral-800/90 shadow-sm divide-y divide-neutral-200/70 dark:divide-neutral-800/70 overflow-hidden">
+        <div className="bg-white dark:bg-[#151517] rounded-2xl border border-neutral-200/90 dark:border-neutral-800/90 shadow-2xs divide-y divide-neutral-200/70 dark:divide-neutral-800/70 overflow-hidden">
           {t.keys.map((item, index) => (
             <div
               key={index}

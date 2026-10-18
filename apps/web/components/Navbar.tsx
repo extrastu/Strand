@@ -1,7 +1,10 @@
+'use client'
+
 import React, { useState } from 'react'
 import { Moon, Sun, Globe, Download, Menu, X } from 'lucide-react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
+import { Button } from '@/components/ui/button'
 
 const GithubIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -36,7 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
           <img
             src="/icon.svg"
             alt="Strand Logo"
-            className="w-8 h-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105"
+            className="w-8 h-8 rounded-lg shadow-xs transition-transform duration-200 group-hover:scale-105"
           />
           <div className="flex items-baseline gap-1.5">
             <span className="font-semibold text-lg tracking-tight text-neutral-900 dark:text-neutral-50">
@@ -77,66 +80,74 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
         </nav>
 
         {/* Action Buttons */}
-        <div className="hidden sm:flex items-center gap-2.5">
+        <div className="hidden sm:flex items-center gap-2">
           {/* Language Switch */}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={toggleLang}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="gap-1.5 text-xs text-neutral-700 dark:text-neutral-300"
             title="Switch Language / 切换语言"
-            aria-label="Switch Language"
           >
-            <Globe className="w-4 h-4" />
+            <Globe className="w-3.5 h-3.5" />
             <span>{lang === 'en' ? '中文' : 'EN'}</span>
-          </button>
+          </Button>
 
           {/* Theme Toggle */}
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setDarkMode(!darkMode)}
-            className="p-1.5 rounded-md text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="h-8 w-8 text-neutral-700 dark:text-neutral-300"
             title={darkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            aria-label="Toggle Theme"
           >
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
+          </Button>
 
           {/* GitHub Source */}
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1.5 rounded-md text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            title="GitHub Repository"
-            aria-label="GitHub"
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild
+            className="h-8 w-8 text-neutral-700 dark:text-neutral-300"
           >
-            <GithubIcon className="w-4 h-4" />
-          </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub Repository"
+            >
+              <GithubIcon className="w-4 h-4" />
+            </a>
+          </Button>
 
           {/* Download CTA */}
-          <a
-            href="#download"
-            className="ml-1 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 shadow-sm transition-all duration-150 active:scale-95"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>{t.download}</span>
-          </a>
+          <Button size="sm" asChild className="ml-1 rounded-lg">
+            <a href="#download" className="gap-1.5">
+              <Download className="w-3.5 h-3.5" />
+              <span>{t.download}</span>
+            </a>
+          </Button>
         </div>
 
         {/* Mobile Hamburger */}
-        <div className="flex sm:hidden items-center gap-2">
-          <button
+        <div className="flex sm:hidden items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setDarkMode(!darkMode)}
-            className="p-1.5 rounded-md text-neutral-700 dark:text-neutral-300"
-            aria-label="Toggle Theme"
+            className="h-8 w-8 text-neutral-700 dark:text-neutral-300"
           >
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-md text-neutral-700 dark:text-neutral-300"
-            aria-label="Toggle Navigation Menu"
+            className="h-8 w-8 text-neutral-700 dark:text-neutral-300"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -172,21 +183,21 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
             {t.faq}
           </a>
           <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={toggleLang}
-              className="flex items-center gap-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300"
+              className="gap-1.5 text-xs text-neutral-700 dark:text-neutral-300"
             >
-              <Globe className="w-4 h-4" />
+              <Globe className="w-3.5 h-3.5" />
               <span>{lang === 'en' ? '切换为中文' : 'Switch to English'}</span>
-            </button>
-            <a
-              href="#download"
-              onClick={() => setMobileMenuOpen(false)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>{t.download}</span>
-            </a>
+            </Button>
+            <Button size="sm" asChild>
+              <a href="#download" onClick={() => setMobileMenuOpen(false)} className="gap-1.5">
+                <Download className="w-3.5 h-3.5" />
+                <span>{t.download}</span>
+              </a>
+            </Button>
           </div>
         </div>
       )}

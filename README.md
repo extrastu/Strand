@@ -12,7 +12,7 @@
 threadsMac/
 ├── apps/
 │   ├── desktop/            # macOS 桌面客户端应用 (Electron + React 19 + TypeScript)
-│   └── web/                # 官方落地页门户网站 (Vite + React 19 + Tailwind CSS v4)
+│   └── web/                # 官方落地页门户网站 (Next.js 15 App Router + shadcn/ui + Lucide + Tailwind CSS v4)
 ├── package.json            # 根工作区配置与统一快捷脚本
 ├── pnpm-workspace.yaml     # pnpm 兼容配置
 └── README.md
@@ -26,7 +26,8 @@ threadsMac/
 - **支持架构**：提供经过签名的 Apple Silicon (`arm64`) 与 Intel (`x64`) 的 `.dmg` 安装包与 `.zip` 压缩包。
 
 ### 2. 官方网站 (`apps/web`)
-- **技术栈**：React 19 + Vite + TypeScript + Tailwind CSS v4。
+- **技术栈**：Next.js 15 (App Router) + shadcn/ui + Lucide React + Tailwind CSS v4。
+- **极致 SEO 优化**：服务端静态预渲染 (SSG)、OpenGraph、Twitter Card、`robots.txt`、`sitemap.xml` 及 Schema.org `SoftwareApplication` 结构化数据 (JSON-LD)。
 - **设计风格**：与客户端完全同构的黑白极简与玻璃拟态质感，支持一键切换深色/浅色主题。
 - **双语支持**：内置英文与简体中文全量本地化，自动识别系统首选语言。
 - **交互式产品沙盒**：在网页端高保真模拟 macOS 窗口交互，支持点选切换账号、折叠侧边栏、预览设置对话框与发帖界面。

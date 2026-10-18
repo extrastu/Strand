@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import {
   PanelLeftClose,
@@ -13,12 +15,12 @@ import {
   ChevronDown,
   Plus,
 } from 'lucide-react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
 
 interface AppMockupProps {
   lang: Language
-  darkMode: boolean
+  darkMode?: boolean
 }
 
 export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
@@ -148,7 +150,7 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
                 </div>
               </div>
 
-              {/* Bottom Settings Button (matches Strand's bottom settings) */}
+              {/* Bottom Settings Button */}
               <div className="p-3 border-t border-neutral-200/70 dark:border-neutral-800/70">
                 <button
                   onClick={() => setShowSettings(true)}
@@ -160,9 +162,9 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
               </div>
             </div>
 
-            {/* Main Content Area: Threads feed view */}
+            {/* Main Content Area */}
             <div className="flex-1 flex flex-col overflow-y-auto">
-              {/* Threads Feed Header */}
+              {/* Header */}
               <div className="sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-[#101010]/80 backdrop-blur-md px-6 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-6 text-sm font-semibold">
                   <span className="text-neutral-900 dark:text-neutral-100 border-b-2 border-neutral-900 dark:border-white pb-1">
@@ -180,7 +182,6 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
 
               {/* Feed Content */}
               <div className="p-6 max-w-xl mx-auto w-full space-y-4">
-                {/* Composer box */}
                 <div className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161618] shadow-2xs flex gap-3">
                   <div className="w-8 h-8 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center font-bold text-xs shrink-0">
                     {activeAccount.name[0]}
@@ -238,11 +239,10 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
               </div>
             </div>
 
-            {/* Settings Dialog Overlay Modal (matches Strand's settings dialog spec) */}
+            {/* Settings Dialog Overlay Modal */}
             {showSettings && (
               <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
                 <div className="w-full max-w-lg bg-white dark:bg-[#18181b] rounded-2xl border border-neutral-200 dark:border-neutral-700 shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150">
-                  {/* Header */}
                   <div className="px-5 py-3.5 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
                     <h3 className="font-semibold text-sm text-neutral-900 dark:text-white">
                       {t.settingsTitle}
@@ -255,7 +255,6 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
                     </button>
                   </div>
 
-                  {/* Body with Left Nav & Right Content */}
                   <div className="flex h-64">
                     <div className="w-36 border-r border-neutral-200 dark:border-neutral-800 p-2 space-y-1 bg-neutral-50 dark:bg-[#141416]">
                       <button

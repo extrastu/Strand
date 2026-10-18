@@ -1,7 +1,11 @@
+'use client'
+
 import React from 'react'
 import { Apple, Download, AlertCircle, FileArchive, CheckCircle2 } from 'lucide-react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 interface DownloadSectionProps {
   lang: Language
@@ -29,8 +33,10 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {/* DMG Card */}
           <div className="relative p-6 sm:p-8 rounded-2xl border-2 border-neutral-900 dark:border-white bg-white dark:bg-[#151517] shadow-lg flex flex-col justify-between">
-            <div className="absolute top-4 right-4 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 uppercase tracking-wide">
-              Recommended
+            <div className="absolute top-4 right-4">
+              <Badge className="uppercase tracking-wide text-[10px]">
+                Recommended
+              </Badge>
             </div>
             <div>
               <div className="w-12 h-12 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 flex items-center justify-center mb-5 shadow-xs">
@@ -54,21 +60,20 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
               </div>
             </div>
 
-            <a
-              href={`#`}
-              onClick={(e) => {
-                e.preventDefault()
+            <Button
+              size="lg"
+              className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-md"
+              onClick={() => {
                 alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.appleSilicon.filename}`)
               }}
-              className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-semibold text-sm bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 shadow-md transition-all active:scale-98"
             >
               <Download className="w-4 h-4" />
               <span>{t.appleSilicon.btn}</span>
-            </a>
+            </Button>
           </div>
 
           {/* ZIP Card */}
-          <div className="p-6 sm:p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#151517] shadow-xs hover:border-neutral-300 dark:hover:border-neutral-700 flex flex-col justify-between transition-colors">
+          <div className="p-6 sm:p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#151517] shadow-2xs hover:border-neutral-300 dark:hover:border-neutral-700 flex flex-col justify-between transition-colors">
             <div>
               <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 flex items-center justify-center mb-5">
                 <FileArchive className="w-6 h-6" />
@@ -91,17 +96,17 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
               </div>
             </div>
 
-            <a
-              href={`#`}
-              onClick={(e) => {
-                e.preventDefault()
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full py-3.5 rounded-xl text-sm font-semibold shadow-2xs"
+              onClick={() => {
                 alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.zipPackage.filename}`)
               }}
-              className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-semibold text-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 shadow-xs transition-all active:scale-98"
             >
               <Download className="w-4 h-4 text-neutral-500" />
               <span>{t.zipPackage.btn}</span>
-            </a>
+            </Button>
           </div>
         </div>
 

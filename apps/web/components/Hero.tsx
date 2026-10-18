@@ -1,7 +1,9 @@
 import React from 'react'
 import { Download, Sparkles, Apple, ArrowRight, ShieldCheck } from 'lucide-react'
-import type { Language } from '../i18n/content'
-import { content } from '../i18n/content'
+import type { Language } from '@/lib/i18n/content'
+import { content } from '@/lib/i18n/content'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface HeroProps {
   lang: Language
@@ -17,13 +19,18 @@ export const Hero: React.FC<HeroProps> = ({ lang }) => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
         {/* Version Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 mb-8 shadow-xs hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors">
-          <Sparkles className="w-3.5 h-3.5 text-neutral-500" />
-          <span>{t.badge}</span>
-          <ArrowRight className="w-3 h-3 text-neutral-400" />
+        <div className="inline-flex items-center mb-8">
+          <Badge
+            variant="secondary"
+            className="gap-2 px-3.5 py-1.5 text-xs font-medium border border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors shadow-2xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{t.badge}</span>
+            <ArrowRight className="w-3 h-3 text-neutral-400" />
+          </Badge>
         </div>
 
-        {/* Primary Heading */}
+        {/* Primary Heading with Semantic H1 for SEO */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50 leading-[1.08] mb-6">
           {t.titlePrimary}
           <br />
@@ -39,24 +46,31 @@ export const Hero: React.FC<HeroProps> = ({ lang }) => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto mb-8">
-          <a
-            href="#download"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-medium text-sm bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-md hover:bg-neutral-800 dark:hover:bg-white active:scale-98 transition-all"
+          <Button
+            size="lg"
+            asChild
+            className="w-full sm:w-auto h-auto py-3.5 px-6 rounded-xl shadow-md"
           >
-            <Apple className="w-4 h-4 fill-current" />
-            <div className="text-left">
-              <div className="font-semibold">{t.downloadDmg}</div>
-              <div className="text-[11px] opacity-75">{t.downloadDmgSub}</div>
-            </div>
-          </a>
+            <a href="#download" className="gap-2.5">
+              <Apple className="w-4 h-4 fill-current shrink-0" />
+              <div className="text-left">
+                <div className="font-semibold text-sm leading-tight">{t.downloadDmg}</div>
+                <div className="text-[11px] opacity-75 font-normal leading-tight">{t.downloadDmgSub}</div>
+              </div>
+            </a>
+          </Button>
 
-          <a
-            href="#download"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 shadow-xs transition-colors"
+          <Button
+            variant="outline"
+            size="lg"
+            asChild
+            className="w-full sm:w-auto h-auto py-3.5 px-5 rounded-xl shadow-2xs"
           >
-            <Download className="w-4 h-4 text-neutral-500" />
-            <span>{t.downloadZip}</span>
-          </a>
+            <a href="#download" className="gap-2">
+              <Download className="w-4 h-4 text-neutral-500" />
+              <span>{t.downloadZip}</span>
+            </a>
+          </Button>
         </div>
 
         {/* Trust Badges / Platform Specs */}
