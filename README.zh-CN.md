@@ -11,8 +11,8 @@
 </p>
 
 <p>
-  <a href="https://github.com/extrastu/Strand/releases/tag/v0.2.0">
-    <img src="https://img.shields.io/badge/Release-v0.2.0-black?style=flat-square" alt="Version 0.2.0" />
+  <a href="https://github.com/extrastu/Strand/releases/tag/v0.2.1">
+    <img src="https://img.shields.io/badge/Release-v0.2.1-black?style=flat-square" alt="Version 0.2.1" />
   </a>
   <a href="https://istrand.vercel.app/">
     <img src="https://img.shields.io/badge/Website-istrand.vercel.app-black?style=flat-square" alt="Website" />
@@ -88,8 +88,8 @@ threadsMac/
 
 访问 [GitHub Releases](https://github.com/extrastu/Strand/releases) 或 [官网下载中心](https://istrand.vercel.app/#download) 获取安装包：
 
-- **DMG 安装包 (Apple Silicon)**: [`Strand-0.2.0-darwin-arm64.dmg`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg)
-- **便携 ZIP 压缩包**: [`Strand-0.2.0-darwin-arm64.zip`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip)
+- **DMG 安装包 (Apple Silicon)**: [`Strand-0.2.1-darwin-arm64.dmg`](https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg)
+- **便携 ZIP 压缩包**: [`Strand-0.2.1-darwin-arm64.zip`](https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.zip)
 
 > **初次打开提示**：Strand 为开源项目并采用 ad-hoc 签名。若首次运行时提示“无法验证开发者”，请在“应用程序”目录中右键（或按住 Control 点击）Strand.app，选择“打开”即可。
 

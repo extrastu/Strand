@@ -317,7 +317,7 @@ export const AppMockup: React.FC<AppMockupProps> = ({ lang }) => {
                         <div className="text-center py-2 space-y-2">
                           <img src="/icon.svg" alt="Strand" className="w-12 h-12 mx-auto rounded-xl" />
                           <div className="font-bold text-sm text-neutral-900 dark:text-white">Strand</div>
-                          <div className="text-[11px] text-neutral-400">Version 0.2.0 (macOS)</div>
+                          <div className="text-[11px] text-neutral-400">Version 0.2.1 (macOS)</div>
                           <div className="text-[10px] text-neutral-500 leading-normal pt-2">
                             {lang === 'en'
                               ? 'An unofficial multi-account client for Threads on macOS. Not affiliated with or endorsed by Meta or Threads.'

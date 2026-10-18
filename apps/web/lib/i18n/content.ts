@@ -11,7 +11,7 @@ export const content = {
       github: 'GitHub',
     },
     hero: {
-      badge: 'Strand v0.2.0 for macOS is out',
+      badge: 'Strand v0.2.1 for macOS is out',
       titlePrimary: 'Threads, refined for',
       titleSecondary: 'macOS workflow.',
       description:
@@ -100,13 +100,13 @@ export const content = {
         title: 'Apple Silicon (Recommended)',
         desc: 'M1, M2, M3, M4 Macs with native ARM64 speed and battery optimization.',
         btn: 'Download DMG (Apple Silicon)',
-        filename: 'Strand-0.2.0-darwin-arm64.dmg',
+        filename: 'Strand-0.2.1-darwin-arm64.dmg',
       },
       zipPackage: {
         title: 'Portable ZIP Archive',
         desc: 'Direct drag-and-drop portable package for Apple Silicon machines.',
         btn: 'Download ZIP',
-        filename: 'Strand-0.2.0-darwin-arm64.zip',
+        filename: 'Strand-0.2.1-darwin-arm64.zip',
       },
       checksumNote: 'SHA-256 integrity checksums available on GitHub Releases.',
       installTipTitle: 'Installation Tip',
@@ -157,7 +157,7 @@ export const content = {
       github: 'GitHub 仓库',
     },
     hero: {
-      badge: 'Strand v0.2.0 已正式发布',
+      badge: 'Strand v0.2.1 已正式发布',
       titlePrimary: '专为 macOS 打造的',
       titleSecondary: 'Threads 多账号优雅体验。',
       description:
@@ -246,13 +246,13 @@ export const content = {
         title: 'Apple Silicon 安装包 (推荐)',
         desc: '适用于搭载 M1, M2, M3, M4 芯片的 Mac，原生 ARM64 极速启动与续航优化。',
         btn: '下载 DMG 安装包 (Apple Silicon)',
-        filename: 'Strand-0.2.0-darwin-arm64.dmg',
+        filename: 'Strand-0.2.1-darwin-arm64.dmg',
       },
       zipPackage: {
         title: '便携 ZIP 压缩包',
         desc: '解压即用无需挂载安装映像，适合偏好免安装的用户。',
         btn: '下载 ZIP 压缩包',
-        filename: 'Strand-0.2.0-darwin-arm64.zip',
+        filename: 'Strand-0.2.1-darwin-arm64.zip',
       },
       checksumNote: '所有发行包的 SHA-256 校验和均公布在 GitHub Releases 页面。',
       installTipTitle: '首次安装提示',

@@ -5,7 +5,7 @@ import { copyFileSync, mkdirSync, readFileSync, rmSync, symlinkSync } from 'node
 import { packager } from '@electron/packager'
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
-const version = pkg.version ?? '0.2.0'
+const version = pkg.version ?? '0.2.1'
 const appName = pkg.productName ?? 'Strand'
 const arch = process.arch === 'arm64' ? 'arm64' : 'x64'
 

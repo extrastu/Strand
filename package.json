@@ -1,6 +1,6 @@
 {
   "name": "strand-monorepo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Monorepo for Strand: unofficial macOS Threads client and official web portal",
   "license": "MIT",

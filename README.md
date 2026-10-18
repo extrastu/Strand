@@ -11,8 +11,8 @@
 </p>
 
 <p>
-  <a href="https://github.com/extrastu/Strand/releases/tag/v0.2.0">
-    <img src="https://img.shields.io/badge/Release-v0.2.0-black?style=flat-square" alt="Version 0.2.0" />
+  <a href="https://github.com/extrastu/Strand/releases/tag/v0.2.1">
+    <img src="https://img.shields.io/badge/Release-v0.2.1-black?style=flat-square" alt="Version 0.2.1" />
   </a>
   <a href="https://istrand.vercel.app/">
     <img src="https://img.shields.io/badge/Website-istrand.vercel.app-black?style=flat-square" alt="Website" />
@@ -88,8 +88,8 @@ Manage and run all sub-applications directly from the repository root:
 
 Grab the latest release from [GitHub Releases](https://github.com/extrastu/Strand/releases) or the [Official Download Center](https://istrand.vercel.app/#download):
 
-- **DMG Installer (Apple Silicon)**: [`Strand-0.2.0-darwin-arm64.dmg`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg)
-- **Portable ZIP (Apple Silicon)**: [`Strand-0.2.0-darwin-arm64.zip`](https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip)
+- **DMG Installer (Apple Silicon)**: [`Strand-0.2.1-darwin-arm64.dmg`](https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg)
+- **Portable ZIP (Apple Silicon)**: [`Strand-0.2.1-darwin-arm64.zip`](https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.zip)
 
 > **First Launch Tip**: Strand is an open-source, ad-hoc signed application. If macOS displays a verification prompt on first launch, right-click (or Control-click) `Strand.app` in `/Applications` and select **Open**.
 

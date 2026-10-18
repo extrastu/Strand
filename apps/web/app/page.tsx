@@ -23,7 +23,7 @@ export default function Home() {
           <p className="text-neutral-700">
             Official Apple Silicon (.dmg) and Portable (.zip) releases are hosted on{' '}
             <a
-              href="https://github.com/extrastu/Strand/releases/tag/v0.2.0"
+              href="https://github.com/extrastu/Strand/releases/tag/v0.2.1"
               className="text-blue-600 underline"
             >
               GitHub Releases

@@ -98,11 +98,11 @@ const jsonLd = {
   '@type': 'SoftwareApplication',
   name: 'Strand',
   url: 'https://istrand.vercel.app',
-  downloadUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+  downloadUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.1/Strand-0.2.1-darwin-arm64.dmg',
   screenshot: 'https://istrand.vercel.app/icon.png',
   operatingSystem: 'macOS 13.0 or later (Ventura, Sonoma, Sequoia)',
   applicationCategory: 'SocialNetworkingApplication',
-  softwareVersion: '0.2.0',
+  softwareVersion: '0.2.1',
   description:
     'An unofficial, privacy-first multi-account desktop client for Threads on macOS with isolated sessions, native monochrome aesthetics, and custom shortcuts.',
   author: {
