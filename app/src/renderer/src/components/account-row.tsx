@@ -24,42 +24,42 @@ export function AccountRow({ account, active }: { account: Account; active: bool
   return (
     <li
       className={cn(
-        'group relative flex items-center rounded-lg transition-all duration-150',
-        'has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-inset has-[button:focus-visible]:ring-ring/60',
+        'group relative flex items-center rounded-lg mx-2 transition-all duration-150',
+        'has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring/60',
         active
-          ? 'bg-accent/80 text-foreground shadow-2xs before:pointer-events-none before:absolute before:left-0 before:top-2.5 before:bottom-2.5 before:w-[3px] before:rounded-r-full before:bg-primary dark:bg-accent/60'
-          : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+          ? 'bg-selected text-foreground font-medium shadow-2xs'
+          : 'text-foreground/80 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.04]',
       )}
     >
       <button
         type="button"
         aria-current={active ? 'true' : undefined}
         onClick={() => void select(account.id)}
-        className="flex h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 text-left outline-none"
+        className="flex h-8.5 min-w-0 flex-1 cursor-pointer items-center gap-2 rounded-lg px-2 text-left outline-none"
       >
         <span className="relative shrink-0">
           <AccountAvatar account={account} />
           {active && (
-            <span className="absolute -right-0.5 -bottom-0.5 flex size-3 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background">
-              <Check className="size-2" strokeWidth={3.5} aria-hidden />
+            <span className="absolute -right-0.5 -bottom-0.5 flex size-2.5 items-center justify-center rounded-full bg-primary text-primary-foreground ring-1.5 ring-background">
+              <Check className="size-1.5" strokeWidth={3.5} aria-hidden />
             </span>
           )}
         </span>
-        <span className="flex min-w-0 flex-1 flex-col justify-center">
+        <span className="flex min-w-0 flex-1 items-center justify-between gap-1.5">
           <span
             className={cn(
-              'block truncate text-xs tracking-tight',
-              active ? 'font-semibold text-foreground' : 'font-medium text-foreground/90 group-hover:text-foreground',
+              'block truncate text-xs',
+              active ? 'font-semibold text-foreground' : 'font-medium text-foreground/85',
             )}
           >
             {account.name}
           </span>
           <span
             className={cn(
-              'mt-0.5 inline-flex w-fit items-center rounded border px-1 py-0.2 text-[9px] font-mono font-medium uppercase tracking-wider leading-none',
+              'inline-flex shrink-0 items-center rounded border px-1 py-0.2 text-[9px] font-mono font-medium uppercase tracking-wider leading-none',
               account.type === 'creator'
-                ? 'border-primary/20 bg-primary/8 text-primary dark:border-primary/30 dark:bg-primary/15'
-                : 'border-border/70 bg-muted/50 text-muted-foreground',
+                ? 'border-primary/20 bg-primary/10 text-primary dark:border-primary/30 dark:bg-primary/20'
+                : 'border-border/70 bg-card/60 text-muted-foreground',
             )}
           >
             {t(TYPE_LABEL_KEY[account.type])}
