@@ -76,6 +76,7 @@ export const IPC = {
   about: 'app:about',
   dragStart: 'window:drag-start',
   dragMove: 'window:drag-move',
+  accountsChanged: 'accounts:changed',
 } as const
 
 /** What the preload exposes to the renderer as `window.threads`. */
@@ -87,6 +88,7 @@ export interface ThreadsApi {
     remove(id: string): Promise<AccountsState>
     select(id: string): Promise<AccountsState>
     copyName(id: string): Promise<string>
+    onChanged?(callback: (state: AccountsState) => void): () => void
   }
   sidebar: {
     /** Resolves to the sidebar width in px that the main process now uses. */

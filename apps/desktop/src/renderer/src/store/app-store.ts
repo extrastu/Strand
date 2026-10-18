@@ -96,6 +96,11 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     }
     // Always tell main which width to use, so both sides agree even if the stored flag is missing.
     await get().setCollapsed(readCollapsed(), false)
+    if (window.threads?.accounts?.onChanged) {
+      window.threads.accounts.onChanged((nextState) => {
+        set(apply(nextState))
+      })
+    }
   },
 
   async select(id) {

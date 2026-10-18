@@ -9,12 +9,18 @@ import { useAppStore } from '@/store/app-store'
  * - Add account
  * - Settings
  * - Focus sidebar search
+ * - Switch account by index (Mod+1 ... Mod+9)
  */
 export function useGlobalShortcuts() {
   const shortcuts = useAppStore((s) => s.settings.shortcuts ?? DEFAULT_SHORTCUTS)
   const collapsed = useAppStore((s) => s.collapsed)
   const setCollapsed = useAppStore((s) => s.setCollapsed)
   const openDialog = useAppStore((s) => s.openDialog)
+  const closeDialog = useAppStore((s) => s.closeDialog)
+  const dialog = useAppStore((s) => s.dialog)
+  const accounts = useAppStore((s) => s.accounts)
+  const activeId = useAppStore((s) => s.activeId)
+  const select = useAppStore((s) => s.select)
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -53,9 +59,24 @@ export function useGlobalShortcuts() {
         }
         return
       }
+
+      // Switch Account by index: Mod+1 ... Mod+9
+      for (let i = 1; i <= 9; i++) {
+        if (matchShortcut(e, `Mod+${i}`)) {
+          e.preventDefault()
+          const target = accounts[i - 1]
+          if (target && target.id !== activeId) {
+            if (dialog?.kind === 'edit' || dialog?.kind === 'remove') {
+              closeDialog()
+            }
+            void select(target.id)
+          }
+          return
+        }
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [shortcuts, collapsed, setCollapsed, openDialog])
+  }, [shortcuts, collapsed, setCollapsed, openDialog, closeDialog, dialog, accounts, activeId, select])
 }

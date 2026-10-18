@@ -70,8 +70,9 @@ export function Sidebar() {
             <div className="px-2 py-1 text-[10px] font-semibold tracking-wider text-muted-foreground/70 uppercase">
               {t('sidebar.heading')}
             </div>
-            {accounts.map((acc) => {
+            {accounts.map((acc, index) => {
               const isSelected = acc.id === activeId
+              const shortcutHint = index < 9 ? formatShortcutForDisplay(`Mod+${index + 1}`) : null
               return (
                 <DropdownMenuItem
                   key={acc.id}
@@ -86,6 +87,11 @@ export function Sidebar() {
                   <span className="text-[10px] text-muted-foreground/70 font-mono uppercase">
                     {t(TYPE_LABEL_KEY[acc.type])}
                   </span>
+                  {shortcutHint && (
+                    <kbd className="font-mono text-[9px] text-muted-foreground/60 ml-0.5">
+                      {shortcutHint}
+                    </kbd>
+                  )}
                   {isSelected && <Check className="size-3.5 text-foreground shrink-0" />}
                 </DropdownMenuItem>
               )

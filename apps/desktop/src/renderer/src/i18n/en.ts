@@ -92,6 +92,8 @@ export const en: Record<MessageKey, string> = {
   'shortcuts.settingsDesc': 'Open the settings dialog',
   'shortcuts.search': 'Search accounts',
   'shortcuts.searchDesc': 'Focus the sidebar search input',
+  'shortcuts.switchAccount': 'Switch accounts by index',
+  'shortcuts.switchAccountDesc': 'Quickly switch to corresponding Threads account (⌘1 - ⌘9)',
   'shortcuts.reset': 'Reset to default',
   'toast.shortcutUpdated': 'Shortcut updated',
 

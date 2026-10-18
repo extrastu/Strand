@@ -46,6 +46,25 @@ test('matchShortcut matches keys and modifiers correctly', () => {
   assert.equal(matchShortcut(plainB, 'Mod+B'), false)
 })
 
+test('formatShortcutForDisplay and matchShortcut work for account switching digits 1 to 9', () => {
+  for (let i = 1; i <= 9; i++) {
+    assert.equal(formatShortcutForDisplay(`Mod+${i}`), `⌘${i}`)
+
+    const event: KeyboardEventLike = {
+      key: String(i),
+      metaKey: true,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+    }
+
+    assert.equal(matchShortcut(event, `Mod+${i}`), true)
+    // Should not match other digits
+    const otherDigit = i === 1 ? 2 : 1
+    assert.equal(matchShortcut(event, `Mod+${otherDigit}`), false)
+  }
+})
+
 test('eventToShortcutString validates and converts keyboard events', () => {
   // Lone modifier returns null
   assert.equal(

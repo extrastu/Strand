@@ -10,6 +10,13 @@ const api: ThreadsApi = {
     remove: (id) => ipcRenderer.invoke(IPC.remove, { id }),
     select: (id) => ipcRenderer.invoke(IPC.select, { id }),
     copyName: (id) => ipcRenderer.invoke(IPC.copyName, { id }),
+    onChanged: (callback) => {
+      const listener = (_event: Electron.IpcRendererEvent, state: import('@shared/types').AccountsState) => callback(state)
+      ipcRenderer.on(IPC.accountsChanged, listener)
+      return () => {
+        ipcRenderer.removeListener(IPC.accountsChanged, listener)
+      }
+    },
   },
   sidebar: {
     setCollapsed: (collapsed, animated) => ipcRenderer.invoke(IPC.collapse, { collapsed, animated }),

@@ -207,7 +207,7 @@ function ShortcutsPanel() {
           (shortcuts[act] ?? DEFAULT_SHORTCUTS[act]) === newShortcut,
       )
 
-      if (conflictingAction) {
+      if (conflictingAction || /^Mod\+[1-9]$/i.test(newShortcut)) {
         toast.error(t('settings.shortcuts.conflict'))
         return
       }
@@ -306,6 +306,18 @@ function ShortcutsPanel() {
             </div>
           )
         })}
+
+        <div className="flex items-center justify-between rounded-xl border border-border/70 p-3 transition-colors hover:bg-muted/20">
+          <div className="space-y-0.5">
+            <h4 className="text-sm font-medium">{t('shortcuts.switchAccount')}</h4>
+            <p className="text-xs text-muted-foreground">{t('shortcuts.switchAccountDesc')}</p>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+            <kbd className="inline-flex h-7 items-center justify-center rounded-md border border-border/80 bg-muted/60 px-2.5 font-medium text-foreground">
+              {formatShortcutForDisplay('Mod+1')} ... {formatShortcutForDisplay('Mod+9')}
+            </kbd>
+          </div>
+        </div>
       </div>
 
       {recordingAction && (

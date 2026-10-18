@@ -61,6 +61,33 @@ function createView(id: string): WebContentsView {
   wc.on('will-navigate', guard)
   wc.on('will-redirect', guard)
 
+  wc.on('before-input-event', (event, input) => {
+    if (input.type !== 'keyDown') return
+    const isMod = process.platform === 'darwin' ? input.meta : (input.control || input.meta)
+    if (isMod && !input.alt && !input.shift) {
+      let digit: number | null = null
+      if (input.key >= '1' && input.key <= '9') {
+        digit = parseInt(input.key, 10)
+      } else if (input.code && /^(?:Digit|Numpad)([1-9])$/.test(input.code)) {
+        const match = input.code.match(/^(?:Digit|Numpad)([1-9])$/)
+        if (match && match[1]) digit = parseInt(match[1], 10)
+      }
+
+      if (digit !== null && digit >= 1 && digit <= 9) {
+        event.preventDefault()
+        const { accounts, activeId } = store.getState()
+        const target = accounts[digit - 1]
+        if (target && target.id !== activeId) {
+          store.setActive(target.id)
+          showActive()
+          if (!win.isDestroyed()) {
+            win.webContents.send(IPC.accountsChanged, store.getState())
+          }
+        }
+      }
+    }
+  })
+
   void wc.loadURL(LOGIN_URL)
   win.contentView.addChildView(view)
   views.set(id, view)
