@@ -1,5 +1,5 @@
 {
-  "name": "strand",
+  "name": "@strand/desktop",
   "productName": "Strand",
   "version": "0.2.0",
   "private": true,

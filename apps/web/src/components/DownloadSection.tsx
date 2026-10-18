@@ -1,0 +1,119 @@
+import React from 'react'
+import { Apple, Download, AlertCircle, FileArchive, CheckCircle2 } from 'lucide-react'
+import type { Language } from '../i18n/content'
+import { content } from '../i18n/content'
+
+interface DownloadSectionProps {
+  lang: Language
+}
+
+export const DownloadSection: React.FC<DownloadSectionProps> = ({ lang }) => {
+  const t = content[lang].downloadSection
+
+  return (
+    <section id="download" className="py-20 border-t border-neutral-200/80 dark:border-neutral-800/80">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-xs font-mono font-medium tracking-wider text-neutral-500 uppercase">
+            {t.tag}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50 mt-2 mb-3">
+            {t.title}
+          </h2>
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
+            {t.subtitle}
+          </p>
+        </div>
+
+        {/* Download Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          {/* DMG Card */}
+          <div className="relative p-6 sm:p-8 rounded-2xl border-2 border-neutral-900 dark:border-white bg-white dark:bg-[#151517] shadow-lg flex flex-col justify-between">
+            <div className="absolute top-4 right-4 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 uppercase tracking-wide">
+              Recommended
+            </div>
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 flex items-center justify-center mb-5 shadow-xs">
+                <Apple className="w-6 h-6 fill-current" />
+              </div>
+              <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                {t.appleSilicon.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
+                {t.appleSilicon.desc}
+              </p>
+              <div className="space-y-1.5 mb-8 text-xs text-neutral-500">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Version 0.2.0 · Universal binary ready</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Interactive DMG with Applications folder shortcut</span>
+                </div>
+              </div>
+            </div>
+
+            <a
+              href={`#`}
+              onClick={(e) => {
+                e.preventDefault()
+                alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.appleSilicon.filename}`)
+              }}
+              className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-semibold text-sm bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 shadow-md transition-all active:scale-98"
+            >
+              <Download className="w-4 h-4" />
+              <span>{t.appleSilicon.btn}</span>
+            </a>
+          </div>
+
+          {/* ZIP Card */}
+          <div className="p-6 sm:p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#151517] shadow-xs hover:border-neutral-300 dark:hover:border-neutral-700 flex flex-col justify-between transition-colors">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 flex items-center justify-center mb-5">
+                <FileArchive className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                {t.zipPackage.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
+                {t.zipPackage.desc}
+              </p>
+              <div className="space-y-1.5 mb-8 text-xs text-neutral-500">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Extract & launch anywhere</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Sealed ad-hoc codesign</span>
+                </div>
+              </div>
+            </div>
+
+            <a
+              href={`#`}
+              onClick={(e) => {
+                e.preventDefault()
+                alert(`${lang === 'en' ? 'Downloading' : '正在下载'} ${t.zipPackage.filename}`)
+              }}
+              className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl font-semibold text-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 shadow-xs transition-all active:scale-98"
+            >
+              <Download className="w-4 h-4 text-neutral-500" />
+              <span>{t.zipPackage.btn}</span>
+            </a>
+          </div>
+        </div>
+
+        {/* First Launch Tip */}
+        <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 flex items-start gap-3 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
+          <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+          <div>
+            <span className="font-semibold">{t.installTipTitle}: </span>
+            {t.installTipText}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

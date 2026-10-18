@@ -3,3 +3,6 @@ node_modules/
 *.corrupt
 out/
 release/
+dist/
+.vite/
+*.tsbuildinfo
