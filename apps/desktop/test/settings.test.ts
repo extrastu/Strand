@@ -163,3 +163,18 @@ test('invalid shortcuts or unknown actions are rejected', () => {
   assert.throws(() => store.set({ shortcuts: { unknownAction: 'Mod+K' } as never }), /unknown shortcut action/)
   assert.throws(() => store.set({ shortcuts: { toggleSidebar: '' } }), /invalid shortcut/)
 })
+
+test('autoCheckUpdates can be configured, persisted, and validated', () => {
+  const file = tmpFile()
+  const defaults: Settings = { theme: 'system', language: 'en', autoCheckUpdates: true }
+  const store = createSettingsStore(file, defaults)
+  assert.equal(store.get().autoCheckUpdates, true)
+
+  store.set({ autoCheckUpdates: false })
+  assert.equal(store.get().autoCheckUpdates, false)
+
+  const reloaded = createSettingsStore(file, defaults)
+  assert.equal(reloaded.get().autoCheckUpdates, false)
+
+  assert.throws(() => store.set({ autoCheckUpdates: 'yes' as never }), /autoCheckUpdates must be a boolean/)
+})

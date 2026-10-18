@@ -1,4 +1,20 @@
-import { AtSign, ExternalLink, Info, Keyboard, Monitor, Moon, RotateCcw, SlidersHorizontal, Sun } from 'lucide-react'
+import {
+  AlertCircle,
+  AtSign,
+  CheckCircle2,
+  Download,
+  ExternalLink,
+  Info,
+  Keyboard,
+  Loader2,
+  Monitor,
+  Moon,
+  RefreshCw,
+  RotateCcw,
+  SlidersHorizontal,
+  Sparkles,
+  Sun,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
@@ -9,8 +25,10 @@ import iconUrl from '@build/icon.png'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { LANGUAGE_NAMES } from '@/i18n/languages'
 import type { MessageKey } from '@/i18n'
 import { useT } from '@/i18n/use-t'
@@ -121,6 +139,7 @@ function GeneralPanel() {
   const t = useT()
   const theme = useAppStore((s) => s.settings.theme)
   const language = useAppStore((s) => s.settings.language)
+  const autoCheckUpdates = useAppStore((s) => s.settings.autoCheckUpdates !== false)
   const updateSettings = useAppStore((s) => s.updateSettings)
 
   return (
@@ -170,6 +189,18 @@ function GeneralPanel() {
             ))}
           </SelectContent>
         </Select>
+      </section>
+
+      <section className="flex items-center justify-between rounded-xl border border-border/70 p-4">
+        <div className="space-y-0.5">
+          <h3 className="text-sm font-medium">{t('settings.autoCheckUpdates.label')}</h3>
+          <p className="text-xs text-muted-foreground">{t('settings.autoCheckUpdates.description')}</p>
+        </div>
+        <Switch
+          checked={autoCheckUpdates}
+          onCheckedChange={(checked) => void updateSettings({ autoCheckUpdates: checked })}
+          aria-label={t('settings.autoCheckUpdates.label')}
+        />
       </section>
     </div>
   )
@@ -354,6 +385,8 @@ function AboutPanel() {
       </div>
       <p className="text-sm text-muted-foreground leading-relaxed">{t('about.description')}</p>
 
+      <UpdateSection />
+
       <div className="pt-1">
         <Button
           variant="outline"
@@ -374,6 +407,137 @@ function AboutPanel() {
         )}
         <p className="text-xs text-muted-foreground/80">{t('about.notice')}</p>
       </div>
+    </div>
+  )
+}
+
+function UpdateSection() {
+  const t = useT()
+  const updateState = useAppStore((s) => s.updateState)
+  const checkForUpdates = useAppStore((s) => s.checkForUpdates)
+  const downloadUpdate = useAppStore((s) => s.downloadUpdate)
+  const installUpdate = useAppStore((s) => s.installUpdate)
+  const openReleasePage = useAppStore((s) => s.openReleasePage)
+
+  return (
+    <div className="w-full rounded-xl border border-border/70 bg-card/40 p-3 text-left">
+      {updateState.status === 'idle' && (
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs text-muted-foreground">{t('updater.check')}</span>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs rounded-lg cursor-pointer"
+            onClick={() => void checkForUpdates(true)}
+          >
+            <RefreshCw className="mr-1.5 size-3" />
+            {t('updater.check')}
+          </Button>
+        </div>
+      )}
+
+      {updateState.status === 'checking' && (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
+          <Loader2 className="size-3.5 animate-spin text-foreground" />
+          <span>{t('updater.checking')}</span>
+        </div>
+      )}
+
+      {updateState.status === 'not-available' && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>{t('updater.upToDate')}</span>
+          </div>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 text-[11px] text-muted-foreground hover:text-foreground px-2 cursor-pointer"
+            onClick={() => void checkForUpdates(true)}
+          >
+            <RefreshCw className="mr-1 size-2.5" />
+            {t('updater.check')}
+          </Button>
+        </div>
+      )}
+
+      {updateState.status === 'available' && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+            <Sparkles className="size-3.5 text-amber-500 shrink-0" />
+            <span>{t('updater.available', { version: updateState.info.version })}</span>
+          </div>
+          {updateState.info.releaseNotes && (
+            <p className="line-clamp-2 text-[11px] text-muted-foreground leading-normal">
+              {updateState.info.releaseNotes}
+            </p>
+          )}
+          <div className="flex items-center gap-2 pt-1">
+            <Button
+              size="sm"
+              className="h-7 text-xs rounded-lg cursor-pointer"
+              onClick={() => void downloadUpdate()}
+            >
+              <Download className="mr-1.5 size-3" />
+              {t('updater.download')}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-xs rounded-lg cursor-pointer"
+              onClick={() => void openReleasePage()}
+            >
+              {t('updater.releaseNotes')}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {updateState.status === 'downloading' && (
+        <div className="space-y-1.5 py-0.5">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span>{t('updater.downloading', { percent: updateState.percent })}</span>
+            <span className="font-mono text-[10px]">
+              {(updateState.transferred / (1024 * 1024)).toFixed(1)} /{' '}
+              {(updateState.total / (1024 * 1024)).toFixed(1)} MB
+            </span>
+          </div>
+          <Progress value={updateState.percent} className="h-1.5" />
+        </div>
+      )}
+
+      {updateState.status === 'downloaded' && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-foreground font-medium">
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>{t('updater.downloaded')}</span>
+          </div>
+          <Button
+            size="sm"
+            className="h-7 text-xs rounded-lg cursor-pointer"
+            onClick={() => void installUpdate()}
+          >
+            {t('updater.install')}
+          </Button>
+        </div>
+      )}
+
+      {updateState.status === 'error' && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-destructive">
+            <AlertCircle className="size-3.5 shrink-0" />
+            <span className="truncate max-w-[180px]">{updateState.message}</span>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs rounded-lg cursor-pointer"
+            onClick={() => void checkForUpdates(true)}
+          >
+            {t('updater.retry')}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

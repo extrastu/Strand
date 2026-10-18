@@ -44,6 +44,7 @@ interface AppStore {
   canGoBack: boolean
   canGoForward: boolean
   isModPressed: boolean
+  updateState: import('@shared/types').UpdateState
 
   init(): Promise<void>
   select(id: string): Promise<void>
@@ -60,6 +61,10 @@ interface AppStore {
   goForward(): Promise<void>
   reload(): Promise<void>
   setModPressed(pressed: boolean): void
+  checkForUpdates(manual?: boolean): Promise<void>
+  downloadUpdate(): Promise<void>
+  installUpdate(): Promise<void>
+  openReleasePage(): Promise<void>
 }
 
 const removingIds = new Set<string>()
@@ -87,6 +92,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   canGoBack: false,
   canGoForward: false,
   isModPressed: false,
+  updateState: { status: 'idle' },
 
   async init() {
     let settingsFailed = false
@@ -127,6 +133,28 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     if (window.threads?.onModStateChanged) {
       window.threads.onModStateChanged((pressed) => {
         get().setModPressed(pressed)
+      })
+    }
+    if (window.threads?.updater?.getState) {
+      try {
+        const initialUpdate = await window.threads.updater.getState()
+        if (initialUpdate) set({ updateState: initialUpdate })
+      } catch {
+        // ignore
+      }
+    }
+    if (window.threads?.updater?.onStatusChanged) {
+      window.threads.updater.onStatusChanged((state) => {
+        const prev = get().updateState
+        set({ updateState: state })
+        if (state.status === 'available' && prev.status !== 'available') {
+          toast.info(t('updater.newVersionNotification', { version: state.info.version }), {
+            action: {
+              label: t('updater.releaseNotes'),
+              onClick: () => get().openDialog({ kind: 'settings' }),
+            },
+          })
+        }
       })
     }
   },
@@ -220,5 +248,37 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     if (typeof document !== 'undefined') {
       document.documentElement.classList.toggle('mod-pressed', pressed)
     }
+  },
+
+  async checkForUpdates(manual = true) {
+    try {
+      const state = await window.threads?.updater?.check?.(manual)
+      if (state) set({ updateState: state })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      set({ updateState: { status: 'error', message } })
+    }
+  },
+
+  async downloadUpdate() {
+    try {
+      await window.threads?.updater?.download?.()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      toast.error(message)
+    }
+  },
+
+  async installUpdate() {
+    try {
+      await window.threads?.updater?.install?.()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      toast.error(message)
+    }
+  },
+
+  async openReleasePage() {
+    await window.threads?.updater?.openReleasePage?.()
   },
 }))

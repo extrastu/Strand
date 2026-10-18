@@ -12,6 +12,7 @@ import { resolveUserDataDir } from './legacy-data'
 import { classifyLink, isWrapperUrl } from './links'
 import { createSettingsStore } from './settings'
 import type { SettingsStore } from './settings'
+import { AppUpdater } from './updater'
 import iconPath from '../../build/icon.png?asset'
 
 const APP_NAME = 'Strand'
@@ -29,6 +30,7 @@ const CHROME_UA =
 let win: BrowserWindow
 let store: AccountStore
 let settings: SettingsStore
+let updater: AppUpdater
 let sidebarWidth = SIDEBAR_WIDTH
 let overlayOpen = false // a renderer dialog is open, so account pages must not cover it
 const views = new Map<string, WebContentsView>() // account id -> view, created lazily and kept alive
@@ -250,7 +252,12 @@ function registerIpc(): void {
   handle<undefined>(IPC.settingsGet, () => settings.get())
   handle<Partial<Settings>>(IPC.settingsSet, (patch) => {
     // Only the known fields are taken; the store rejects invalid values and keeps what it had.
-    const next = settings.set({ theme: patch.theme, language: patch.language })
+    const next = settings.set({
+      theme: patch.theme,
+      language: patch.language,
+      shortcuts: patch.shortcuts,
+      autoCheckUpdates: patch.autoCheckUpdates,
+    })
     nativeTheme.themeSource = next.theme // the renderer, the window chrome and the account pages follow
     return next
   })
@@ -303,6 +310,11 @@ function registerIpc(): void {
       void shell.openExternal(url)
     }
   })
+  handle<{ manual?: boolean }>(IPC.updaterCheck, ({ manual }) => updater.check(manual === true))
+  handle<undefined>(IPC.updaterDownload, () => updater.download())
+  handle<undefined>(IPC.updaterInstall, () => updater.install())
+  handle<undefined>(IPC.updaterOpenRelease, () => updater.openReleasePage())
+  handle<undefined>(IPC.updaterState, () => updater.getState())
 }
 
 let collapseAnimTimer: NodeJS.Timeout | null = null
@@ -354,7 +366,9 @@ void app.whenReady().then(() => {
       theme: 'system',
       language: defaultLanguageFor(app.getLocale()),
       shortcuts: DEFAULT_SHORTCUTS,
+      autoCheckUpdates: true,
     })
+    updater = new AppUpdater(() => win, () => settings)
   } catch (err) {
     // Reading the data failed for a reason other than "missing" or "corrupt" (permissions, a folder in
     // the way, ...). Starting anyway could overwrite good data, so say what is wrong and stop.
@@ -399,7 +413,10 @@ void app.whenReady().then(() => {
     overlayOpen = false
     sidebarWidth = SIDEBAR_WIDTH
   })
-  win.webContents.on('did-finish-load', showActive)
+  win.webContents.on('did-finish-load', () => {
+    showActive()
+    updater.startAutoCheck()
+  })
 })
 
 app.on('window-all-closed', () => app.quit())

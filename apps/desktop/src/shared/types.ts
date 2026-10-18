@@ -49,7 +49,28 @@ export interface Settings {
   theme: ThemeSetting
   language: Language
   shortcuts?: Partial<Record<ShortcutAction, string>>
+  autoCheckUpdates?: boolean
 }
+
+export interface UpdateInfo {
+  version: string
+  releaseName: string
+  releaseNotes: string
+  publishedAt: string
+  downloadUrl: string
+  releaseUrl: string
+  assetName: string
+  assetSize: number
+}
+
+export type UpdateState =
+  | { status: 'idle' }
+  | { status: 'checking' }
+  | { status: 'available'; info: UpdateInfo }
+  | { status: 'not-available'; checkedAt: string; currentVersion: string }
+  | { status: 'downloading'; info: UpdateInfo; percent: number; transferred: number; total: number }
+  | { status: 'downloaded'; info: UpdateInfo; filePath: string }
+  | { status: 'error'; message: string }
 
 export interface AboutInfo {
   name: string
@@ -84,6 +105,12 @@ export const IPC = {
   navChanged: 'nav:changed',
   openExternal: 'shell:open-external',
   modState: 'window:mod-state',
+  updaterCheck: 'updater:check',
+  updaterDownload: 'updater:download',
+  updaterInstall: 'updater:install',
+  updaterOpenRelease: 'updater:open-release',
+  updaterState: 'updater:state',
+  updaterStatusChanged: 'updater:status-changed',
 } as const
 
 export interface NavigationState {
@@ -121,6 +148,14 @@ export interface ThreadsApi {
   about(): Promise<AboutInfo>
   openExternal(url: string): Promise<void>
   onModStateChanged?(callback: (pressed: boolean) => void): () => void
+  updater: {
+    check(manual?: boolean): Promise<UpdateState>
+    download(): Promise<void>
+    install(): Promise<void>
+    openReleasePage(): Promise<void>
+    getState(): Promise<UpdateState>
+    onStatusChanged?(callback: (state: UpdateState) => void): () => void
+  }
   /** Account pages are native views drawn above the renderer; hide them while a dialog is open. */
   overlay: {
     set(open: boolean): Promise<void>

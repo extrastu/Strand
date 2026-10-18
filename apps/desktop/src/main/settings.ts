@@ -39,6 +39,7 @@ function read(file: string): Partial<Settings> {
     const chosen: Partial<Settings> = {}
     if (oneOf<ThemeSetting>(THEMES, record.theme)) chosen.theme = record.theme
     if (oneOf<Language>(LANGUAGES, record.language)) chosen.language = record.language
+    if (typeof record.autoCheckUpdates === 'boolean') chosen.autoCheckUpdates = record.autoCheckUpdates
     if (record.shortcuts && typeof record.shortcuts === 'object' && !Array.isArray(record.shortcuts)) {
       const sc = record.shortcuts as Record<string, unknown>
       const validSc: Partial<ShortcutMap> = {}
@@ -68,6 +69,9 @@ export function createSettingsStore(file: string, defaults: Settings): SettingsS
     if (defaults.shortcuts || c.shortcuts) {
       res.shortcuts = { ...(defaults.shortcuts ?? {}), ...(c.shortcuts ?? {}) }
     }
+    if (defaults.autoCheckUpdates !== undefined || c.autoCheckUpdates !== undefined) {
+      res.autoCheckUpdates = c.autoCheckUpdates ?? defaults.autoCheckUpdates
+    }
     return res
   }
 
@@ -90,6 +94,10 @@ export function createSettingsStore(file: string, defaults: Settings): SettingsS
         if (!oneOf<Language>(LANGUAGES, patch.language)) throw new Error(`language must be one of ${LANGUAGES.join(', ')}`)
         next.language = patch.language
       }
+      if (patch.autoCheckUpdates !== undefined) {
+        if (typeof patch.autoCheckUpdates !== 'boolean') throw new Error('autoCheckUpdates must be a boolean')
+        next.autoCheckUpdates = patch.autoCheckUpdates
+      }
       if (patch.shortcuts !== undefined) {
         if (typeof patch.shortcuts !== 'object' || patch.shortcuts === null || Array.isArray(patch.shortcuts)) {
           throw new Error('shortcuts must be an object')
@@ -107,7 +115,14 @@ export function createSettingsStore(file: string, defaults: Settings): SettingsS
         next.shortcuts = nextSc
       }
       // Writing even when the value equals the default records an explicit choice.
-      if (patch.theme === undefined && patch.language === undefined && patch.shortcuts === undefined) return effective(chosen)
+      if (
+        patch.theme === undefined &&
+        patch.language === undefined &&
+        patch.shortcuts === undefined &&
+        patch.autoCheckUpdates === undefined
+      ) {
+        return effective(chosen)
+      }
       save(next) // throws before anything changes in memory, so there is nothing to roll back
       chosen = next
       return effective(chosen)

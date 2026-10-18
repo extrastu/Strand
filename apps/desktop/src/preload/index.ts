@@ -47,6 +47,23 @@ const api: ThreadsApi = {
       ipcRenderer.removeListener(IPC.modState, listener)
     }
   },
+  updater: {
+    check: (manual?: boolean) => ipcRenderer.invoke(IPC.updaterCheck, { manual }),
+    download: () => ipcRenderer.invoke(IPC.updaterDownload),
+    install: () => ipcRenderer.invoke(IPC.updaterInstall),
+    openReleasePage: () => ipcRenderer.invoke(IPC.updaterOpenRelease),
+    getState: () => ipcRenderer.invoke(IPC.updaterState),
+    onStatusChanged: (callback) => {
+      const listener = (
+        _event: Electron.IpcRendererEvent,
+        state: import('@shared/types').UpdateState,
+      ) => callback(state)
+      ipcRenderer.on(IPC.updaterStatusChanged, listener)
+      return () => {
+        ipcRenderer.removeListener(IPC.updaterStatusChanged, listener)
+      }
+    },
+  },
   overlay: {
     set: (open) => ipcRenderer.invoke(IPC.overlay, { open }),
   },
