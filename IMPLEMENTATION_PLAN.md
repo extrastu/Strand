@@ -1,24 +1,27 @@
 STATUS: in-progress
 
-# Implementation plan — multi-account shell
+# Implementation plan — TS + React + shadcn + Zustand + lucide rebuild
+
+Work on a new branch (e.g. `refactor/ts-shadcn-ui`) cut from `feat/multi-account-shell` (`8c4aa95` is the behavior baseline).
 
 ## Done
-- Spike (`spike/`): isolated sessions and switching confirmed; login entry is `threads.com/login`.
-- `app/src/accounts.js`: account store (transactional mutations with rollback, atomic update, load repair for bad names / duplicate / unsafe ids, corrupt-file backup, non-parse read errors throw). 20 tests in `app/test/accounts.test.js`, `npm test` green.
-- `app/src/main.js`, `preload.js`, `sidebar.html`: window with sidebar + one lazily created `WebContentsView` per account (`persist:acct-<id>`), external-link guard on navigate/redirect/window.open, sidebar page locked down, IPC accepted only from the sidebar's main frame, remove-account confirms and clears session storage.
-- After the user's first manual trial: per-row 复制 button (copies the account's display name via the main process clipboard, with a toast), and a collapsible sidebar (240px <-> 72px rail, remembered in localStorage). Click on a row still switches.
-- External links: five paths (window.open, target=_blank, same-tab link, location.href, noopener) all reach the default browser and leave the account view on threads.com (checked against a local logger).
-- Smoke-tested through the debug protocol with a throwaway profile: add, switch, update, persistence across relaunch, lazy view creation, sidebar navigation blocked.
+- Baseline multi-account shell committed (`8c4aa95`).
+- Rebuild on `refactor/ts-shadcn-ui` (uncommitted): electron-vite + React 19 + TS strict, Tailwind 4, shadcn (radix) components, Zustand store, lucide icons, Threads light/dark tokens. `typecheck`, `test` (29 ported cases, assertions intact), `build` exit 0; `npm run dev` starts with HMR.
+- Verified against a throwaway profile through the debug protocol: typed bridge, add / edit / remove (AlertDialog, view destroyed, session cleared, active falls back), persistence across relaunch, lazy views, collapse (240/72, geometry), account pages hidden while a dialog is open, copy + toast (36px pill inside the 44px strip), real-mouse window drag (sidebar strip and top bar move the window; page and list do not), 6 external-link paths incl. `l.threads.com` shims. CDP screenshots reviewed in light and dark for: empty state, add dialog, list, row menu, remove confirmation, collapsed rail, toast.
+- Design deviations from the spec text, on purpose: secondary text is #6b6b6b / #8d8d8d (spec said #777; that only reaches 4.5:1 on white and 4.2:1 on #101010); top bar is 44px (was 38).
 
-- Window drag: `-webkit-app-region` did not move the window (the user could not drag even with the full-width top bar; synthetic events cannot drive web drag regions, so that could not be reproduced that way). Replaced by manual dragging: the sidebar header strip and the 38px top bar track pointer movement and ask the main process (IPC `window:drag-start` / `window:drag-move`, sidebar-only) to move the window. Verified by posting real mouse events and reading the native window position through System Events: both strips move the window, the Threads page and sidebar list do not.
+- First `/verify` pass (14 findings): fixed the real ones: removal vs. dialog-close race (no view is recreated for an account mid-removal), overlay flag and sidebar width reset when the renderer reloads, overlay IPC failures surfaced, double-click delete guarded in the store, init failure no longer shows "no accounts", collapse state always pushed to main on load, menu shadow removed, dialog radius 16px, icon buttons 44px, badge text contrast raised to >= 6.4:1 (computed).
+- Left as is on purpose: toast state lives in Sonner, not in the Zustand store (spec wording says the store holds it; moving it would add code for no behavior); the app page may "navigate" to its own URL (reload) but nothing else; the dev server page has no CSP (Vite HMR needs inline scripts; production has the strict CSP); `shadcn` is a devDependency only for `shadcn/tailwind.css`, which the generated components' `data-open:` / `data-checked:` variants need (state it in the commit body); Electron stays at ^33.
+
+- User feedback after a manual trial: toggle moves to the title bar next to the traffic lights; collapsing hides the whole sidebar (no rail); fix the heavy focus ring on rows and rows/ellipsis overflowing the sidebar (Radix ScrollArea widened its content). Spec updated accordingly.
 
 ## Next
-1. Manual check by the user with two real accounts: login at `threads.com/login`, switch, relaunch, remove (confirmation + logout), external links open in the default browser.
-2. `/verify` has not passed yet: two adversarial passes each found issues; the real ones were fixed. Copy button and collapse were added after the last pass, so a fresh pass is pending.
-3. Link shims: user reported a blank in-app page plus the browser opening for real post links (Threads wraps them in `l.threads.com/?u=...`). Fixed by `app/src/links.js` (unwraps `u`, opens the real URL externally, never loads the shim; goes back if a shim page was left on screen) with 9 tests; verified end to end with a local logger. Still to confirm on a real post by the user.
+1. `/verify` again on the latest changes before any commit (title bar toggle, hide-sidebar collapse and the row layout changed after the first pass).
+2. User manual check with two real accounts: login at `threads.com/login`, switch, remove, real post links, drag, light and dark.
 
-## Known open issues / deliberate choices
-- Fallback after removing the active account is the first remaining account (spec wording "last-active" read loosely).
-- Subframe navigations are not blocked (login/captcha embeds third-party frames).
-- `window.open('about:blank')` popups and non-http(s) schemes (mailto:, tel:) are dropped, not forwarded.
-- Not in this feature: quick post, drafts, snippets, publish history.
+## Known open issues / deliberate choices carried over
+- Fallback after removing the active account is the first remaining account.
+- Subframe navigations are not blocked; `about:blank` popups and non-http(s) schemes are dropped.
+- Link shims, account removal and the confirmation dialog were never tested against real accounts.
+- Pitfall from the baseline: `-webkit-app-region` did not move the window; keep the manual IPC drag.
+- Do not `pkill` by a generic Electron pattern while testing: the user may be running their own instance.

@@ -1,4 +1,3 @@
-'use strict'
 // Decides where a link goes: stay in the app, open in the default browser, or be dropped.
 
 const ALLOWED_HOSTS = ['threads.com', 'threads.net', 'instagram.com', 'facebook.com']
@@ -6,7 +5,9 @@ const ALLOWED_HOSTS = ['threads.com', 'threads.net', 'instagram.com', 'facebook.
 const WRAPPER_HOSTS = ['l.threads.com', 'l.threads.net', 'l.instagram.com', 'l.facebook.com', 'lm.facebook.com']
 const MAX_UNWRAP = 3
 
-function parseWeb(url) {
+export type LinkDecision = { kind: 'internal' | 'external'; url: string } | { kind: 'blocked' }
+
+function parseWeb(url: string): URL | null {
   try {
     const parsed = new URL(url)
     return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed : null
@@ -15,13 +16,12 @@ function parseWeb(url) {
   }
 }
 
-function isAllowedHost(hostname) {
+function isAllowedHost(hostname: string): boolean {
   return ALLOWED_HOSTS.some((h) => hostname === h || hostname.endsWith(`.${h}`))
 }
 
-// -> { kind: 'internal' | 'external', url } or { kind: 'blocked' }.
 // For wrapper pages, `url` is the unwrapped target, so callers never load the shim itself.
-function classifyLink(url, depth = 0) {
+export function classifyLink(url: string, depth = 0): LinkDecision {
   const parsed = parseWeb(url)
   if (!parsed) return { kind: 'blocked' }
   if (WRAPPER_HOSTS.includes(parsed.hostname)) {
@@ -34,9 +34,7 @@ function classifyLink(url, depth = 0) {
   return { kind: isAllowedHost(parsed.hostname) ? 'internal' : 'external', url }
 }
 
-function isWrapperUrl(url) {
+export function isWrapperUrl(url: string): boolean {
   const parsed = parseWeb(url)
   return parsed !== null && WRAPPER_HOSTS.includes(parsed.hostname)
 }
-
-module.exports = { classifyLink, isWrapperUrl }

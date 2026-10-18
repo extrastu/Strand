@@ -1,0 +1,113 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { ACCOUNT_TYPES, MAX_NAME_LENGTH } from '@shared/types'
+import type { Account, AccountType } from '@shared/types'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { TYPE_HINT, TYPE_LABEL } from '@/lib/labels'
+import { useAppStore } from '@/store/app-store'
+
+export function AccountDialog() {
+  const dialog = useAppStore((s) => s.dialog)
+  const accounts = useAppStore((s) => s.accounts)
+  const closeDialog = useAppStore((s) => s.closeDialog)
+
+  const open = dialog?.kind === 'add' || dialog?.kind === 'edit'
+  const editing = dialog?.kind === 'edit' ? accounts.find((a) => a.id === dialog.id) : undefined
+
+  return (
+    <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
+      <DialogContent className="gap-5 rounded-xl p-6 sm:max-w-md">
+        {open && <AccountForm key={editing?.id ?? 'new'} editing={editing} />}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function AccountForm({ editing }: { editing: Account | undefined }) {
+  const save = useAppStore((s) => s.save)
+  const closeDialog = useAppStore((s) => s.closeDialog)
+  const [name, setName] = useState(editing?.name ?? '')
+  const [type, setType] = useState<AccountType>(editing?.type ?? 'personal')
+  const [error, setError] = useState('')
+  const [pending, setPending] = useState(false)
+
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault()
+    const trimmed = name.trim()
+    const length = [...trimmed].length
+    if (length === 0) return setError('请输入账号名称')
+    if (length > MAX_NAME_LENGTH) return setError(`名称不能超过 ${MAX_NAME_LENGTH} 个字符`)
+    setError('')
+    setPending(true)
+    const ok = await save(editing?.id ?? null, { name: trimmed, type })
+    setPending(false)
+    if (ok) closeDialog()
+  }
+
+  return (
+    <form onSubmit={(e) => void onSubmit(e)} className="grid gap-5" noValidate>
+      <DialogHeader>
+        <DialogTitle className="text-lg font-semibold">{editing ? '编辑账号' : '添加账号'}</DialogTitle>
+        <DialogDescription>
+          {editing ? '修改名称或账号类型,不会影响登录状态。' : '添加后,在右侧页面用 Threads 账号登录。'}
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="grid gap-2">
+        <Label htmlFor="account-name">名称</Label>
+        <Input
+          id="account-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="例如:主号"
+          autoComplete="off"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? 'account-error' : undefined}
+          className="h-11 rounded-xl border-transparent bg-secondary px-4 text-[15px]"
+        />
+        {error && (
+          <p id="account-error" role="alert" className="text-[13px] text-destructive">
+            {error}
+          </p>
+        )}
+      </div>
+
+      <div className="grid gap-2">
+        <Label id="account-type-label">类型</Label>
+        <RadioGroup
+          value={type}
+          onValueChange={(v) => setType(v as AccountType)}
+          aria-labelledby="account-type-label"
+          className="grid-cols-2"
+        >
+          {ACCOUNT_TYPES.map((t) => (
+            <Label
+              key={t}
+              htmlFor={`account-type-${t}`}
+              className="flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors duration-150 hover:bg-accent has-[[aria-checked=true]]:border-foreground"
+            >
+              <RadioGroupItem value={t} id={`account-type-${t}`} className="mt-0.5" />
+              <span className="grid gap-0.5">
+                <span className="font-semibold">{TYPE_LABEL[t]}</span>
+                <span className="text-[13px] font-normal text-muted-foreground">{TYPE_HINT[t]}</span>
+              </span>
+            </Label>
+          ))}
+        </RadioGroup>
+      </div>
+
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="outline" onClick={closeDialog}>
+          取消
+        </Button>
+        <Button type="submit" disabled={pending}>
+          {editing ? '保存' : '添加'}
+        </Button>
+      </div>
+    </form>
+  )
+}

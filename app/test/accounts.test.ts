@@ -1,10 +1,9 @@
-'use strict'
-const test = require('node:test')
-const assert = require('node:assert/strict')
-const fs = require('node:fs')
-const os = require('node:os')
-const path = require('node:path')
-const { createStore, partitionFor } = require('../src/accounts')
+import { test } from 'vitest'
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { createStore, partitionFor } from '../src/main/accounts'
 
 function tmpFile() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'threads-accounts-'))
@@ -35,8 +34,8 @@ test('add rejects bad names and types', () => {
   const store = createStore(tmpFile())
   assert.throws(() => store.add({ name: '   ', type: 'personal' }), /name is required/)
   assert.throws(() => store.add({ name: 'x'.repeat(41), type: 'personal' }), /at most 40/)
-  assert.throws(() => store.add({ name: 'ok', type: 'business' }), /type must be one of/)
-  assert.throws(() => store.add({ name: 42, type: 'personal' }), /name must be a string/)
+  assert.throws(() => store.add({ name: 'ok', type: 'business' as never }), /type must be one of/)
+  assert.throws(() => store.add({ name: 42 as never, type: 'personal' }), /name must be a string/)
   assert.equal(store.getState().accounts.length, 0)
 })
 
@@ -49,7 +48,7 @@ test('rename and retype update the account', () => {
   assert.throws(() => store.rename('nope', 'x'), /unknown account/)
   assert.throws(() => store.retype('nope', 'creator'), /unknown account/)
   assert.throws(() => store.rename('id1', ''), /name is required/)
-  assert.throws(() => store.retype('id1', 'bogus'), /type must be one of/)
+  assert.throws(() => store.retype('id1', 'bogus' as never), /type must be one of/)
 })
 
 test('setActive switches the active account and rejects unknown ids', () => {
@@ -131,9 +130,9 @@ test('getState returns a copy that cannot mutate the store', () => {
   const store = createStore(tmpFile(), { newId: counterIds() })
   store.add({ name: 'a', type: 'personal' })
   const s = store.getState()
-  s.accounts[0].name = 'hacked'
+  s.accounts[0]!.name = 'hacked'
   s.accounts.push({ id: 'x', name: 'x', type: 'personal' })
-  assert.equal(store.getState().accounts[0].name, 'a')
+  assert.equal(store.getState().accounts[0]!.name, 'a')
   assert.equal(store.getState().accounts.length, 1)
 })
 
@@ -147,7 +146,7 @@ test('update changes name and type together, and a bad value changes nothing on 
   store.add({ name: 'a', type: 'personal' })
   store.update('id1', { name: 'b', type: 'creator' })
   assert.deepEqual(store.getState().accounts[0], { id: 'id1', name: 'b', type: 'creator' })
-  assert.throws(() => store.update('id1', { name: 'c', type: 'bogus' }), /type must be one of/)
+  assert.throws(() => store.update('id1', { name: 'c', type: 'bogus' as never }), /type must be one of/)
   assert.throws(() => store.update('id1', { name: '', type: 'personal' }), /name is required/)
   assert.deepEqual(store.getState().accounts[0], { id: 'id1', name: 'b', type: 'creator' })
   assert.deepEqual(createStore(file).getState().accounts[0], { id: 'id1', name: 'b', type: 'creator' })
@@ -235,7 +234,7 @@ test('name length counts characters, so truncation never splits an emoji', () =>
   const file = tmpFile()
   fs.mkdirSync(path.dirname(file), { recursive: true })
   fs.writeFileSync(file, JSON.stringify({ accounts: [{ id: 'a', name: `${'x'.repeat(39)}😀😀`, type: 'personal' }] }))
-  const loaded = createStore(file).getState().accounts[0].name
+  const loaded = createStore(file).getState().accounts[0]!.name
   assert.equal(loaded, `${'x'.repeat(39)}😀`)
   const store = createStore(tmpFile())
   assert.doesNotThrow(() => store.add({ name: '😀'.repeat(40), type: 'personal' }))

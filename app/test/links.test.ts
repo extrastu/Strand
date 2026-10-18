@@ -1,9 +1,8 @@
-'use strict'
-const test = require('node:test')
-const assert = require('node:assert/strict')
-const { classifyLink, isWrapperUrl } = require('../src/links')
+import { test } from 'vitest'
+import assert from 'node:assert/strict'
+import { classifyLink, isWrapperUrl } from '../src/main/links'
 
-const wrap = (host, target) => `https://${host}/?u=${encodeURIComponent(target)}&e=abc`
+const wrap = (host: string, target: string) => `https://${host}/?u=${encodeURIComponent(target)}&e=abc`
 
 test('threads, instagram and facebook pages stay in the app', () => {
   for (const url of [

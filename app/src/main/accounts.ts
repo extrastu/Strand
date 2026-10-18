@@ -1,56 +1,59 @@
-'use strict'
 // Account metadata store. Holds names, types and the active id only: no credentials or cookies.
-const fs = require('node:fs')
-const path = require('node:path')
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
+import fs from 'node:fs'
+import path from 'node:path'
+import { ACCOUNT_TYPES, MAX_NAME_LENGTH } from '@shared/types'
+import type { Account, AccountInput, AccountsState, AccountType } from '@shared/types'
 
-const TYPES = ['personal', 'creator']
-const MAX_NAME = 40
 const SAFE_ID = /^[A-Za-z0-9-]+$/ // ids become part of a session partition name
 
-function cleanName(name) {
+function cleanName(name: unknown): string {
   if (typeof name !== 'string') throw new Error('name must be a string')
   const trimmed = name.trim()
   if (!trimmed) throw new Error('name is required')
-  if ([...trimmed].length > MAX_NAME) throw new Error(`name must be at most ${MAX_NAME} characters`)
+  if ([...trimmed].length > MAX_NAME_LENGTH) throw new Error(`name must be at most ${MAX_NAME_LENGTH} characters`)
   return trimmed
 }
 
-function cleanType(type) {
-  if (!TYPES.includes(type)) throw new Error(`type must be one of ${TYPES.join(', ')}`)
-  return type
+function cleanType(type: unknown): AccountType {
+  if (!ACCOUNT_TYPES.includes(type as AccountType)) {
+    throw new Error(`type must be one of ${ACCOUNT_TYPES.join(', ')}`)
+  }
+  return type as AccountType
 }
 
 // Names read from disk are repaired rather than rejected, so an account (and its login) is never lost.
-function repairName(name) {
-  return [...name.trim()].slice(0, MAX_NAME).join('').trim() || '未命名'
+function repairName(name: string): string {
+  return [...name.trim()].slice(0, MAX_NAME_LENGTH).join('').trim() || '未命名'
 }
 
-function isValidAccount(a) {
+function isValidAccount(a: unknown): a is Account {
+  if (a === null || typeof a !== 'object') return false
+  const { id, name, type } = a as Record<string, unknown>
   return (
-    a !== null &&
-    typeof a === 'object' &&
-    typeof a.id === 'string' &&
-    SAFE_ID.test(a.id) &&
-    typeof a.name === 'string' &&
-    TYPES.includes(a.type)
+    typeof id === 'string' &&
+    SAFE_ID.test(id) &&
+    typeof name === 'string' &&
+    ACCOUNT_TYPES.includes(type as AccountType)
   )
 }
 
+const empty = (): AccountsState => ({ accounts: [], activeId: null })
+
 // Missing file or unparsable JSON starts empty (a corrupt file is kept as .corrupt);
 // any other read error throws, so a transient failure can never lead to overwriting good data.
-function read(file) {
-  let raw
+function read(file: string): AccountsState {
+  let raw: string
   try {
     raw = fs.readFileSync(file, 'utf8')
   } catch (err) {
-    if (err.code === 'ENOENT') return { accounts: [], activeId: null }
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return empty()
     throw err
   }
   try {
-    const data = JSON.parse(raw)
-    const seen = new Set()
-    const accounts = []
+    const data = JSON.parse(raw) as { accounts?: unknown; activeId?: unknown }
+    const seen = new Set<string>()
+    const accounts: Account[] = []
     for (const a of Array.isArray(data.accounts) ? data.accounts : []) {
       if (!isValidAccount(a) || seen.has(a.id)) continue // duplicate ids would share one session
       seen.add(a.id)
@@ -63,30 +66,43 @@ function read(file) {
     } catch {
       // best-effort backup
     }
-    return { accounts: [], activeId: null }
+    return empty()
   }
 }
 
-function partitionFor(id) {
+export function partitionFor(id: string): string {
   return `persist:acct-${id}`
 }
 
-function createStore(file, { newId = () => crypto.randomUUID() } = {}) {
+export interface AccountStore {
+  getState(): AccountsState
+  add(input: AccountInput): Account
+  update(id: string, input: AccountInput): void
+  rename(id: string, name: string): void
+  retype(id: string, type: AccountType): void
+  setActive(id: string): void
+  remove(id: string): void
+}
+
+export function createStore(
+  file: string,
+  { newId = () => crypto.randomUUID() }: { newId?: () => string } = {},
+): AccountStore {
   const state = read(file)
 
-  const find = (id) => {
+  const find = (id: string): Account => {
     const account = state.accounts.find((a) => a.id === id)
     if (!account) throw new Error(`unknown account: ${id}`)
     return account
   }
 
   // A dangling or missing activeId falls back to the first account.
-  const resolveActive = () => {
+  const resolveActive = (): string | null => {
     if (state.accounts.some((a) => a.id === state.activeId)) return state.activeId
-    return state.accounts.length ? state.accounts[0].id : null
+    return state.accounts[0]?.id ?? null
   }
 
-  const save = () => {
+  const save = (): void => {
     state.activeId = resolveActive()
     fs.mkdirSync(path.dirname(file), { recursive: true })
     const tmp = `${file}.tmp`
@@ -95,7 +111,7 @@ function createStore(file, { newId = () => crypto.randomUUID() } = {}) {
   }
 
   // Run a mutation and persist it; if anything throws, restore the previous in-memory state.
-  const mutate = (fn) => {
+  const mutate = <T>(fn: () => T): T => {
     const before = { accounts: state.accounts.map((a) => ({ ...a })), activeId: state.activeId }
     try {
       const result = fn()
@@ -116,7 +132,7 @@ function createStore(file, { newId = () => crypto.randomUUID() } = {}) {
     },
     add({ name, type }) {
       return mutate(() => {
-        const account = { id: newId(), name: cleanName(name), type: cleanType(type) }
+        const account: Account = { id: newId(), name: cleanName(name), type: cleanType(type) }
         state.accounts.push(account)
         state.activeId = account.id
         return { ...account }
@@ -153,5 +169,3 @@ function createStore(file, { newId = () => crypto.randomUUID() } = {}) {
     },
   }
 }
-
-module.exports = { createStore, partitionFor, TYPES }
