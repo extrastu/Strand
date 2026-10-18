@@ -31,7 +31,7 @@ export default defineConfig({
   main: { resolve: { alias: shared } },
   preload: { resolve: { alias: shared } },
   renderer: {
-    resolve: { alias: { ...shared, '@': resolve('src/renderer/src') } },
+    resolve: { alias: { ...shared, '@': resolve('src/renderer/src'), '@build': resolve('build') } },
     plugins: [react(), tailwindcss(), cspPlugin],
   },
 })

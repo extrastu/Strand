@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { toast } from 'sonner'
 import './styles/globals.css'
 import { App } from '@/components/app'
+import { translate } from '@/i18n'
 import { useAppStore } from '@/store/app-store'
 
 // Follow the system appearance (shadcn convention: a `dark` class on <html>).
@@ -15,7 +16,7 @@ media.addEventListener('change', syncTheme)
 useAppStore.subscribe((state, prev) => {
   const open = state.dialog !== null
   if (open !== (prev.dialog !== null)) {
-    window.threads.overlay.set(open).catch(() => toast.error('界面状态同步失败,请重试。'))
+    window.threads.overlay.set(open).catch(() => toast.error(translate(useAppStore.getState().settings.language, 'toast.syncFailed')))
   }
 })
 

@@ -1,8 +1,16 @@
 import { toast } from 'sonner'
 import { create } from 'zustand'
-import type { Account, AccountInput, AccountsState } from '@shared/types'
+import { defaultLanguageFor } from '@shared/locale'
+import type { AboutInfo, Account, AccountInput, AccountsState, Settings } from '@shared/types'
+import { translate } from '@/i18n'
+import type { MessageKey, Params } from '@/i18n'
 
-export type DialogState = { kind: 'add' } | { kind: 'edit'; id: string } | { kind: 'remove'; id: string } | null
+export type DialogState =
+  | { kind: 'add' }
+  | { kind: 'edit'; id: string }
+  | { kind: 'remove'; id: string }
+  | { kind: 'settings' }
+  | null
 
 const COLLAPSED_KEY = 'sidebarCollapsed'
 
@@ -28,6 +36,10 @@ interface AppStore {
   collapsed: boolean
   ready: boolean
   dialog: DialogState
+  /** Until the saved settings arrive the language is guessed from the browser locale; the UI waits (see App). */
+  settings: Settings
+  settingsLoaded: boolean
+  about: AboutInfo | null
 
   init(): Promise<void>
   select(id: string): Promise<void>
@@ -36,6 +48,8 @@ interface AppStore {
   remove(id: string): Promise<void>
   copyName(id: string): Promise<void>
   setCollapsed(collapsed: boolean): Promise<void>
+  updateSettings(patch: Partial<Settings>): Promise<void>
+  loadAbout(): Promise<void>
   openDialog(dialog: Exclude<DialogState, null>): void
   closeDialog(): void
 }
@@ -44,19 +58,38 @@ const removingIds = new Set<string>()
 
 const apply = (state: AccountsState) => ({ accounts: state.accounts, activeId: state.activeId })
 
+/** Translates with the language that is current when called, for toasts fired from actions. */
+function t(key: MessageKey, params?: Params): string {
+  return translate(useAppStore.getState().settings.language, key, params)
+}
+
 export const useAppStore = create<AppStore>()((set, get) => ({
   accounts: [],
   activeId: null,
   collapsed: false,
   ready: false,
   dialog: null,
+  settings: {
+    theme: 'system',
+    language: defaultLanguageFor(typeof navigator === 'undefined' ? '' : navigator.language),
+  },
+  settingsLoaded: false,
+  about: null,
 
   async init() {
+    let settingsFailed = false
+    try {
+      set({ settings: await window.threads.settings.get() })
+    } catch {
+      settingsFailed = true // keep the guessed defaults, and say so once the toaster exists
+    }
+    set({ settingsLoaded: true })
+    if (settingsFailed) setTimeout(() => toast.error(t('toast.settingsLoadFailed')), 0)
     try {
       set({ ...apply(await window.threads.accounts.getState()), ready: true })
     } catch {
       // Stay not-ready: showing "no accounts" while main still has an active account would be a lie.
-      toast.error('读取账号失败,请重启应用。')
+      toast.error(t('toast.loadFailed'))
       return
     }
     // Always tell main which width to use, so both sides agree even if the stored flag is missing.
@@ -68,7 +101,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     try {
       set(apply(await window.threads.accounts.select(id)))
     } catch {
-      toast.error('切换失败,请重试。')
+      toast.error(t('toast.switchFailed'))
     }
   },
 
@@ -80,7 +113,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
       set(apply(next))
       return true
     } catch {
-      toast.error('保存失败,请重试。名称需为 1–40 个字符。')
+      toast.error(t('toast.saveFailed'))
       return false
     }
   },
@@ -91,7 +124,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     try {
       set(apply(await window.threads.accounts.remove(id)))
     } catch {
-      toast.error('删除失败,请重试。')
+      toast.error(t('toast.deleteFailed'))
     } finally {
       removingIds.delete(id)
       get().closeDialog()
@@ -100,9 +133,9 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   async copyName(id) {
     try {
-      toast.success(`已复制账号名称:${await window.threads.accounts.copyName(id)}`)
+      toast.success(t('toast.copied', { name: await window.threads.accounts.copyName(id) }))
     } catch {
-      toast.error('复制失败,请重试。')
+      toast.error(t('toast.copyFailed'))
     }
   },
 
@@ -112,7 +145,24 @@ export const useAppStore = create<AppStore>()((set, get) => ({
       writeCollapsed(collapsed)
       set({ collapsed })
     } catch {
-      toast.error('侧边栏切换失败,请重试。')
+      toast.error(t('toast.sidebarFailed'))
+    }
+  },
+
+  async updateSettings(patch) {
+    try {
+      set({ settings: await window.threads.settings.set(patch) })
+    } catch {
+      toast.error(t('toast.settingsFailed'))
+    }
+  },
+
+  async loadAbout() {
+    if (get().about) return
+    try {
+      set({ about: await window.threads.about() })
+    } catch {
+      // the About panel simply shows no version line
     }
   },
 

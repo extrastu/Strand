@@ -14,6 +14,11 @@ const api: ThreadsApi = {
   sidebar: {
     setCollapsed: (collapsed) => ipcRenderer.invoke(IPC.collapse, { collapsed }),
   },
+  settings: {
+    get: () => ipcRenderer.invoke(IPC.settingsGet),
+    set: (patch) => ipcRenderer.invoke(IPC.settingsSet, patch),
+  },
+  about: () => ipcRenderer.invoke(IPC.about),
   overlay: {
     set: (open) => ipcRenderer.invoke(IPC.overlay, { open }),
   },

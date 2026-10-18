@@ -1,14 +1,17 @@
 // Multi-account Threads shell: the renderer (sidebar + top bar) is this window's own page, plus one
 // isolated WebContentsView per account. No injection into Threads pages, no API calls.
 import path from 'node:path'
-import { app, BrowserWindow, clipboard, ipcMain, nativeImage, session, shell, WebContentsView } from 'electron'
+import { app, BrowserWindow, clipboard, dialog, ipcMain, nativeImage, nativeTheme, session, shell, WebContentsView } from 'electron'
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import { IPC, SIDEBAR_WIDTH, SIDEBAR_WIDTH_HIDDEN, TOPBAR_HEIGHT } from '@shared/types'
-import type { AccountInput, AccountsState } from '@shared/types'
+import { defaultLanguageFor } from '@shared/locale'
+import type { AboutInfo, AccountInput, AccountsState, Settings } from '@shared/types'
 import { createStore, partitionFor } from './accounts'
 import type { AccountStore } from './accounts'
 import { resolveUserDataDir } from './legacy-data'
 import { classifyLink, isWrapperUrl } from './links'
+import { createSettingsStore } from './settings'
+import type { SettingsStore } from './settings'
 import iconPath from '../../build/icon.png?asset'
 
 const APP_NAME = 'Strand'
@@ -25,6 +28,7 @@ const CHROME_UA =
 
 let win: BrowserWindow
 let store: AccountStore
+let settings: SettingsStore
 let sidebarWidth = SIDEBAR_WIDTH
 let overlayOpen = false // a renderer dialog is open, so account pages must not cover it
 const views = new Map<string, WebContentsView>() // account id -> view, created lazily and kept alive
@@ -169,6 +173,19 @@ function registerIpc(): void {
     clipboard.writeText(account.name)
     return account.name
   })
+  handle<undefined>(IPC.settingsGet, () => settings.get())
+  handle<Partial<Settings>>(IPC.settingsSet, (patch) => {
+    // Only the known fields are taken; the store rejects invalid values and keeps what it had.
+    const next = settings.set({ theme: patch.theme, language: patch.language })
+    nativeTheme.themeSource = next.theme // the renderer, the window chrome and the account pages follow
+    return next
+  })
+  handle<undefined>(IPC.about, (): AboutInfo => ({
+    name: app.getName(),
+    version: app.getVersion(),
+    electron: process.versions.electron,
+    chromium: process.versions.chrome,
+  }))
   handle<{ open?: unknown }>(IPC.overlay, ({ open }) => {
     overlayOpen = open === true
     showActive()
@@ -186,7 +203,23 @@ void app.whenReady().then(() => {
     const icon = nativeImage.createFromPath(iconPath)
     if (!icon.isEmpty()) app.dock?.setIcon(icon)
   }
-  store = createStore(path.join(app.getPath('userData'), 'accounts.json'))
+  try {
+    store = createStore(path.join(app.getPath('userData'), 'accounts.json'))
+    settings = createSettingsStore(path.join(app.getPath('userData'), 'settings.json'), {
+      theme: 'system',
+      language: defaultLanguageFor(app.getLocale()),
+    })
+  } catch (err) {
+    // Reading the data failed for a reason other than "missing" or "corrupt" (permissions, a folder in
+    // the way, ...). Starting anyway could overwrite good data, so say what is wrong and stop.
+    dialog.showErrorBox(
+      APP_NAME,
+      `${APP_NAME} could not read its data in:\n${app.getPath('userData')}\n\n${err instanceof Error ? err.message : String(err)}`,
+    )
+    app.quit()
+    return
+  }
+  nativeTheme.themeSource = settings.get().theme
   win = new BrowserWindow({
     width: 1200,
     height: 820,

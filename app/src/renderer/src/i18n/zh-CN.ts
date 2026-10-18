@@ -1,0 +1,74 @@
+// Simplified Chinese: the reference dictionary. `en.ts` must define exactly the same keys.
+export const zhCN = {
+  'common.close': '关闭',
+  'common.cancel': '取消',
+
+  'sidebar.aria': '账号',
+  'sidebar.heading': '账号',
+  'sidebar.add': '添加账号',
+  'sidebar.settings': '设置',
+  'titlebar.hideSidebar': '隐藏侧边栏',
+  'titlebar.showSidebar': '显示侧边栏',
+
+  'type.personal': '个人',
+  'type.creator': '创作者',
+  'type.personalHint': '日常使用的账号',
+  'type.creatorHint': '用来发布内容的账号',
+
+  'row.more': '更多操作:{name}',
+  'row.copyName': '复制账号名称',
+  'row.edit': '编辑',
+  'row.delete': '删除',
+
+  'account.addTitle': '添加账号',
+  'account.editTitle': '编辑账号',
+  'account.addDescription': '添加后,在右侧页面用 Threads 账号登录。',
+  'account.editDescription': '修改名称或账号类型,不会影响登录状态。',
+  'account.nameLabel': '名称',
+  'account.namePlaceholder': '例如:主号',
+  'account.typeLabel': '类型',
+  'account.nameRequired': '请输入账号名称',
+  'account.nameTooLong': '名称不能超过 {max} 个字符',
+  'account.submitAdd': '添加',
+  'account.submitSave': '保存',
+
+  'remove.title': '删除账号「{name}」?',
+  'remove.description': '会清除这个账号在本应用里的登录状态,不会影响 Threads 上的账号本身。',
+  'remove.confirm': '删除',
+
+  'empty.title': '还没有账号',
+  'empty.description': '添加账号后,在右侧用 Threads 账号登录。个人号和创作者号互不干扰。',
+
+  'toast.copied': '已复制账号名称:{name}',
+  'toast.copyFailed': '复制失败,请重试。',
+  'toast.switchFailed': '切换失败,请重试。',
+  'toast.saveFailed': '保存失败,请重试。名称需为 1–40 个字符。',
+  'toast.deleteFailed': '删除失败,请重试。',
+  'toast.loadFailed': '读取账号失败,请重启应用。',
+  'toast.sidebarFailed': '侧边栏切换失败,请重试。',
+  'toast.syncFailed': '界面状态同步失败,请重试。',
+  'toast.settingsFailed': '设置保存失败,请重试。',
+  'toast.settingsLoadFailed': '读取设置失败,已使用默认设置。',
+
+  'settings.title': '设置',
+  'settings.description': '调整主题和语言,查看应用信息。',
+  'settings.nav': '设置分类',
+  'settings.general': '通用',
+  'settings.about': '关于',
+  'settings.theme.label': '主题',
+  'settings.theme.description': '选择应用和账号页面的外观。',
+  'settings.theme.system': '跟随系统',
+  'settings.theme.light': '浅色',
+  'settings.theme.dark': '深色',
+  'settings.language.label': '语言',
+  'settings.language.description': '应用界面使用的语言,不影响 Threads 页面。',
+
+  'about.iconAlt': 'Strand 图标',
+  'about.version': '版本 {version}',
+  'about.description': '一个非官方的 Threads 多账号 macOS 客户端。',
+  'about.runtime': 'Electron {electron} · Chromium {chromium}',
+  'about.unavailable': '暂时无法读取版本信息。',
+  'about.notice': 'Strand 与 Meta 或 Threads 没有关联,也未获其认可。',
+} as const
+
+export type MessageKey = keyof typeof zhCN

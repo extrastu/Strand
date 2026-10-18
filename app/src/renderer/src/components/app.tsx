@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { AccountDialog } from '@/components/account-dialog'
 import { EmptyState } from '@/components/empty-state'
 import { RemoveAccountDialog } from '@/components/remove-account-dialog'
+import { SettingsDialog } from '@/components/settings-dialog'
 import { Sidebar } from '@/components/sidebar'
 import { TitleBar } from '@/components/title-bar'
 import { Toaster } from '@/components/ui/sonner'
@@ -9,6 +11,15 @@ import { useAppStore } from '@/store/app-store'
 
 export function App() {
   const collapsed = useAppStore((s) => s.collapsed)
+  const language = useAppStore((s) => s.settings.language)
+  const settingsLoaded = useAppStore((s) => s.settingsLoaded)
+
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
+
+  // Wait for the saved language: rendering the guessed one first would flash the wrong language.
+  if (!settingsLoaded) return null
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -24,6 +35,7 @@ export function App() {
       </div>
       <AccountDialog />
       <RemoveAccountDialog />
+      <SettingsDialog />
       {/* Toasts sit in the 44px title bar row: everything below it can be covered by the account page. */}
       <Toaster position="top-center" offset={{ top: 4 }} />
     </TooltipProvider>

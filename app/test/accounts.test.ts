@@ -195,7 +195,7 @@ test('names loaded from disk are trimmed, clamped to 40 chars, and never empty',
   const names = createStore(file).getState().accounts.map((a) => a.name)
   assert.equal(names[0], 'padded')
   assert.equal(names[1], 'x'.repeat(40))
-  assert.equal(names[2], '未命名')
+  assert.equal(names[2], '—')
 })
 
 test('a corrupt file is backed up before it can be overwritten', () => {

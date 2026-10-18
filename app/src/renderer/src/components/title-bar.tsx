@@ -3,7 +3,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useWindowDrag } from '@/hooks/use-window-drag'
-import { TYPE_LABEL } from '@/lib/labels'
+import { useT } from '@/i18n/use-t'
+import { TYPE_LABEL_KEY } from '@/lib/labels'
 import { useAppStore } from '@/store/app-store'
 
 /**
@@ -12,11 +13,12 @@ import { useAppStore } from '@/store/app-store'
  * the account page, so nothing that must stay visible lives below this row's edge.
  */
 export function TitleBar() {
+  const t = useT()
   const active = useAppStore((s) => s.accounts.find((a) => a.id === s.activeId))
   const collapsed = useAppStore((s) => s.collapsed)
   const setCollapsed = useAppStore((s) => s.setCollapsed)
   const onDrag = useWindowDrag()
-  const label = collapsed ? '显示侧边栏' : '隐藏侧边栏'
+  const label = collapsed ? t('titlebar.showSidebar') : t('titlebar.hideSidebar')
 
   return (
     <header
@@ -44,7 +46,7 @@ export function TitleBar() {
         <div className="flex min-w-0 items-center gap-2">
           <span className="truncate text-sm font-medium">{active.name}</span>
           <Badge variant="secondary" className="h-[18px] shrink-0 rounded-full bg-foreground/[0.07] px-1.5 text-[11px] font-normal text-foreground/70">
-            {TYPE_LABEL[active.type]}
+            {t(TYPE_LABEL_KEY[active.type])}
           </Badge>
         </div>
       ) : (

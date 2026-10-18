@@ -1,8 +1,10 @@
 import { Plus, UsersRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useT } from '@/i18n/use-t'
 import { useAppStore } from '@/store/app-store'
 
 export function EmptyState() {
+  const t = useT()
   const ready = useAppStore((s) => s.ready)
   const empty = useAppStore((s) => s.accounts.length === 0)
   const openDialog = useAppStore((s) => s.openDialog)
@@ -14,12 +16,12 @@ export function EmptyState() {
         <UsersRound className="size-6 text-primary" aria-hidden />
       </div>
       <div className="space-y-1.5">
-        <h1 className="font-serif text-2xl">还没有账号</h1>
-        <p className="max-w-xs text-balance text-sm text-muted-foreground">添加账号后,在右侧用 Threads 账号登录。个人号和创作者号互不干扰。</p>
+        <h1 className="font-serif text-2xl">{t('empty.title')}</h1>
+        <p className="max-w-xs text-balance text-sm text-muted-foreground">{t('empty.description')}</p>
       </div>
       <Button onClick={() => openDialog({ kind: 'add' })}>
         <Plus aria-hidden />
-        添加账号
+        {t('sidebar.add')}
       </Button>
     </div>
   )

@@ -10,11 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TYPE_LABEL } from '@/lib/labels'
+import { useT } from '@/i18n/use-t'
+import { TYPE_LABEL_KEY } from '@/lib/labels'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 
 export function AccountRow({ account, active }: { account: Account; active: boolean }) {
+  const t = useT()
   const select = useAppStore((s) => s.select)
   const copyName = useAppStore((s) => s.copyName)
   const openDialog = useAppStore((s) => s.openDialog)
@@ -44,7 +46,7 @@ export function AccountRow({ account, active }: { account: Account; active: bool
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm leading-5 font-medium">{account.name}</span>
           <Badge variant="secondary" className="mt-0.5 h-[18px] rounded-full bg-foreground/[0.07] px-1.5 text-[11px] font-normal text-foreground/70">
-            {TYPE_LABEL[account.type]}
+            {t(TYPE_LABEL_KEY[account.type])}
           </Badge>
         </span>
       </button>
@@ -53,7 +55,7 @@ export function AccountRow({ account, active }: { account: Account; active: bool
           <Button
             variant="ghost"
             size="icon"
-            aria-label={`更多操作:${account.name}`}
+            aria-label={t('row.more', { name: account.name })}
             className="absolute top-1/2 right-2 -translate-y-1/2 bg-inherit text-muted-foreground opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-foreground/10 hover:text-foreground focus-visible:ring-0 data-[state=open]:bg-foreground/10 data-[state=open]:opacity-100"
           >
             <Ellipsis aria-hidden />
@@ -62,16 +64,16 @@ export function AccountRow({ account, active }: { account: Account; active: bool
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onSelect={() => void copyName(account.id)}>
             <Copy aria-hidden />
-            复制账号名称
+            {t('row.copyName')}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => openDialog({ kind: 'edit', id: account.id })}>
             <Pencil aria-hidden />
-            编辑
+            {t('row.edit')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={() => openDialog({ kind: 'remove', id: account.id })}>
             <Trash2 aria-hidden />
-            删除
+            {t('row.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

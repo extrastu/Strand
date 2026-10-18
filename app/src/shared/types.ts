@@ -21,6 +21,24 @@ export interface AccountInput {
   type: AccountType
 }
 
+export type ThemeSetting = 'system' | 'light' | 'dark'
+export type Language = 'zh-CN' | 'en'
+
+export const THEMES: readonly ThemeSetting[] = ['system', 'light', 'dark']
+export const LANGUAGES: readonly Language[] = ['zh-CN', 'en']
+
+export interface Settings {
+  theme: ThemeSetting
+  language: Language
+}
+
+export interface AboutInfo {
+  name: string
+  version: string
+  electron: string
+  chromium: string
+}
+
 export const SIDEBAR_WIDTH = 240
 export const SIDEBAR_WIDTH_HIDDEN = 0 // collapsed: the sidebar is gone and the account page fills the window
 export const TOPBAR_HEIGHT = 44
@@ -34,6 +52,9 @@ export const IPC = {
   copyName: 'accounts:copy',
   collapse: 'sidebar:collapse',
   overlay: 'view:overlay',
+  settingsGet: 'settings:get',
+  settingsSet: 'settings:set',
+  about: 'app:about',
   dragStart: 'window:drag-start',
   dragMove: 'window:drag-move',
 } as const
@@ -52,6 +73,12 @@ export interface ThreadsApi {
     /** Resolves to the sidebar width in px that the main process now uses. */
     setCollapsed(collapsed: boolean): Promise<number>
   }
+  settings: {
+    get(): Promise<Settings>
+    /** Applies the given fields (theme is applied to the whole app at once) and resolves to all settings. */
+    set(patch: Partial<Settings>): Promise<Settings>
+  }
+  about(): Promise<AboutInfo>
   /** Account pages are native views drawn above the renderer; hide them while a dialog is open. */
   overlay: {
     set(open: boolean): Promise<void>

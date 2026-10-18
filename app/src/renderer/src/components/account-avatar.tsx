@@ -10,7 +10,7 @@ export function AccountAvatar({ account, className }: { account: Account; classN
       <AvatarFallback
         className={cn(
           'text-[13px] font-medium',
-          account.type === 'creator' ? 'bg-primary text-primary-foreground' : 'bg-selected text-foreground',
+          account.type === 'creator' ? 'bg-primary text-primary-foreground' : 'bg-foreground/10 text-foreground',
         )}
       >
         {initialOf(account.name)}

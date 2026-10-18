@@ -24,7 +24,7 @@ function cleanType(type: unknown): AccountType {
 
 // Names read from disk are repaired rather than rejected, so an account (and its login) is never lost.
 function repairName(name: string): string {
-  return [...name.trim()].slice(0, MAX_NAME_LENGTH).join('').trim() || '未命名'
+  return [...name.trim()].slice(0, MAX_NAME_LENGTH).join('').trim() || '—'
 }
 
 function isValidAccount(a: unknown): a is Account {

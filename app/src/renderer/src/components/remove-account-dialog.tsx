@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useT } from '@/i18n/use-t'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +15,7 @@ import {
 import { useAppStore } from '@/store/app-store'
 
 export function RemoveAccountDialog() {
+  const t = useT()
   const dialog = useAppStore((s) => s.dialog)
   const account = useAppStore((s) => {
     const d = s.dialog
@@ -30,11 +32,11 @@ export function RemoveAccountDialog() {
           <AlertDialogMedia className="rounded-full bg-destructive/10 text-destructive">
             <Trash2 aria-hidden />
           </AlertDialogMedia>
-          <AlertDialogTitle className="font-serif text-xl font-normal">删除账号「{account?.name}」?</AlertDialogTitle>
-          <AlertDialogDescription>会清除这个账号在本应用里的登录状态,不会影响 Threads 上的账号本身。</AlertDialogDescription>
+          <AlertDialogTitle className="font-serif text-xl font-normal">{t('remove.title', { name: account?.name ?? '' })}</AlertDialogTitle>
+          <AlertDialogDescription>{t('remove.description')}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="-mx-6 -mb-6 rounded-b-2xl bg-transparent p-6 pt-2">
-          <AlertDialogCancel>取消</AlertDialogCancel>
+          <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
             disabled={pending}
@@ -45,7 +47,7 @@ export function RemoveAccountDialog() {
               void remove(account.id).finally(() => setPending(false))
             }}
           >
-            删除
+            {t('remove.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
