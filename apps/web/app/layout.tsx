@@ -1,15 +1,25 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d0d0e' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://strand.app'),
+  metadataBase: new URL('https://istrand.vercel.app'),
   title: {
     default: 'Strand — Elegant Multi-Account Client for Threads on macOS',
-    template: '%s | Strand',
+    template: '%s | Strand — Threads Client for macOS',
   },
   description:
-    'An unofficial, native-inspired multi-account desktop client for Threads on macOS. Isolated sessions, pure monochrome aesthetics, and privacy-first local storage.',
+    'Strand is an unofficial, native-inspired desktop client for Threads on macOS. Seamlessly manage multiple accounts with isolated partitions, pure monochrome aesthetics, and privacy-first local storage.',
   keywords: [
     'Threads for Mac',
     'Threads desktop client',
@@ -18,30 +28,39 @@ export const metadata: Metadata = {
     'Threads client macOS',
     'Strand',
     'Strand app',
+    'Threads 桌面版',
+    'Threads 电脑客户端',
+    'Threads 多账号管理',
+    'Mac 版 Threads',
     'Threads dark mode Mac',
     'multi-session Threads',
+    'Apple Silicon Threads app',
   ],
-  authors: [{ name: 'Strand Open Source Project' }],
-  creator: 'Strand Team',
+  authors: [{ name: 'extrastu', url: 'https://github.com/extrastu' }],
+  creator: 'extrastu',
+  publisher: 'Strand',
+  applicationName: 'Strand',
   icons: {
     icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     apple: [{ url: '/icon.png', sizes: '180x180' }],
+    shortcut: ['/favicon.svg'],
   },
+  manifest: '/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     alternateLocale: 'zh_CN',
-    url: 'https://strand.app',
+    url: 'https://istrand.vercel.app',
     title: 'Strand — Multi-Account Threads Client for macOS',
     description:
-      'Seamlessly switch between multiple Threads accounts on macOS with strictly isolated sandboxed sessions.',
+      'Seamlessly switch between multiple Threads accounts on macOS with strictly isolated sandboxed sessions and native monochrome elegance.',
     siteName: 'Strand',
     images: [
       {
-        url: '/icon.png',
+        url: 'https://istrand.vercel.app/icon.png',
         width: 512,
         height: 512,
-        alt: 'Strand macOS Client Logo',
+        alt: 'Strand — Multi-Account Client for Threads on macOS',
       },
     ],
   },
@@ -50,22 +69,50 @@ export const metadata: Metadata = {
     title: 'Strand — Multi-Account Threads Client for macOS',
     description:
       'Seamlessly switch between multiple Threads accounts with isolated sessions and a minimalist macOS experience.',
-    images: ['/icon.png'],
+    images: ['https://istrand.vercel.app/icon.png'],
+    creator: '@extrastu',
   },
   alternates: {
-    canonical: 'https://strand.app',
+    canonical: 'https://istrand.vercel.app',
+    languages: {
+      'en-US': 'https://istrand.vercel.app',
+      'zh-CN': 'https://istrand.vercel.app',
+    },
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  category: 'social networking',
 }
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'Strand',
+  url: 'https://istrand.vercel.app',
+  downloadUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+  screenshot: 'https://istrand.vercel.app/icon.png',
   operatingSystem: 'macOS 13.0 or later (Ventura, Sonoma, Sequoia)',
   applicationCategory: 'SocialNetworkingApplication',
   softwareVersion: '0.2.0',
   description:
-    'An unofficial, privacy-first multi-account desktop client for Threads on macOS with isolated sessions and pure monochrome aesthetics.',
+    'An unofficial, privacy-first multi-account desktop client for Threads on macOS with isolated sessions, native monochrome aesthetics, and custom shortcuts.',
+  author: {
+    '@type': 'Person',
+    name: 'extrastu',
+    url: 'https://github.com/extrastu',
+  },
+  sameAs: [
+    'https://github.com/extrastu/Strand',
+  ],
   offers: {
     '@type': 'Offer',
     price: '0',

@@ -1,0 +1,22 @@
+{
+  "name": "Strand — Multi-Account Threads Client for macOS",
+  "short_name": "Strand",
+  "description": "An unofficial, privacy-first multi-account desktop client for Threads on macOS.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0e",
+  "theme_color": "#101010",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

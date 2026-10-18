@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/extrastu/Strand/issues"
   },
-  "homepage": "https://github.com/extrastu/Strand#readme",
+  "homepage": "https://istrand.vercel.app/",
   "workspaces": [
     "apps/*"
   ],
