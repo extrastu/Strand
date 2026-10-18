@@ -8,7 +8,108 @@ export const content = {
       shortcuts: 'Shortcuts',
       faq: 'FAQ',
       download: 'Download',
+      changelog: 'Changelog',
       github: 'GitHub',
+    },
+    changelogPage: {
+      tag: "Release History",
+      title: 'Changelog',
+      subtitle: 'All the latest releases, features, improvements, and updates for Strand on macOS.',
+      backHome: 'Back to Home',
+      downloadDmg: 'Download .dmg',
+      downloadZip: 'Download .zip',
+      releaseNotes: 'Release Notes',
+      latestBadge: 'Latest Release',
+      categories: {
+        features: 'New Features',
+        improvements: 'Improvements',
+        fixes: 'Bug Fixes',
+      },
+      releases: [
+        {
+          version: 'v0.2.1',
+          date: 'October 18, 2026',
+          isLatest: true,
+          summary: 'Dedicated Changelog portal launch, automated release badges, and full SEO enhancements.',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                'Added dedicated Changelog page to official web portal with full bilingual release history.',
+                'Integrated real-time version badge into GitHub README synced with releases.',
+                'Enhanced navigation bar and footer with direct Changelog routes.',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                'Optimized sitemap.xml and Schema.org metadata for changelog release tracking.',
+                'Polished typography and responsive layout for mobile changelog inspection.',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.2.0',
+          date: 'October 18, 2026',
+          isLatest: false,
+          summary: 'Major architecture evolution to Monorepo, official Next.js 15 landing website, and enhanced multi-account keyboard workflows.',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                'Monorepo architecture with npm/pnpm workspaces managing apps/desktop and apps/web.',
+                'Brand-new official website built with Next.js 15 App Router, shadcn/ui, and Tailwind CSS v4.',
+                'Global account switching with ⌘1~9 shortcuts across isolated webview partitions.',
+                'Settings dialog with General (Theme, Language) and About tabs.',
+                'Full bilingual support (English & 简体中文) with 100% dictionary coverage.',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                'Smooth spring drawer animations when collapsing or expanding the sidebar with ⌘B.',
+                'Automated ad-hoc codesigning and DMG/ZIP distribution packaging scripts.',
+                'Browser language auto-detection with graceful fallback to English.',
+                'Comprehensive SEO optimization with OpenGraph, JSON-LD, robots.txt, and sitemap.',
+                'Zero-config traffic analytics via @vercel/analytics.',
+              ],
+            },
+            {
+              category: 'fixes',
+              items: [
+                'Fixed before-input-event propagation when keyboard focus resides inside Threads webview.',
+                'Fixed theme synchronization across main window chrome and webview sessions.',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.1.0',
+          date: 'October 16, 2026',
+          isLatest: false,
+          summary: 'Initial public release of Strand, the unofficial Threads multi-account client for macOS.',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                'Isolated multi-account webview partitions (persist:account-<id>) with zero cookie leaks.',
+                'Minimalist monochrome aesthetic inspired by Threads and Claude desktop geometry.',
+                'Sidebar account management with add, switch, rename, and remove capabilities.',
+                'Native macOS keyboard shortcuts and window controls.',
+                'Strict local privacy: zero middleman servers and no telemetry collection.',
+              ],
+            },
+          ],
+        },
+      ],
     },
     hero: {
       badge: 'Strand v0.2.1 for macOS is out',
@@ -139,6 +240,7 @@ export const content = {
       disclaimer: 'Threads and Meta are trademarks of Meta Platforms, Inc. Strand is an independent project.',
       rights: 'All rights reserved.',
       links: {
+        changelog: 'Changelog',
         releases: 'Releases',
         repo: 'Source Code',
         issues: 'Report Issue',
@@ -154,7 +256,108 @@ export const content = {
       shortcuts: '快捷键',
       faq: '常见问题',
       download: '立即下载',
+      changelog: '更新日志',
       github: 'GitHub 仓库',
+    },
+    changelogPage: {
+      tag: "版本历史",
+      title: '更新日志',
+      subtitle: 'Strand macOS 客户端的所有最新版本、新功能、性能优化与问题修复记录。',
+      backHome: '返回首页',
+      downloadDmg: '下载 .dmg 安装包',
+      downloadZip: '下载 .zip 压缩包',
+      releaseNotes: 'GitHub 发行说明',
+      latestBadge: '最新版本',
+      categories: {
+        features: '新功能与特性',
+        improvements: '优化与改进',
+        fixes: '问题修复',
+      },
+      releases: [
+        {
+          version: 'v0.2.1',
+          date: '2026 年 10 月 18 日',
+          isLatest: true,
+          summary: '官方网站上线更新日志页面，接入动态版本号 Badge，全面优化 SEO 与依赖项。',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                '官方网站上线专属更新日志（Changelog）页面，提供完整中英文版本演进记录。',
+                'GitHub README 接入版本号动态 Shields Badge，实时同步 Release 状态。',
+                '顶部导航栏与页脚新增更新日志直达入口。',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                '优化 sitemap.xml 索引与 Schema.org 结构化数据，增强更新日志搜索引擎收录。',
+                '调优移动端与桌面端的排版间距与响应式阅读体验。',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.2.0',
+          date: '2026 年 10 月 18 日',
+          isLatest: false,
+          summary: '重大架构演进：迁移为 Monorepo 体系，新增 Next.js 15 官方门户网站，支持全局快捷键多账号切换。',
+          dmgUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.dmg',
+          zipUrl: 'https://github.com/extrastu/Strand/releases/download/v0.2.0/Strand-0.2.0-darwin-arm64.zip',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases/tag/v0.2.0',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                '重构为 npm/pnpm workspaces Monorepo 统一调度 apps/desktop 与 apps/web。',
+                '全新构建基于 Next.js 15 App Router、shadcn/ui 与 Tailwind CSS v4 的官方网站。',
+                '支持跨 Webview 分区的 ⌘1~9 快捷键快速切换多账号。',
+                '全新设置面板：支持外观主题（跟随系统 / 浅色 / 深色）、语言切换及关于信息。',
+                '完整中英双语国际化支持，文案覆盖率 100%。',
+              ],
+            },
+            {
+              category: 'improvements',
+              items: [
+                '⌘B 快捷折叠/展开侧边栏时加入细腻的弹性抽屉过渡动效。',
+                '自动化 ad-hoc 签名与 DMG / ZIP 压缩安装包构建脚本。',
+                '官网智能跟随浏览器首选语言，并在无法识别时平滑回滚至英文。',
+                '深度 SEO 体系构建：包含 OpenGraph、JSON-LD 知识图谱、robots.txt 及 sitemap.xml。',
+                '集成 @vercel/analytics 实现零配置网站访问统计。',
+              ],
+            },
+            {
+              category: 'fixes',
+              items: [
+                '修复焦点处于 Threads 网页内时键盘快捷键被拦截丢失的问题。',
+                '修复应用原生窗口边框与网页会话之间的主题色同步问题。',
+              ],
+            },
+          ],
+        },
+        {
+          version: 'v0.1.0',
+          date: '2026 年 10 月 16 日',
+          isLatest: false,
+          summary: 'Strand macOS 客户端首次正式公开发布。',
+          releaseUrl: 'https://github.com/extrastu/Strand/releases',
+          sections: [
+            {
+              category: 'features',
+              items: [
+                '基于独立沙箱分区（persist:account-<id>）的多账号无缝隔离，零 Cookie 串号风险。',
+                '汲取 Threads 经典黑白视觉与 Claude 桌面端几何质感的高级极简美学。',
+                '侧边栏账号管理器：支持添加、无缝切换、重命名与移除账号。',
+                'macOS 原生快捷键与窗口交通灯控制集成。',
+                '纯本地沙箱存储，不设中间服务器，零埋点零数据抓取。',
+              ],
+            },
+          ],
+        },
+      ],
     },
     hero: {
       badge: 'Strand v0.2.1 已正式发布',
@@ -285,6 +488,7 @@ export const content = {
       disclaimer: 'Threads 与 Meta 均为 Meta Platforms, Inc. 的商标。Strand 是一项独立的开源实验。',
       rights: '保留所有权利。',
       links: {
+        changelog: '更新日志',
         releases: '版本发布',
         repo: '开源仓库',
         issues: '反馈问题',

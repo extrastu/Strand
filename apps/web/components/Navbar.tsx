@@ -26,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/80 dark:border-neutral-800/80 glass-nav transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo & Brand */}
-        <a href="#" className="flex items-center gap-2.5 group">
+        <a href="/" className="flex items-center gap-2.5 group">
           <img
             src="/icon.svg"
             alt="Strand Logo"
@@ -45,28 +45,34 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-neutral-600 dark:text-neutral-400">
           <a
-            href="#features"
+            href="/#features"
             className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
           >
             {t.features}
           </a>
           <a
-            href="#showcase"
+            href="/#showcase"
             className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
           >
             {t.showcase}
           </a>
           <a
-            href="#shortcuts"
+            href="/#shortcuts"
             className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
           >
             {t.shortcuts}
           </a>
           <a
-            href="#faq"
+            href="/#faq"
             className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
           >
             {t.faq}
+          </a>
+          <a
+            href="/changelog"
+            className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
+          >
+            {t.changelog}
           </a>
         </nav>
 
@@ -114,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
 
           {/* Download CTA */}
           <Button size="sm" asChild className="ml-1 rounded-lg">
-            <a href="#download" className="gap-1.5">
+            <a href="/#download" className="gap-1.5">
               <Download className="w-3.5 h-3.5" />
               <span>{t.download}</span>
             </a>
@@ -146,32 +152,39 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
       {mobileMenuOpen && (
         <div className="sm:hidden border-b border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-900/95 px-5 py-4 space-y-3">
           <a
-            href="#features"
+            href="/#features"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
           >
             {t.features}
           </a>
           <a
-            href="#showcase"
+            href="/#showcase"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
           >
             {t.showcase}
           </a>
           <a
-            href="#shortcuts"
+            href="/#shortcuts"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
           >
             {t.shortcuts}
           </a>
           <a
-            href="#faq"
+            href="/#faq"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
           >
             {t.faq}
+          </a>
+          <a
+            href="/changelog"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+          >
+            {t.changelog}
           </a>
           <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
             <Button
@@ -184,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, darkMode, setDark
               <span>{lang === 'en' ? '切换为中文' : 'Switch to English'}</span>
             </Button>
             <Button size="sm" asChild>
-              <a href="#download" onClick={() => setMobileMenuOpen(false)} className="gap-1.5">
+              <a href="/#download" onClick={() => setMobileMenuOpen(false)} className="gap-1.5">
                 <Download className="w-3.5 h-3.5" />
                 <span>{t.download}</span>
               </a>

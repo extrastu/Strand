@@ -29,6 +29,12 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
           {/* Links */}
           <div className="flex flex-wrap items-center justify-center gap-6 font-medium">
             <a
+              href="/changelog"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              {t.links.changelog}
+            </a>
+            <a
               href="https://github.com/extrastu/Strand/releases"
               target="_blank"
               rel="noopener noreferrer"
