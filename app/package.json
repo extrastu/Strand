@@ -12,10 +12,12 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "start": "electron-vite build && electron-vite preview",
+    "package": "electron-vite build && node scripts/package.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@electron/packager": "^20.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",

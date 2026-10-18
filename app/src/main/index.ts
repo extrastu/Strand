@@ -199,7 +199,7 @@ function registerIpc(): void {
 
 void app.whenReady().then(() => {
   // A packaged app takes its icon from icon.icns; in dev the Dock would show Electron's, so set ours.
-  if (process.platform === 'darwin') {
+  if (process.platform === 'darwin' && !app.isPackaged) {
     const icon = nativeImage.createFromPath(iconPath)
     if (!icon.isEmpty()) app.dock?.setIcon(icon)
   }
