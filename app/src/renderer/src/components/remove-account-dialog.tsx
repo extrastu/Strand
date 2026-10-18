@@ -25,15 +25,15 @@ export function RemoveAccountDialog() {
 
   return (
     <AlertDialog open={dialog?.kind === 'remove' && account !== undefined} onOpenChange={(next) => !next && closeDialog()}>
-      <AlertDialogContent className="rounded-xl p-6">
+      <AlertDialogContent className="rounded-2xl p-6 shadow-[var(--shadow-pop)]">
         <AlertDialogHeader>
-          <AlertDialogMedia className="rounded-full">
+          <AlertDialogMedia className="rounded-full bg-destructive/10 text-destructive">
             <Trash2 aria-hidden />
           </AlertDialogMedia>
-          <AlertDialogTitle className="text-lg font-semibold">删除账号「{account?.name}」?</AlertDialogTitle>
+          <AlertDialogTitle className="font-serif text-xl font-normal">删除账号「{account?.name}」?</AlertDialogTitle>
           <AlertDialogDescription>会清除这个账号在本应用里的登录状态,不会影响 Threads 上的账号本身。</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="-mx-6 -mb-6 rounded-b-xl bg-transparent p-6 pt-2">
+        <AlertDialogFooter className="-mx-6 -mb-6 rounded-b-2xl bg-transparent p-6 pt-2">
           <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"

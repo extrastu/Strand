@@ -4,7 +4,7 @@ Supersedes the multi-account shell spec (committed as `8c4aa95`; it stays the be
 
 ## Goal
 
-The same multi-account Threads shell, rebuilt in TypeScript with a React renderer (shadcn/ui, Zustand, lucide-react), designed to look and feel like Threads. No new features.
+The same multi-account Threads shell, rebuilt in TypeScript with a React renderer (shadcn/ui, Zustand, lucide-react), designed with Claude desktop's layout, shapes and interaction and Threads' black-and-white palette. No new features.
 
 ## Done when
 
@@ -16,15 +16,17 @@ The same multi-account Threads shell, rebuilt in TypeScript with a React rendere
 5. **Logic ported, tests kept.** The account store and link classification move to TypeScript. All 29 baseline test cases are ported (Vitest) with their assertions intact (none weakened or deleted) and pass.
 6. **shadcn/ui.** Built from shadcn components added through its CLI into `src/renderer/components/ui/`, using only those the UI needs (expected: Button, Input, Label, Dialog, AlertDialog, DropdownMenu, Tooltip, Avatar, Badge, ScrollArea, Sonner). Add / edit account is a Dialog; remove confirmation is an AlertDialog; per-row actions (复制 / 编辑 / 删除) live in a DropdownMenu and are also keyboard reachable.
 7. **Icons.** lucide-react only. No emoji or text glyphs (‹ ›) used as icons.
-8. **Threads design.** Light and dark follow the system and share one token set on `:root` / `.dark`:
-   - Light: white background, near-black text (#101010); dark: #101010 background, #181818 raised surfaces, near-white text (#F3F5F7).
-   - Secondary text #777; hairline dividers (about #E6E6E6 light, rgba(243,245,247,.15) dark); no drop shadows on surfaces.
-   - Primary button is solid black on light and solid white on dark; secondary is outlined; fully rounded (pill) buttons and badges; 12-16px radius for dialogs and rows. Accent blue only for focus rings and links.
-   - System font stack (SF Pro on macOS), 15px base, tight but airy rows, 44px minimum tap height for rows and buttons, restrained motion (150-200ms ease-out; respects `prefers-reduced-motion`).
-   - Title bar row (44px, whole window width, drags the window): sidebar toggle button right of the traffic lights (macOS style), active account centered. The toggle stays in the title bar in both states.
-   - Account rows: circular avatar (first character), name, quiet type badge (个人 / 创作者 in neutral tones, no orange), active row marked by a subtle surface tint plus a check or dot, not a saturated fill.
-   - Reviewed by screenshots of the renderer in light and dark (Chrome DevTools Protocol capture, `prefers-color-scheme` emulated) for: populated list, empty state, collapsed rail, add dialog, remove confirmation. Findings fixed before done.
-9. **A11y and quality.** Visible `:focus-visible` rings, labels on all icon-only buttons, dialogs trap and restore focus, text contrast at least 4.5:1 in both themes, no horizontal overflow at the 720px minimum window width.
+8. **Claude desktop design language** (layout, shapes and interaction; the palette stays Threads black and white). Light and dark follow the system and share one token set on `:root` / `.dark`:
+   - Threads black-and-white palette (the user wants this color scheme; layout and interaction follow Claude desktop). Light: white page and sidebar, text #101010, hairlines #E6E6E6, hover #F5F5F5, selected #ECECEC. Dark: #101010 page and sidebar, #181818 raised surfaces, text #F3F5F7, hairlines about rgba(243,245,247,.15), hover #1E1E1E, selected #2A2A2A.
+   - No brand color. The primary button and the creator avatar are solid black on light and solid white on dark; the only chroma is the Threads blue (#0095F6 light, #4CB5F9 dark) on focus rings, plus a muted red for destructive actions.
+   - Type: system sans for the UI at 14px; macOS serif (`ui-serif`, New York) for display headings only (dialog titles, empty state). Medium weight, not bold, for list items.
+   - Shapes: text buttons and inputs 12px radius, dialogs 20px, menus 12px, badges and avatars fully round. Icon-only buttons are 32px circles whose hover/selected background is a true circle, with the 44px tap area provided by an invisible hit extension, so the circle never touches the row edges.
+   - Soft warm shadows are allowed on floating surfaces (dialogs, menus, toasts) only.
+   - Sidebar: an "添加账号" row at the top in the style of Claude's "New chat" (solid black / white circle with a plus, hover tint), then the account list. Rows are 52px with a 32px avatar, hover = faint tint, selected = slightly stronger tint, check badge on the avatar; the row actions button fades in on hover and overlays the row end.
+   - Title bar row (44px, whole window width, drags the window): sidebar toggle right of the traffic lights, active account centered, hairline below. Toggle stays in both states.
+   - Motion 150-200ms ease-out, respects `prefers-reduced-motion`.
+   - Reviewed by screenshots of the renderer in light and dark (Chrome DevTools Protocol capture, `prefers-color-scheme` emulated) for: populated list, empty state, hidden sidebar, add dialog, remove confirmation, row menu, hover on an icon button. Findings fixed before done.
+9. **A11y and quality.** Visible `:focus-visible` rings, labels on all icon-only buttons, dialogs trap and restore focus, text contrast at least 4.5:1 in both themes (checked by computation for every text/surface pair used), no horizontal overflow at the 720px minimum window width.
 10. **Security and packaging.** `contextIsolation` on, `nodeIntegration` off, renderer sandboxed (preload built as CommonJS), strict CSP on the renderer page (no `unsafe-inline` scripts, no remote assets or fonts, no CDN). Account views keep their own partitions and no preload.
 11. **Manual check by the user**, with two real accounts: items 2, 8 and the external-link, remove and drag behaviors.
 

@@ -6,11 +6,11 @@ import { cn } from '@/lib/utils'
 /** Creator accounts get the solid (black / white) circle, personal accounts the quiet grey one. */
 export function AccountAvatar({ account, className }: { account: Account; className?: string }) {
   return (
-    <Avatar className={cn('size-9', className)}>
+    <Avatar className={cn('size-8 after:hidden', className)}>
       <AvatarFallback
         className={cn(
-          'text-[15px] font-semibold',
-          account.type === 'creator' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground',
+          'text-[13px] font-medium',
+          account.type === 'creator' ? 'bg-primary text-primary-foreground' : 'bg-selected text-foreground',
         )}
       >
         {initialOf(account.name)}

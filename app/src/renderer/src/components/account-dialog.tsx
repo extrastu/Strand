@@ -20,7 +20,7 @@ export function AccountDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
-      <DialogContent className="gap-5 rounded-xl p-6 sm:max-w-md">
+      <DialogContent className="gap-5 rounded-2xl p-6 shadow-[var(--shadow-pop)] sm:max-w-md">
         {open && <AccountForm key={editing?.id ?? 'new'} editing={editing} />}
       </DialogContent>
     </Dialog>
@@ -51,7 +51,7 @@ function AccountForm({ editing }: { editing: Account | undefined }) {
   return (
     <form onSubmit={(e) => void onSubmit(e)} className="grid gap-5" noValidate>
       <DialogHeader>
-        <DialogTitle className="text-lg font-semibold">{editing ? '编辑账号' : '添加账号'}</DialogTitle>
+        <DialogTitle className="font-serif text-xl font-normal">{editing ? '编辑账号' : '添加账号'}</DialogTitle>
         <DialogDescription>
           {editing ? '修改名称或账号类型,不会影响登录状态。' : '添加后,在右侧页面用 Threads 账号登录。'}
         </DialogDescription>
@@ -67,7 +67,7 @@ function AccountForm({ editing }: { editing: Account | undefined }) {
           autoComplete="off"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? 'account-error' : undefined}
-          className="h-11 rounded-xl border-transparent bg-secondary px-4 text-[15px]"
+          className="h-10 rounded-xl border-input bg-background px-3 text-sm focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
         />
         {error && (
           <p id="account-error" role="alert" className="text-[13px] text-destructive">
@@ -88,12 +88,12 @@ function AccountForm({ editing }: { editing: Account | undefined }) {
             <Label
               key={t}
               htmlFor={`account-type-${t}`}
-              className="flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors duration-150 hover:bg-accent has-[[aria-checked=true]]:border-foreground"
+              className="flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors duration-150 hover:bg-accent has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5"
             >
               <RadioGroupItem value={t} id={`account-type-${t}`} className="mt-0.5" />
               <span className="grid gap-0.5">
-                <span className="font-semibold">{TYPE_LABEL[t]}</span>
-                <span className="text-[13px] font-normal text-muted-foreground">{TYPE_HINT[t]}</span>
+                <span className="font-medium">{TYPE_LABEL[t]}</span>
+                <span className="text-xs font-normal text-muted-foreground">{TYPE_HINT[t]}</span>
               </span>
             </Label>
           ))}

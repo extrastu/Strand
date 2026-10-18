@@ -21,7 +21,7 @@ export function TitleBar() {
   return (
     <header
       onPointerDown={onDrag}
-      className="grid h-11 shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b pr-4 pl-[72px]"
+      className="grid h-11 shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b bg-background pr-4 pl-[76px]"
     >
       <div className="flex items-center">
         <Tooltip>
@@ -31,7 +31,7 @@ export function TitleBar() {
               size="icon"
               aria-label={label}
               aria-expanded={!collapsed}
-              className="aria-expanded:bg-transparent aria-expanded:hover:bg-accent"
+              className="text-muted-foreground hover:text-foreground aria-expanded:bg-transparent aria-expanded:hover:bg-accent"
               onClick={() => void setCollapsed(!collapsed)}
             >
               <PanelLeft aria-hidden />
@@ -42,8 +42,8 @@ export function TitleBar() {
       </div>
       {active ? (
         <div className="flex min-w-0 items-center gap-2">
-          <span className="truncate font-semibold">{active.name}</span>
-          <Badge variant="secondary" className="h-5 shrink-0 rounded-full bg-foreground/[0.07] px-2 text-xs font-normal text-foreground/70">
+          <span className="truncate text-sm font-medium">{active.name}</span>
+          <Badge variant="secondary" className="h-[18px] shrink-0 rounded-full bg-foreground/[0.07] px-1.5 text-[11px] font-normal text-foreground/70">
             {TYPE_LABEL[active.type]}
           </Badge>
         </div>

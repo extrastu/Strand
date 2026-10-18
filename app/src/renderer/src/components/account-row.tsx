@@ -22,28 +22,28 @@ export function AccountRow({ account, active }: { account: Account; active: bool
   return (
     <li
       className={cn(
-        'group relative flex items-center rounded-xl transition-colors duration-150 hover:bg-accent',
-        'has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-inset has-[button:focus-visible]:ring-ring/70',
-        active && 'bg-accent',
+        'group relative flex items-center rounded-xl transition-colors duration-150',
+        'has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-inset has-[button:focus-visible]:ring-ring/60',
+        active ? 'bg-selected' : 'hover:bg-accent',
       )}
     >
       <button
         type="button"
         aria-current={active ? 'true' : undefined}
         onClick={() => void select(account.id)}
-        className="flex h-14 min-w-0 flex-1 items-center gap-3 rounded-xl px-3 text-left outline-none"
+        className="flex h-[52px] min-w-0 flex-1 items-center gap-3 rounded-xl px-3 text-left outline-none"
       >
         <span className="relative shrink-0">
           <AccountAvatar account={account} />
           {active && (
-            <span className="absolute -right-0.5 -bottom-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-accent">
+            <span className="absolute -right-1 -bottom-1 flex size-4 items-center justify-center rounded-full bg-foreground text-background ring-2 ring-selected">
               <Check className="size-2.5" strokeWidth={3} aria-hidden />
             </span>
           )}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate font-semibold">{account.name}</span>
-          <Badge variant="secondary" className="mt-0.5 h-5 rounded-full bg-foreground/[0.07] px-2 text-xs font-normal text-foreground/70">
+          <span className="block truncate text-sm leading-5 font-medium">{account.name}</span>
+          <Badge variant="secondary" className="mt-0.5 h-[18px] rounded-full bg-foreground/[0.07] px-1.5 text-[11px] font-normal text-foreground/70">
             {TYPE_LABEL[account.type]}
           </Badge>
         </span>
@@ -54,12 +54,12 @@ export function AccountRow({ account, active }: { account: Account; active: bool
             variant="ghost"
             size="icon"
             aria-label={`更多操作:${account.name}`}
-            className="absolute top-1/2 right-1 -translate-y-1/2 bg-accent opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-secondary focus-visible:ring-0 data-[state=open]:opacity-100"
+            className="absolute top-1/2 right-2 -translate-y-1/2 bg-inherit text-muted-foreground opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-foreground/10 hover:text-foreground focus-visible:ring-0 data-[state=open]:bg-foreground/10 data-[state=open]:opacity-100"
           >
             <Ellipsis aria-hidden />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-44">
+        <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onSelect={() => void copyName(account.id)}>
             <Copy aria-hidden />
             复制账号名称
